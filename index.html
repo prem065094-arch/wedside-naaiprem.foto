@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>naaiprem.foto — ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน อีเวนต์ | รับงานทั่วประเทศไทย</title>
+  <meta name="description" content="naaiprem.foto ช่างภาพอิสระ รับถ่ายงานแต่ง รับปริญญา พอร์ตนักเรียน และอีเวนต์ ภาพโทนใส เน้นแคนดิด บรีฟท่าโพสให้ตลอด ไม่จำกัดจำนวนรูป รับงานทั่วประเทศไทย">
+  <meta name="theme-color" content="#0a0a0a">
+
+  <!-- Open Graph (แก้: เปลี่ยน og:image เป็น URL เต็มของโดเมนจริงเมื่อขึ้นเว็บ) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="naaiprem.foto — เก็บรอยยิ้มจริง ในโทนภาพใสๆ ที่เป็นคุณ">
+  <meta property="og:description" content="รับถ่ายงานแต่ง รับปริญญา พอร์ตนักเรียน อีเวนต์ บรีฟท่าโพสให้ตลอด ไม่จำกัดจำนวนรูป รับงานทั่วประเทศไทย">
+  <meta property="og:image" content="images/hero/hero-01-wedding.jpg">
+  <meta property="og:locale" content="th_TH">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Sans+Thai:wght@300;400;500&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="images/hero/hero-01-wedding.jpg">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- บอก CSS ว่า JS ทำงาน (ถ้าไม่มี JS เนื้อหาจะแสดงทันทีโดยไม่มี animation) -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- data.js ต้องมาก่อน main.js -->
+  <script src="js/data.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#portfolio">ข้ามไปยังผลงาน</a>
+
+  <!-- Cursor แบบกำหนดเอง (แสดงเฉพาะ Desktop ที่ใช้เมาส์) -->
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"><span class="cursor__label">ดู</span></div>
+  </div>
+
+  <!-- ============================== NAVBAR ============================== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#home" class="logo" aria-label="naaiprem.foto กลับไปด้านบน">naaiprem<span>.foto</span></a>
+
+      <nav class="nav__menu" id="navMenu" aria-label="เมนูหลัก">
+        <ul class="nav__links">
+          <li><a href="#portfolio" class="nav__link">ผลงาน</a></li>
+          <li><a href="#services" class="nav__link">บริการ</a></li>
+          <li><a href="#process" class="nav__link">ขั้นตอน</a></li>
+          <li><a href="#reviews" class="nav__link">รีวิว</a></li>
+          <li><a href="#faq" class="nav__link">คำถามที่พบบ่อย</a></li>
+        </ul>
+        <div class="nav__mobile-contact">
+          <a href="tel:0622349685" data-contact="phone" class="nav__mobile-phone"><span data-contact-text="phoneLabel">062-234-9685</span></a>
+          <p>รับงานทั่วประเทศไทย</p>
+        </div>
+      </nav>
+
+      <a href="https://m.me/" data-contact="messenger" class="btn btn--primary btn--sm nav__cta">จองคิว</a>
+
+      <button class="nav__toggle" id="navToggle" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============================== HERO ==============================
+         แก้ภาพ: เปลี่ยนไฟล์ใน images/hero/ (ใช้ 1 ภาพต่อ 1 ประเภทงาน ขนาดแนะนำ 2000px)
+         data-label = ชื่อหมวดที่แสดงมุมขวาล่าง -->
+    <section class="hero" id="home" aria-label="หน้าแรก">
+      <div class="hero__media" data-parallax="0.25">
+        <figure class="hero__slide is-active" data-label="งานแต่ง">
+          <img src="images/hero/hero-01-wedding.jpg" alt="กลุ่มเพื่อนยืนเรียงแถวยิ้มให้กล้องในอาคารที่มีแสงธรรมชาติ" width="2000" height="1331" fetchpriority="high" decoding="async">
+        </figure>
+        <figure class="hero__slide" data-label="รับปริญญา">
+          <img src="images/hero/hero-02-graduation.jpg" alt="ภาพมุมต่ำ กลุ่มนักเรียนจับมือกันชูขึ้นฟ้าสีคราม" width="2000" height="1331" loading="lazy" decoding="async">
+        </figure>
+        <figure class="hero__slide" data-label="พอร์ตนักเรียน">
+          <img src="images/hero/hero-03-portfolio.jpg" alt="นักเรียนนอนเป็นวงกลมบนสนามหญ้า ยิ้มมองกล้อง" width="2000" height="1331" loading="lazy" decoding="async">
+        </figure>
+        <figure class="hero__slide" data-label="อีเวนต์">
+          <img src="images/hero/hero-04-event.jpg" alt="กลุ่มเพื่อนเกาะตาข่ายทำหน้าตลกอย่างสนุกสนาน" width="2000" height="1331" loading="lazy" decoding="async">
+        </figure>
+      </div>
+      <div class="hero__shade" aria-hidden="true"></div>
+
+      <div class="hero__content container">
+        <p class="hero__eyebrow hero-in" style="--i:0">งานแต่ง · รับปริญญา · พอร์ตนักเรียน · อีเวนต์</p>
+        <h1 class="hero__brand hero-in" style="--i:1">naaiprem<span>.foto</span></h1>
+        <!-- แก้: สโลแกน -->
+        <p class="hero__slogan hero-in" style="--i:2">เก็บรอยยิ้มจริง ในโทนภาพใสๆ ที่เป็นคุณ</p>
+        <p class="hero__sub hero-in" style="--i:3">โพสท่าไม่เป็นก็ได้ภาพสวย ช่างภาพบรีฟให้ตลอดการถ่าย และไม่จำกัดจำนวนรูป</p>
+        <p class="hero__badge hero-in" style="--i:4">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          รับงานทั่วประเทศไทย
+        </p>
+        <div class="hero__actions hero-in" style="--i:5">
+          <a href="#portfolio" class="btn btn--ghost">ดูผลงาน</a>
+          <a href="https://m.me/" data-contact="messenger" class="btn btn--primary">จองคิว</a>
+        </div>
+      </div>
+
+      <div class="hero__meta" aria-hidden="true">
+        <span class="hero__count"><span id="heroIndex">01</span> / <span id="heroTotal">04</span></span>
+        <span class="hero__label" id="heroLabel">งานแต่ง</span>
+        <div class="hero__bars" id="heroBars"></div>
+      </div>
+
+      <a href="#portfolio" class="hero__scroll" aria-label="เลื่อนลงไปดูผลงาน">
+        <span>เลื่อนดูผลงาน</span>
+        <i aria-hidden="true"></i>
+      </a>
+    </section>
+
+    <!-- ============================== GALLERY ==============================
+         ภาพทั้งหมดสร้างจาก GALLERY ใน js/data.js (ไม่ต้องแก้ HTML ส่วนนี้) -->
+    <section class="section gallery" id="portfolio" aria-labelledby="galleryTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Portfolio</p>
+          <h2 class="section-title" id="galleryTitle">ผลงานที่ผ่านมา</h2>
+          <p class="section-lead">ทุกภาพคือช่วงเวลาจริงของลูกค้าจริง เลือกดูตามประเภทงานที่คุณสนใจได้เลย</p>
+        </header>
+
+        <div class="filters reveal" role="group" aria-label="กรองผลงานตามประเภท">
+          <button class="filter is-active" data-filter="all" aria-pressed="true">ทั้งหมด</button>
+          <button class="filter" data-filter="wedding" aria-pressed="false">งานแต่ง</button>
+          <button class="filter" data-filter="graduation" aria-pressed="false">รับปริญญา</button>
+          <button class="filter" data-filter="portfolio" aria-pressed="false">พอร์ตนักเรียน</button>
+          <button class="filter" data-filter="event" aria-pressed="false">อีเวนต์</button>
+        </div>
+      </div>
+
+      <div class="gallery__wrap reveal">
+        <div class="gallery__grid" id="galleryGrid"></div>
+      </div>
+
+      <div class="gallery__more">
+        <button class="btn btn--ghost" id="loadMore">ดูผลงานเพิ่มเติม</button>
+      </div>
+    </section>
+
+    <!-- ============================== STATS ==============================
+         ตัวเลขสร้างจาก STATS ใน js/data.js -->
+    <section class="stats" aria-label="ผลงานในตัวเลข">
+      <ul class="stats__list container" id="statsList"></ul>
+    </section>
+
+    <!-- ============================== ปัญหาของลูกค้า ============================== -->
+    <section class="section pain" id="pain" aria-labelledby="painTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Sound familiar?</p>
+          <h2 class="section-title" id="painTitle">เคยกังวลแบบนี้ไหม?</h2>
+        </header>
+
+        <ul class="pain__list">
+          <li class="pain__item reveal" data-delay="0">
+            <span class="pain__num">01</span>
+            <p class="pain__quote">“โพสท่าไม่เป็น ยืนหน้ากล้องทีไร ภาพออกมาแข็งทุกที”</p>
+          </li>
+          <li class="pain__item reveal" data-delay="1">
+            <span class="pain__num">02</span>
+            <p class="pain__quote">“กลัวได้รูปน้อย จ่ายไปแล้วแต่ได้ภาพกลับมาไม่กี่ใบ”</p>
+          </li>
+          <li class="pain__item reveal" data-delay="2">
+            <span class="pain__num">03</span>
+            <p class="pain__quote">“กลัวช่างภาพพลาดช่วงสำคัญ ที่ย้อนกลับไปถ่ายใหม่ไม่ได้”</p>
+          </li>
+          <li class="pain__item reveal" data-delay="3">
+            <span class="pain__num">04</span>
+            <p class="pain__quote">“อยู่ต่างจังหวัด หาช่างภาพที่ถูกใจและเดินทางมาถ่ายได้ยาก”</p>
+          </li>
+        </ul>
+
+        <p class="pain__answer reveal">ไม่ต้องกังวลเรื่องพวกนี้อีกต่อไป<br>เพราะนี่คือสิ่งที่ <em>naaiprem.foto</em> ตั้งใจดูแลให้คุณตั้งแต่วันแรก</p>
+      </div>
+    </section>
+
+    <!-- ============================== จุดเด่น ============================== -->
+    <section class="section features" id="why" aria-labelledby="whyTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Why naaiprem.foto</p>
+          <h2 class="section-title" id="whyTitle">ทำไมลูกค้าถึงเลือกเรา</h2>
+        </header>
+
+        <ul class="features__list">
+          <li class="feature reveal" data-delay="0">
+            <svg class="feature__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg>
+            <h3 class="feature__title">บรีฟท่าโพสให้ตลอด</h3>
+            <p class="feature__text">ไม่เคยถ่ายรูปมาก่อนก็ไม่เป็นไร ช่างภาพจะบอกท่า มุม และจังหวะให้ทุกช็อต พร้อมชวนคุยจนหายเกร็ง ภาพจึงออกมาเป็นธรรมชาติ</p>
+          </li>
+          <li class="feature reveal" data-delay="1">
+            <svg class="feature__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.2 8.2a5 5 0 1 1 0 7.6L12 12l-6.2-3.8a5 5 0 1 0 0 7.6L12 12z"/></svg>
+            <h3 class="feature__title">ไม่จำกัดจำนวนรูป</h3>
+            <p class="feature__text">ถ่ายเก็บให้เต็มที่ตลอดเวลางาน ไม่ต้องนับรูป ไม่ต้องกลัวขาด ทุกช่วงเวลาดีๆ ได้ถูกเก็บไว้ครบ</p>
+          </li>
+          <li class="feature reveal" data-delay="2">
+            <svg class="feature__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <h3 class="feature__title">รับงานทั่วประเทศไทย</h3>
+            <p class="feature__text">อยู่จังหวัดไหนก็เดินทางไปถ่ายให้ได้ แค่แจ้งสถานที่มา แล้วเราช่วยวางแผนวันถ่ายให้</p>
+          </li>
+          <li class="feature reveal" data-delay="3">
+            <svg class="feature__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/></svg>
+            <h3 class="feature__title">สไตล์เฉพาะตัว แต่งทุกภาพ</h3>
+            <p class="feature__text">โทนภาพใส สว่าง เน้นแคนดิดที่เก็บอารมณ์จริง และทุกภาพที่ส่งมอบผ่านการคัดและแต่งสีอย่างใส่ใจ</p>
+          </li>
+          <li class="feature reveal" data-delay="4">
+            <svg class="feature__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <h3 class="feature__title">ไม่พลาดช่วงเวลาสำคัญ</h3>
+            <p class="feature__text">วางลำดับงานร่วมกับคุณล่วงหน้า รู้ว่าช่วงไหนสำคัญ และพร้อมอยู่ตรงนั้นทุกครั้ง</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================== บริการ ==============================
+         แก้: ภาพการ์ดอยู่ใน images/services/ และระยะเวลาส่งงานอยู่ใน <li class="service__delivery"> -->
+    <section class="section services" id="services" aria-labelledby="servicesTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Services</p>
+          <h2 class="section-title" id="servicesTitle">บริการถ่ายภาพ</h2>
+          <p class="section-lead">เลือกประเภทงานที่ต้องการ แล้วทักมาคุยรายละเอียดกันได้เลย ราคาปรับตามรูปแบบงานและสถานที่</p>
+        </header>
+
+        <div class="services__grid">
+          <article class="service reveal" data-delay="0">
+            <div class="service__media">
+              <img src="images/services/service-wedding.jpg" alt="กลุ่มเพื่อนยืนเรียงแถวในอาคารโทนสว่าง ตัวอย่างภาพงานแต่ง" width="799" height="1000" loading="lazy" decoding="async">
+            </div>
+            <div class="service__body">
+              <p class="service__tags">พิธีเช้า · งานเลี้ยง · พรีเวดดิ้ง</p>
+              <h3 class="service__title">งานแต่งงาน</h3>
+              <p class="service__text">เล่าเรื่องวันสำคัญของคุณสองคนผ่านภาพที่เป็นธรรมชาติ ตั้งแต่พิธีเช้าจนจบงานเลี้ยง รวมถึงพรีเวดดิ้งในสถานที่ที่มีความหมาย</p>
+              <ul class="service__list">
+                <li>บรีฟท่าโพสตลอดการถ่าย</li>
+                <li>ไม่จำกัดจำนวนรูป</li>
+                <li>คัดและแต่งทุกภาพ</li>
+                <li class="service__delivery">ส่งงานภายใน 30 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
+              </ul>
+              <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
+            </div>
+          </article>
+
+          <article class="service reveal" data-delay="1">
+            <div class="service__media">
+              <img src="images/services/service-graduation.jpg" alt="นักเรียนจับมือกันชูขึ้นฟ้า ตัวอย่างภาพรับปริญญา" width="799" height="1000" loading="lazy" decoding="async">
+            </div>
+            <div class="service__body">
+              <p class="service__tags">ซ้อมใหญ่ · วันรับจริง · ถ่ายนอกรอบ</p>
+              <h3 class="service__title">รับปริญญา</h3>
+              <p class="service__text">เก็บความภูมิใจของบัณฑิตและครอบครัว ทั้งภาพเดี่ยว ภาพหมู่กับเพื่อน และภาพครอบครัวแบบมีสไตล์</p>
+              <ul class="service__list">
+                <li>บรีฟท่าโพสตลอดการถ่าย</li>
+                <li>ไม่จำกัดจำนวนรูป</li>
+                <li>คัดและแต่งทุกภาพ</li>
+                <li class="service__delivery">ส่งงานภายใน 14 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
+              </ul>
+              <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
+            </div>
+          </article>
+
+          <article class="service reveal" data-delay="2">
+            <div class="service__media">
+              <img src="images/services/service-portfolio.jpg" alt="นักเรียนนอนเป็นวงกลมบนสนามหญ้า ตัวอย่างภาพพอร์ตนักเรียน" width="799" height="1000" loading="lazy" decoding="async">
+            </div>
+            <div class="service__body">
+              <p class="service__tags">ยื่นมหาวิทยาลัย · ภาพโปรไฟล์</p>
+              <h3 class="service__title">พอร์ตนักเรียน</h3>
+              <p class="service__text">ภาพพอร์ตและโปรไฟล์ที่ดูดีและเป็นตัวเอง พร้อมช่วยแนะนำชุด สถานที่ และท่าโพสที่เหมาะกับคณะที่จะยื่น</p>
+              <ul class="service__list">
+                <li>บรีฟท่าโพสตลอดการถ่าย</li>
+                <li>ไม่จำกัดจำนวนรูป</li>
+                <li>คัดและแต่งทุกภาพ</li>
+                <li class="service__delivery">ส่งงานภายใน 7 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
+              </ul>
+              <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
+            </div>
+          </article>
+
+          <article class="service reveal" data-delay="3">
+            <div class="service__media">
+              <img src="images/services/service-event.jpg" alt="กลุ่มคนพูดคุยกันในทางเดินอาคาร ตัวอย่างภาพงานอีเวนต์" width="799" height="1000" loading="lazy" decoding="async">
+            </div>
+            <div class="service__body">
+              <p class="service__tags">สัมมนา · ปาร์ตี้ · งานบริษัท · วันเกิด</p>
+              <h3 class="service__title">งานอีเวนต์</h3>
+              <p class="service__text">เก็บบรรยากาศ บุคคลสำคัญ และไฮไลต์ของงานได้ครบ ได้ภาพที่นำไปใช้ประชาสัมพันธ์ต่อได้ทันที</p>
+              <ul class="service__list">
+                <li>บรีฟท่าโพสสำหรับภาพหมู่</li>
+                <li>ไม่จำกัดจำนวนรูป</li>
+                <li>คัดและแต่งทุกภาพ</li>
+                <li class="service__delivery">ส่งงานภายใน 7 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
+              </ul>
+              <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== ขั้นตอนการทำงาน ============================== -->
+    <section class="section process" id="process" aria-labelledby="processTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">How it works</p>
+          <h2 class="section-title" id="processTitle">ขั้นตอนการจองคิว</h2>
+          <p class="section-lead">ง่าย ชัดเจน ไม่ยุ่งยาก ตั้งแต่ทักครั้งแรกจนได้รับภาพ</p>
+        </header>
+
+        <ol class="process__list">
+          <li class="step reveal" data-delay="0">
+            <span class="step__num">01</span>
+            <h3 class="step__title">ทักแชทหรือโทร</h3>
+            <p class="step__text">ทักเพจ NAAI PREM หรือโทร <span data-contact-text="phoneLabel">062-234-9685</span> แจ้งวันที่และประเภทงาน</p>
+          </li>
+          <li class="step reveal" data-delay="1">
+            <span class="step__num">02</span>
+            <h3 class="step__title">คุยรายละเอียด</h3>
+            <p class="step__text">คุยเรื่องสถานที่ ช่วงเวลา และสไตล์ภาพที่ชอบ แล้วรับใบเสนอราคา</p>
+          </li>
+          <li class="step reveal" data-delay="2">
+            <span class="step__num">03</span>
+            <h3 class="step__title">มัดจำล็อกคิว</h3>
+            <p class="step__text">โอนมัดจำเพื่อยืนยันวันที่ คิวของคุณจะถูกล็อกไว้ทันที</p>
+          </li>
+          <li class="step reveal" data-delay="3">
+            <span class="step__num">04</span>
+            <h3 class="step__title">วันถ่ายจริง</h3>
+            <p class="step__text">ช่างภาพบรีฟท่าให้ตลอด คุณแค่มาเป็นตัวเอง ที่เหลือเราดูแลให้</p>
+          </li>
+          <li class="step reveal" data-delay="4">
+            <span class="step__num">05</span>
+            <h3 class="step__title">คัดและแต่งภาพ</h3>
+            <p class="step__text">คัดภาพที่ดีที่สุด และแต่งสีทุกภาพในโทนใสเฉพาะตัว</p>
+          </li>
+          <li class="step reveal" data-delay="5">
+            <span class="step__num">06</span>
+            <h3 class="step__title">ส่งงานออนไลน์</h3>
+            <p class="step__text">รับภาพทั้งหมดผ่านลิงก์ออนไลน์ ดาวน์โหลดเก็บไว้ได้ทันที</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================== รีวิว ==============================
+         ข้อความรีวิวสร้างจาก REVIEWS ใน js/data.js -->
+    <section class="section reviews" id="reviews" aria-labelledby="reviewsTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Kind words</p>
+          <h2 class="section-title" id="reviewsTitle">เสียงจากลูกค้า</h2>
+        </header>
+
+        <div class="reviews__slider reveal" aria-roledescription="carousel" aria-label="รีวิวจากลูกค้า">
+          <div class="reviews__track" id="reviewsTrack"></div>
+          <div class="reviews__controls">
+            <button class="icon-btn" id="reviewPrev" aria-label="รีวิวก่อนหน้า">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <div class="reviews__dots" id="reviewDots"></div>
+            <button class="icon-btn" id="reviewNext" aria-label="รีวิวถัดไป">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== FAQ ============================== -->
+    <section class="section faq" id="faq" aria-labelledby="faqTitle">
+      <div class="container container--narrow">
+        <header class="section-head reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2 class="section-title" id="faqTitle">คำถามที่พบบ่อย</h2>
+        </header>
+
+        <div class="faq__list reveal">
+          <div class="faq__item">
+            <h3><button class="faq__q" aria-expanded="false" aria-controls="faq1" id="faq1-btn">ไม่เคยถ่ายรูปมาก่อน โพสท่าไม่เป็น ทำยังไงดี?<i aria-hidden="true"></i></button></h3>
+            <div class="faq__a" id="faq1" role="region" aria-labelledby="faq1-btn"><div><p>ไม่ต้องกังวลเลย ลูกค้าส่วนใหญ่ก็ไม่เคยถ่ายมาก่อนเหมือนกัน ช่างภาพจะบรีฟท่า มุม และจังหวะให้ตลอดการถ่าย พร้อมชวนคุยให้ผ่อนคลาย ภาพที่ได้จึงดูเป็นธรรมชาติแบบที่คุณเป็น</p></div></div>
+          </div>
+          <div class="faq__item">
+            <h3><button class="faq__q" aria-expanded="false" aria-controls="faq2" id="faq2-btn">ได้รูปกี่รูป?<i aria-hidden="true"></i></button></h3>
+            <div class="faq__a" id="faq2" role="region" aria-labelledby="faq2-btn"><div><p>ไม่จำกัดจำนวนรูป ช่างภาพถ่ายเก็บให้เต็มที่ตลอดช่วงเวลาที่จอง ภาพที่ใช้ได้ทุกภาพจะถูกคัดและแต่งส่งให้ทั้งหมด</p></div></div>
+          </div>
+          <div class="faq__item">
+            <h3><button class="faq__q" aria-expanded="false" aria-controls="faq3" id="faq3-btn">รับงานต่างจังหวัดไหม มีค่าเดินทางเพิ่มหรือเปล่า?<i aria-hidden="true"></i></button></h3>
+            <!-- แก้: ระบุพื้นที่ที่ไม่คิดค่าเดินทาง / วิธีคิดค่าเดินทาง -->
+            <div class="faq__a" id="faq3" role="region" aria-labelledby="faq3-btn"><div><p>รับงานทั่วประเทศไทย งานนอกพื้นที่อาจมีค่าเดินทางและที่พักเพิ่มตามระยะทาง ซึ่งจะแจ้งให้ชัดเจนตั้งแต่ตอนคุยรายละเอียด ไม่มีค่าใช้จ่ายแอบแฝง</p></div></div>
+          </div>
+          <div class="faq__item">
+            <h3><button class="faq__q" aria-expanded="false" aria-controls="faq4" id="faq4-btn">ต้องจองล่วงหน้านานแค่ไหน และต้องมัดจำไหม?<i aria-hidden="true"></i></button></h3>
+            <!-- แก้: ระยะเวลาจองล่วงหน้าและเงื่อนไขมัดจำ -->
+            <div class="faq__a" id="faq4" role="region" aria-labelledby="faq4-btn"><div><p>แนะนำให้จองล่วงหน้าอย่างน้อย 1–2 เดือน โดยเฉพาะงานแต่งและช่วงรับปริญญาที่คิวเต็มเร็ว คิวจะยืนยันเมื่อโอนมัดจำแล้ว ส่วนยอดที่เหลือชำระในวันถ่าย</p></div></div>
+          </div>
+          <div class="faq__item">
+            <h3><button class="faq__q" aria-expanded="false" aria-controls="faq5" id="faq5-btn">ใช้เวลาส่งงานกี่วัน?<i aria-hidden="true"></i></button></h3>
+            <!-- แก้: ระยะเวลาส่งงาน (ให้ตรงกับการ์ดบริการ) -->
+            <div class="faq__a" id="faq5" role="region" aria-labelledby="faq5-btn"><div><p>นับจากวันถ่าย งานแต่งประมาณ 30 วัน รับปริญญา 14 วัน พอร์ตนักเรียนและอีเวนต์ 7 วัน ถ้าต้องการภาพด่วนแจ้งล่วงหน้าได้เลย</p></div></div>
+          </div>
+          <div class="faq__item">
+            <h3><button class="faq__q" aria-expanded="false" aria-controls="faq6" id="faq6-btn">พอร์ตนักเรียน ช่วยแนะนำการแต่งตัวและสถานที่ไหม?<i aria-hidden="true"></i></button></h3>
+            <div class="faq__a" id="faq6" role="region" aria-labelledby="faq6-btn"><div><p>ช่วยแนะนำแน่นอน ทั้งชุด โทนสี และสถานที่ที่เข้ากับคณะหรือบุคลิกของน้อง รวมถึงเตรียมท่าโพสสำหรับภาพโปรไฟล์ให้ดูมั่นใจและเป็นตัวเอง</p></div></div>
+          </div>
+          <div class="faq__item">
+            <h3><button class="faq__q" aria-expanded="false" aria-controls="faq7" id="faq7-btn">ภาพออกมาโทนไหน?<i aria-hidden="true"></i></button></h3>
+            <div class="faq__a" id="faq7" role="region" aria-labelledby="faq7-btn"><div><p>โทนใส สว่าง ดูสดชื่น เน้นภาพแคนดิดที่เก็บอารมณ์จริง ดูตัวอย่างได้ในส่วนผลงานด้านบน หรือดูงานล่าสุดที่ Instagram <a href="https://www.instagram.com/naaiprem_photo/" data-contact="instagram">@naaiprem_photo</a></p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== CALL TO ACTION ==============================
+         แก้ภาพพื้นหลัง: images/cta/cta-bg.jpg -->
+    <section class="cta" id="contact" aria-labelledby="ctaTitle">
+      <div class="cta__media" data-parallax="0.18">
+        <img src="images/cta/cta-bg.jpg" alt="" width="2000" height="1331" loading="lazy" decoding="async">
+      </div>
+      <div class="cta__shade" aria-hidden="true"></div>
+
+      <div class="cta__content container">
+        <p class="eyebrow reveal">Let's talk</p>
+        <h2 class="cta__title reveal" id="ctaTitle">พร้อมเก็บวันสำคัญ<br>ของคุณแล้วหรือยัง?</h2>
+        <p class="cta__text reveal">ทักมาเช็กคิวว่างและสอบถามราคาได้เลย คุยกันแบบสบายๆ ไม่มีค่าใช้จ่ายในการสอบถาม</p>
+        <div class="cta__actions reveal">
+          <a href="https://m.me/" data-contact="messenger" class="btn btn--primary btn--lg">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/></svg>
+            ทักแชทเพจ NAAI PREM
+          </a>
+          <a href="tel:0622349685" data-contact="phone" class="btn btn--ghost btn--lg">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+            โทร <span data-contact-text="phoneLabel">062-234-9685</span>
+          </a>
+        </div>
+        <p class="cta__note reveal">หรือดูงานล่าสุดที่ Instagram <a href="https://www.instagram.com/naaiprem_photo/" data-contact="instagram">@naaiprem_photo</a></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="#home" class="logo logo--lg">naaiprem<span>.foto</span></a>
+        <p>ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน และอีเวนต์<br>รับงานทั่วประเทศไทย</p>
+      </div>
+
+      <div class="footer__col">
+        <h3 class="footer__heading">ติดต่อ</h3>
+        <a href="tel:0622349685" data-contact="phone" class="footer__phone"><span data-contact-text="phoneLabel">062-234-9685</span></a>
+        <p class="footer__muted">หรือทักแชทเพจ NAAI PREM ได้ทุกวัน</p>
+      </div>
+
+      <div class="footer__col">
+        <h3 class="footer__heading">ติดตาม</h3>
+        <ul class="footer__social">
+          <li>
+            <a href="https://www.facebook.com/" data-contact="facebookPage">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v6h4v-6h3l1-4h-4V8z"/></svg>
+              Facebook Page · NAAI PREM
+            </a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/" data-contact="facebookPersonal">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+              Facebook · เปรม ม.
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/naaiprem_photo/" data-contact="instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17 7h.01"/></svg>
+              Instagram · naaiprem_photo
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer__bottom">
+      <p>© <span id="year">2026</span> naaiprem.foto · สงวนลิขสิทธิ์ภาพทั้งหมด ห้ามนำไปใช้โดยไม่ได้รับอนุญาต</p>
+    </div>
+  </footer>
+
+  <!-- ============================== ปุ่มลอย (มือถือ) ============================== -->
+  <div class="fab" id="fab">
+    <div class="fab__menu" id="fabMenu">
+      <a href="tel:0622349685" data-contact="phone" class="fab__action">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+        โทรเลย
+      </a>
+      <a href="https://m.me/" data-contact="messenger" class="fab__action">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/></svg>
+        ทักแชทเพจ
+      </a>
+    </div>
+    <button class="fab__toggle" id="fabToggle" aria-label="เปิดช่องทางติดต่อ" aria-expanded="false" aria-controls="fabMenu">
+      <svg class="fab__icon-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/></svg>
+      <svg class="fab__icon-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <!-- ============================== LIGHTBOX ============================== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="ดูภาพผลงานแบบเต็มจอ" hidden>
+    <div class="lightbox__stage" id="lightboxStage">
+      <img class="lightbox__img" id="lightboxImg" alt="">
+    </div>
+    <div class="lightbox__bar">
+      <p class="lightbox__caption" id="lightboxCaption"></p>
+      <p class="lightbox__count" id="lightboxCount"></p>
+    </div>
+    <button class="lightbox__btn lightbox__close" id="lightboxClose" aria-label="ปิด">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <button class="lightbox__btn lightbox__prev" id="lightboxPrev" aria-label="ภาพก่อนหน้า">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <button class="lightbox__btn lightbox__next" id="lightboxNext" aria-label="ภาพถัดไป">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</body>
+</html>
