@@ -240,7 +240,6 @@ const GALLERY = [
   { src: 'images/ordination/ordination-13.jpg', category: 'ordination', title: 'ปลงผมขาวดำ', alt: 'ภาพขาวดำ ผู้ใหญ่กำลังโกนผมนาคที่หลับตา', width: 1600, height: 1065 },
   { src: 'images/ordination/ordination-47-portrait.jpg', category: 'ordination', title: 'ถือตาลปัตร', alt: 'พระบวชใหม่ถือตาลปัตรยืนหน้าพระพุทธรูปสีขาว', width: 1066, height: 1600 },
   { src: 'images/ordination/ordination-40.jpg', category: 'ordination', title: 'ในพระอุโบสถ', alt: 'พระบวชใหม่นั่งในพระอุโบสถที่ตกแต่งสีทอง', width: 1600, height: 1065 },
-  { src: 'images/ordination/ordination-09-portrait.jpg', category: 'ordination', title: 'กราบพระบวชใหม่', alt: 'หญิงสาวนั่งพนมมือหน้าพระบวชใหม่บนทางเดินในวัด', width: 1066, height: 1600 },
   { src: 'images/ordination/ordination-01.jpg', category: 'ordination', title: 'รายละเอียดผ้าพิธี', alt: 'ภาพใกล้ผ้าลูกไม้สีขาวประดับพู่ในงานอุปสมบท', width: 1600, height: 1065 },
   { src: 'images/ordination/ordination-03.jpg', category: 'ordination', title: 'ลอดผ้าเหลือง', alt: 'นาคชุดขาวพนมมือ ถ่ายลอดผ่านผ้าสีเหลืองฉากหน้า', width: 1600, height: 1065 },
   { src: 'images/ordination/ordination-04.jpg', category: 'ordination', title: 'กล่าวคำขอบวช', alt: 'นาคในชุดสีทองพนมมือพูดใส่ไมโครโฟน', width: 1600, height: 1065 },
