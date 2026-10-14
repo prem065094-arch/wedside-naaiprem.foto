@@ -118,6 +118,6 @@ cd ~/Desktop/Webside_naaiprem && python3 -m http.server 8000
 - [ ] ระยะเวลาส่งงานพอร์ตนักเรียน (ตอนนี้ใส่ 7 วันไว้ ยังไม่ได้ยืนยัน)
 - [x] ภาพจริงของหมวดงานแต่ง / รับปริญญา / พอร์ตนักเรียน
 - [x] เปลี่ยนอีเวนต์เป็นงานอุปสมบท (48 ภาพในแกลเลอรี ไม่อยู่ในหน้าปก)
-- [ ] ภาพ OG (`og:image`) และ URL โดเมนจริง
+- [x] SEO: Search Console (meta google-site-verification), sitemap.xml, robots.txt, canonical, JSON-LD — ถ้าเปลี่ยนโดเมนต้องแก้ URL ทุกจุด (ดูคอมเมนต์ใน `<head>` ของ index.html)
 - [x] ติดตั้งระบบจอง + ใส่ `BOOKING.endpoint` / มัดจำ: QR พร้อมเพย์ (images/payment/promptpay-qr.png) + SCB 421-1-25593-9
 - [ ] ยอดมัดจำของแต่ละงาน (ตอนนี้แจ้งว่า "จะแจ้งให้ตอนยืนยันรายละเอียด")
