@@ -35,6 +35,7 @@
 
   --gallery-gap: 12px;
   --gallery-cols: 4;
+  --gallery-pad: clamp(16px, 3vw, 40px);
 }
 
 /* ---------- 2) Base ---------- */
@@ -244,6 +245,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 .hero__media { position: absolute; inset: 0; z-index: -2; will-change: transform; }
 .hero__slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.8s ease-in-out; }
 .hero__slide.is-active { opacity: 1; }
+.hero__slide picture { display: block; width: 100%; height: 100%; }
 .hero__slide img {
   width: 100%; height: 100%; object-fit: cover;
   transform: scale(1.1);
@@ -322,6 +324,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
   margin: -24px auto clamp(32px, 5vw, 56px);
 }
 .filter {
+  display: inline-flex; align-items: center;
   min-height: 42px; padding: 0 20px; border-radius: 999px;
   border: 1px solid var(--line-strong);
   font-family: var(--font-heading); font-size: .92rem; color: var(--text-muted);
@@ -329,8 +332,37 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 }
 .filter:hover { color: var(--text); border-color: rgba(255,255,255,.4); }
 .filter.is-active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.filter[hidden] { display: none; }
 
-.gallery__wrap { max-width: 1440px; margin: 0 auto; padding: 0 clamp(12px, 3vw, 40px); }
+/* แต่ละหมวด (รับปริญญา / งานแต่ง / พอร์ตนักเรียน) — เลขลำดับรันอัตโนมัติตามลำดับใน HTML */
+.gallery { counter-reset: work; }
+.gallery__group { counter-increment: work; scroll-margin-top: var(--nav-h); }
+.gallery__group[hidden] { display: none; }
+.gallery__group + .gallery__group { margin-top: clamp(64px, 9vw, 112px); }
+.gallery__head {
+  max-width: 1440px; margin: 0 auto clamp(20px, 3vw, 32px);
+  padding: 0 var(--gallery-pad);
+  display: grid; grid-template-columns: 1fr auto; column-gap: 24px; align-items: end;
+}
+.gallery__eyebrow {
+  grid-column: 1 / -1;
+  font-family: var(--font-display); font-style: italic; font-size: 1.1rem; letter-spacing: .08em;
+  color: var(--text-muted);
+}
+.gallery__eyebrow::before { content: counter(work, decimal-leading-zero) ' — '; font-style: normal; color: var(--text-dim); }
+.gallery__heading {
+  grid-column: 1;
+  font-family: var(--font-heading); font-weight: 300;
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem); line-height: 1.4;
+}
+.gallery__lead { grid-column: 1; max-width: 600px; margin-top: 6px; color: var(--text-muted); font-size: .96rem; }
+.gallery__count {
+  grid-column: 2; grid-row: 2 / span 2; align-self: end;
+  font-family: var(--font-display); font-size: 1.15rem; letter-spacing: .06em; color: var(--text-dim);
+  font-variant-numeric: lining-nums tabular-nums; white-space: nowrap;
+}
+
+.gallery__wrap { max-width: 1440px; margin: 0 auto; padding: 0 var(--gallery-pad); }
 .gallery__grid {
   position: relative;
   display: grid;
@@ -364,7 +396,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
   opacity: 0; transform: translateY(10px);
   transition: opacity .5s var(--ease), transform .5s var(--ease);
 }
-.gallery__cat { font-size: .8rem; color: rgba(242,242,242,.7); }
 .gallery__title { font-family: var(--font-heading); font-size: 1rem; font-weight: 400; }
 
 @media (hover: hover) and (pointer: fine) {
@@ -376,19 +407,18 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
   .fx-grayscale .gallery__item:hover .gallery__img,
   .fx-grayscale .gallery__item:focus-visible .gallery__img { filter: none; }
 }
-/* อุปกรณ์สัมผัส: แสดงชื่อหมวดเล็กๆ ตลอด */
-@media (hover: none) {
-  .gallery__info { opacity: 1; transform: none; padding: 36px 12px 10px; }
-  .gallery__title { font-size: .88rem; }
-  .gallery__cat { font-size: .75rem; }
-}
+/* อุปกรณ์สัมผัส: ไม่มีแถบชื่อทับภาพ ให้เห็นภาพเต็มตามสัดส่วนจริง (ชื่อภาพดูได้ใน Lightbox) */
 
 .gallery__more { display: flex; justify-content: center; margin-top: clamp(32px, 5vw, 56px); }
 .gallery__more[hidden] { display: none; }
 
 @media (max-width: 1199px) { :root { --gallery-cols: 3; } }
 @media (max-width: 899px)  { :root { --gallery-cols: 2; --gallery-gap: 8px; } }
-@media (max-width: 479px)  { :root { --gallery-cols: 1; } }
+@media (max-width: 479px)  {
+  :root { --gallery-cols: 1; --gallery-gap: 10px; }
+  .gallery__head { grid-template-columns: 1fr; }
+  .gallery__count { grid-column: 1; grid-row: auto; margin-top: 8px; font-size: 1rem; }
+}
 
 /* ===== Stats ===== */
 .stats { background: var(--bg-alt); padding: clamp(48px, 7vw, 80px) 0; }

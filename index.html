@@ -11,13 +11,14 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="naaiprem.foto — เก็บรอยยิ้มจริง ในโทนภาพใสๆ ที่เป็นคุณ">
   <meta property="og:description" content="รับถ่ายงานแต่ง รับปริญญา พอร์ตนักเรียน อีเวนต์ บรีฟท่าโพสให้ตลอด ไม่จำกัดจำนวนรูป รับงานทั่วประเทศไทย">
-  <meta property="og:image" content="images/hero/hero-01-wedding.jpg">
+  <meta property="og:image" content="images/hero/hero-01-graduation.jpg">
   <meta property="og:locale" content="th_TH">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Sans+Thai:wght@300;400;500&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="images/hero/hero-01-wedding.jpg">
+  <link rel="preload" as="image" href="images/hero/hero-01-graduation-portrait.jpg" media="(orientation: portrait)">
+  <link rel="preload" as="image" href="images/hero/hero-01-graduation.jpg" media="(orientation: landscape)">
   <link rel="stylesheet" href="css/style.css">
   <!-- บอก CSS ว่า JS ทำงาน (ถ้าไม่มี JS เนื้อหาจะแสดงทันทีโดยไม่มี animation) -->
   <script>document.documentElement.classList.add('js');</script>
@@ -64,27 +65,44 @@
 
   <main>
     <!-- ============================== HERO ==============================
-         แก้ภาพ: เปลี่ยนไฟล์ใน images/hero/ (ใช้ 1 ภาพต่อ 1 ประเภทงาน ขนาดแนะนำ 2000px)
+         แก้ภาพ: เปลี่ยนไฟล์ใน images/hero/ (ใช้ 1 ภาพต่อ 1 ประเภทงาน)
+         แต่ละสไลด์มี 2 ไฟล์ เพราะ Hero เต็มจอ ถ้าใช้ภาพแนวนอนบนมือถือ (จอแนวตั้ง) ภาพจะถูกตัดซ้าย-ขวาจนเหลือแนวตั้ง
+           • <source> = ภาพแนวตั้ง *-portrait.jpg สำหรับจอแนวตั้ง (มือถือ / แท็บเล็ต) ขนาดแนะนำ 1600px
+           • <img>    = ภาพแนวนอน สำหรับจอแนวนอน (คอมพิวเตอร์) ขนาดแนะนำ 2000px
+         ภาพแนวตั้งควรเลือกภาพที่ตัวแบบอยู่ช่วงบน-กลางภาพ เพราะช่วงล่างจะมีข้อความทับ
          data-label = ชื่อหมวดที่แสดงมุมขวาล่าง -->
     <section class="hero" id="home" aria-label="หน้าแรก">
       <div class="hero__media" data-parallax="0.25">
-        <figure class="hero__slide is-active" data-label="งานแต่ง">
-          <img src="images/hero/hero-01-wedding.jpg" alt="กลุ่มเพื่อนยืนเรียงแถวยิ้มให้กล้องในอาคารที่มีแสงธรรมชาติ" width="2000" height="1331" fetchpriority="high" decoding="async">
+        <figure class="hero__slide is-active" data-label="รับปริญญา">
+          <picture>
+            <source media="(orientation: portrait)" srcset="images/hero/hero-01-graduation-portrait.jpg" width="1065" height="1600">
+            <img src="images/hero/hero-01-graduation.jpg" alt="เพื่อนบัณฑิตหญิงสี่คนกอดคอหัวเราะหน้าป้ายมหาวิทยาลัย" width="2000" height="1331" fetchpriority="high" decoding="async">
+          </picture>
         </figure>
-        <figure class="hero__slide" data-label="รับปริญญา">
-          <img src="images/hero/hero-02-graduation.jpg" alt="ภาพมุมต่ำ กลุ่มนักเรียนจับมือกันชูขึ้นฟ้าสีคราม" width="2000" height="1331" loading="lazy" decoding="async">
+        <figure class="hero__slide" data-label="งานแต่ง">
+          <picture>
+            <source media="(orientation: portrait)" srcset="images/hero/hero-02-wedding-portrait.jpg" width="1065" height="1600">
+            <img src="images/hero/hero-02-wedding.jpg" alt="บ่าวสาวยิ้มให้กันท่ามกลางกลีบดอกไม้ที่โปรยลงมา" width="2000" height="1331" loading="lazy" decoding="async">
+          </picture>
         </figure>
         <figure class="hero__slide" data-label="พอร์ตนักเรียน">
-          <img src="images/hero/hero-03-portfolio.jpg" alt="นักเรียนนอนเป็นวงกลมบนสนามหญ้า ยิ้มมองกล้อง" width="2000" height="1331" loading="lazy" decoding="async">
+          <picture>
+            <source media="(orientation: portrait)" srcset="images/hero/hero-03-portfolio-portrait.jpg" width="1065" height="1600">
+            <img src="images/hero/hero-03-portfolio.jpg" alt="ภาพมุมต่ำ เพื่อนนักเรียนจับมือชูขึ้นฟ้าสีคราม" width="2000" height="1331" loading="lazy" decoding="async">
+          </picture>
         </figure>
+        <!-- TODO: ยังเป็นภาพตัวอย่าง รอภาพอีเวนต์จริง -->
         <figure class="hero__slide" data-label="อีเวนต์">
-          <img src="images/hero/hero-04-event.jpg" alt="กลุ่มเพื่อนเกาะตาข่ายทำหน้าตลกอย่างสนุกสนาน" width="2000" height="1331" loading="lazy" decoding="async">
+          <picture>
+            <source media="(orientation: portrait)" srcset="images/hero/hero-04-event-portrait.jpg" width="909" height="1363">
+            <img src="images/hero/hero-04-event.jpg" alt="กลุ่มเพื่อนเกาะตาข่ายทำหน้าตลกอย่างสนุกสนาน" width="2000" height="1331" loading="lazy" decoding="async">
+          </picture>
         </figure>
       </div>
       <div class="hero__shade" aria-hidden="true"></div>
 
       <div class="hero__content container">
-        <p class="hero__eyebrow hero-in" style="--i:0">งานแต่ง · รับปริญญา · พอร์ตนักเรียน · อีเวนต์</p>
+        <p class="hero__eyebrow hero-in" style="--i:0">รับปริญญา · งานแต่ง · พอร์ตนักเรียน · อีเวนต์</p>
         <h1 class="hero__brand hero-in" style="--i:1">naaiprem<span>.foto</span></h1>
         <!-- แก้: สโลแกน -->
         <p class="hero__slogan hero-in" style="--i:2">เก็บรอยยิ้มจริง ในโทนภาพใสๆ ที่เป็นคุณ</p>
@@ -101,7 +119,7 @@
 
       <div class="hero__meta" aria-hidden="true">
         <span class="hero__count"><span id="heroIndex">01</span> / <span id="heroTotal">04</span></span>
-        <span class="hero__label" id="heroLabel">งานแต่ง</span>
+        <span class="hero__label" id="heroLabel">รับปริญญา</span>
         <div class="hero__bars" id="heroBars"></div>
       </div>
 
@@ -112,7 +130,9 @@
     </section>
 
     <!-- ============================== GALLERY ==============================
-         ภาพทั้งหมดสร้างจาก GALLERY ใน js/data.js (ไม่ต้องแก้ HTML ส่วนนี้) -->
+         แบ่งเป็นหมวด เรียงตามลำดับบล็อก .gallery__group ด้านล่าง (ย้ายบล็อกขึ้น-ลงเพื่อสลับลำดับได้)
+         ภาพในแต่ละหมวดสร้างจาก GALLERY ใน js/data.js ตาม data-category (ไม่ต้องแก้ HTML เวลาเพิ่มภาพ)
+         หมวดที่ยังไม่มีภาพใน GALLERY จะถูกซ่อนอัตโนมัติ -->
     <section class="section gallery" id="portfolio" aria-labelledby="galleryTitle">
       <div class="container">
         <header class="section-head reveal">
@@ -121,22 +141,49 @@
           <p class="section-lead">ทุกภาพคือช่วงเวลาจริงของลูกค้าจริง เลือกดูตามประเภทงานที่คุณสนใจได้เลย</p>
         </header>
 
-        <div class="filters reveal" role="group" aria-label="กรองผลงานตามประเภท">
-          <button class="filter is-active" data-filter="all" aria-pressed="true">ทั้งหมด</button>
-          <button class="filter" data-filter="wedding" aria-pressed="false">งานแต่ง</button>
-          <button class="filter" data-filter="graduation" aria-pressed="false">รับปริญญา</button>
-          <button class="filter" data-filter="portfolio" aria-pressed="false">พอร์ตนักเรียน</button>
-          <button class="filter" data-filter="event" aria-pressed="false">อีเวนต์</button>
-        </div>
+        <nav class="filters reveal" aria-label="ไปยังหมวดผลงาน">
+          <a class="filter" href="#work-graduation" data-jump="graduation">รับปริญญา</a>
+          <a class="filter" href="#work-wedding" data-jump="wedding">งานแต่ง</a>
+          <a class="filter" href="#work-portfolio" data-jump="portfolio">พอร์ตนักเรียน</a>
+        </nav>
       </div>
 
-      <div class="gallery__wrap reveal">
-        <div class="gallery__grid" id="galleryGrid"></div>
-      </div>
+      <!-- แก้: ข้อความหัวหมวด -->
+      <section class="gallery__group" id="work-graduation" data-category="graduation" aria-labelledby="workGraduationTitle">
+        <header class="gallery__head container reveal">
+          <p class="gallery__eyebrow">Graduation</p>
+          <h3 class="gallery__heading" id="workGraduationTitle">รับปริญญา</h3>
+          <p class="gallery__lead">ซ้อมย่อย ซ้อมใหญ่ วันรับจริง และถ่ายนอกรอบ เก็บครบทั้งภาพเดี่ยว ภาพคู่ และภาพกับครอบครัว</p>
+          <p class="gallery__count" data-gallery-count></p>
+        </header>
+        <div class="gallery__wrap reveal"><div class="gallery__grid" data-gallery-grid></div></div>
+        <div class="gallery__more"><button class="btn btn--ghost" type="button" data-load-more>ดูภาพรับปริญญาเพิ่มเติม</button></div>
+      </section>
 
-      <div class="gallery__more">
-        <button class="btn btn--ghost" id="loadMore">ดูผลงานเพิ่มเติม</button>
-      </div>
+      <section class="gallery__group" id="work-wedding" data-category="wedding" aria-labelledby="workWeddingTitle">
+        <header class="gallery__head container reveal">
+          <p class="gallery__eyebrow">Wedding</p>
+          <h3 class="gallery__heading" id="workWeddingTitle">งานแต่ง</h3>
+          <p class="gallery__lead">พิธีเช้า งานเลี้ยง และพรีเวดดิ้ง เก็บทั้งช่วงพิธีสำคัญและรอยยิ้มของทุกคนในงาน</p>
+          <p class="gallery__count" data-gallery-count></p>
+        </header>
+        <div class="gallery__wrap reveal"><div class="gallery__grid" data-gallery-grid></div></div>
+        <div class="gallery__more"><button class="btn btn--ghost" type="button" data-load-more>ดูภาพงานแต่งเพิ่มเติม</button></div>
+      </section>
+
+      <section class="gallery__group" id="work-portfolio" data-category="portfolio" aria-labelledby="workPortfolioTitle">
+        <header class="gallery__head container reveal">
+          <p class="gallery__eyebrow">Portfolio</p>
+          <h3 class="gallery__heading" id="workPortfolioTitle">พอร์ตนักเรียน</h3>
+          <p class="gallery__lead">ภาพโปรไฟล์ยื่นมหาวิทยาลัย และภาพกลุ่มกับเพื่อนก่อนจบ ม.6 ในโทนใส เป็นธรรมชาติ</p>
+          <p class="gallery__count" data-gallery-count></p>
+        </header>
+        <div class="gallery__wrap reveal"><div class="gallery__grid" data-gallery-grid></div></div>
+        <div class="gallery__more"><button class="btn btn--ghost" type="button" data-load-more>ดูภาพพอร์ตนักเรียนเพิ่มเติม</button></div>
+      </section>
+
+      <!-- TODO: เมื่อมีภาพอีเวนต์จริงใน GALLERY ให้คัดลอกบล็อกด้านบนมาวางตรงนี้ แล้วเปลี่ยนเป็น
+           id="work-event" data-category="event" (และเพิ่มลิงก์ data-jump="event" ในแถบด้านบน) -->
     </section>
 
     <!-- ============================== STATS ==============================
@@ -227,7 +274,7 @@
         <div class="services__grid">
           <article class="service reveal" data-delay="0">
             <div class="service__media">
-              <img src="images/services/service-wedding.jpg" alt="กลุ่มเพื่อนยืนเรียงแถวในอาคารโทนสว่าง ตัวอย่างภาพงานแต่ง" width="799" height="1000" loading="lazy" decoding="async">
+              <img src="images/services/service-wedding.jpg" alt="เจ้าบ่าวชุดปกติขาวยืนคู่เจ้าสาวหน้าซุ้มดอกไม้ ตัวอย่างภาพงานแต่ง" width="800" height="1000" loading="lazy" decoding="async">
             </div>
             <div class="service__body">
               <p class="service__tags">พิธีเช้า · งานเลี้ยง · พรีเวดดิ้ง</p>
@@ -245,7 +292,7 @@
 
           <article class="service reveal" data-delay="1">
             <div class="service__media">
-              <img src="images/services/service-graduation.jpg" alt="นักเรียนจับมือกันชูขึ้นฟ้า ตัวอย่างภาพรับปริญญา" width="799" height="1000" loading="lazy" decoding="async">
+              <img src="images/services/service-graduation.jpg" alt="คู่บัณฑิตโผล่หน้ายิ้มจากผนังระแนงสีส้ม ตัวอย่างภาพรับปริญญา" width="800" height="1000" loading="lazy" decoding="async">
             </div>
             <div class="service__body">
               <p class="service__tags">ซ้อมใหญ่ · วันรับจริง · ถ่ายนอกรอบ</p>
@@ -263,7 +310,7 @@
 
           <article class="service reveal" data-delay="2">
             <div class="service__media">
-              <img src="images/services/service-portfolio.jpg" alt="นักเรียนนอนเป็นวงกลมบนสนามหญ้า ตัวอย่างภาพพอร์ตนักเรียน" width="799" height="1000" loading="lazy" decoding="async">
+              <img src="images/services/service-portfolio.jpg" alt="นักเรียนหญิงถือหนังสือชีววิทยายิ้มบนสะพาน ตัวอย่างภาพพอร์ตนักเรียน" width="800" height="1000" loading="lazy" decoding="async">
             </div>
             <div class="service__body">
               <p class="service__tags">ยื่นมหาวิทยาลัย · ภาพโปรไฟล์</p>

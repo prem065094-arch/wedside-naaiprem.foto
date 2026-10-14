@@ -139,23 +139,18 @@
     });
   }
 
-  /* ---------- 4) Gallery: Masonry + Filter (FLIP) + Load more ---------- */
+  /* ---------- 4) Gallery: แยกหมวด + Masonry + Load more ---------- */
   function initGallery(lightbox) {
-    const grid = $('#galleryGrid');
-    const moreWrap = $('.gallery__more');
-    const moreBtn = $('#loadMore');
-    const filterBtns = $$('.filter');
-    if (!grid) return;
+    const groups = $$('.gallery__group');
+    if (!groups.length) return;
 
     if (SETTINGS.grayscaleHover) document.body.classList.add('fx-grayscale');
 
     const ROW = 8; // ต้องตรงกับ grid-auto-rows ใน CSS
+    const initial = SETTINGS.initialCount || 8;
+    const step = SETTINGS.loadMoreCount || 12;
     const items = GALLERY.map((data, index) => ({ ...data, index, el: null }));
-    let filter = 'all';
-    let shown = SETTINGS.initialCount || 12;
-
-    const filtered = () => (filter === 'all' ? items : items.filter((it) => it.category === filter));
-    const visible = () => filtered().slice(0, shown);
+    const grids = [];
 
     function createItem(it) {
       const el = document.createElement('button');
@@ -168,7 +163,6 @@
           <img class="gallery__img" src="${esc(it.src)}" alt="${esc(it.alt)}"
                width="${it.width}" height="${it.height}" loading="lazy" decoding="async">
           <span class="gallery__info" aria-hidden="true">
-            <span class="gallery__cat">${esc(CATEGORIES[it.category])}</span>
             <span class="gallery__title">${esc(it.title)}</span>
           </span>
         </span>`;
@@ -182,8 +176,8 @@
       return el;
     }
 
-    // คำนวณจำนวนแถว (span) จากสัดส่วนภาพ → ไม่ต้องรอภาพโหลด ไม่เกิด layout shift
-    function setSpans(list) {
+    // คำนวณจำนวนแถว (span) จากสัดส่วนภาพจริง → ภาพไม่ถูกครอป และไม่เกิด layout shift ระหว่างรอโหลด
+    function setSpans(grid, list) {
       const style = getComputedStyle(grid);
       const cols = style.gridTemplateColumns.split(' ').filter(Boolean).length || 1;
       const gap = parseFloat(style.columnGap) || 0;
@@ -194,115 +188,74 @@
       });
     }
 
-    function resetItem(el) {
-      el.getAnimations().forEach((a) => a.cancel());
-      el.classList.remove('is-leaving');
-      el.style.position = el.style.left = el.style.top = el.style.width = el.style.margin = el.style.pointerEvents = '';
-    }
+    groups.forEach((group) => {
+      const category = group.dataset.category;
+      const grid = $('[data-gallery-grid]', group);
+      const moreBtn = $('[data-load-more]', group);
+      const list = items.filter((it) => it.category === category);
 
-    function render(animate = true) {
-      const next = visible();
-      const nextSet = new Set(next);
-      const current = $$('.gallery__item', grid).filter((el) => !el.classList.contains('is-leaving'));
-      const useFlip = animate && !reduceMotion() && current.length > 0;
+      // ยังไม่มีภาพในหมวดนี้ → ซ่อนทั้งหมวดและลิงก์ทางลัด
+      if (!list.length) {
+        group.hidden = true;
+        $$(`[data-jump="${category}"]`).forEach((a) => { a.hidden = true; });
+        return;
+      }
 
-      // FIRST: จำตำแหน่งเดิม
-      const gridRect = grid.getBoundingClientRect();
-      const first = new Map();
-      if (useFlip) current.forEach((el) => first.set(el, el.getBoundingClientRect()));
+      const countEl = $('[data-gallery-count]', group);
+      if (countEl) countEl.textContent = `${list.length} ภาพ`;
 
-      // ภาพที่ต้องออก: ตรึงตำแหน่งไว้แล้วค่อยๆ จางหาย
-      current.forEach((el) => {
-        if (nextSet.has(items[el.dataset.index])) return;
-        if (!useFlip) { el.remove(); return; }
-        const r = first.get(el);
-        el.classList.add('is-leaving');
-        Object.assign(el.style, {
-          position: 'absolute',
-          left: `${r.left - gridRect.left}px`,
-          top: `${r.top - gridRect.top}px`,
-          width: `${r.width}px`,
-          margin: '0',
-          pointerEvents: 'none',
+      let shown = 0;
+      const visible = () => list.slice(0, shown);
+
+      function showMore(count, animate) {
+        const next = list.slice(shown, shown + count);
+        shown += next.length;
+        next.forEach((it) => {
+          it.el = createItem(it);
+          grid.appendChild(it.el);
         });
-        el.animate(
-          [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.94)' }],
-          { duration: 380, easing: 'ease', fill: 'forwards' },
-        ).finished.then(() => el.remove()).catch(() => {});
-      });
+        setSpans(grid, next);
+        moreBtn.parentElement.hidden = shown >= list.length;
 
-      // จัดลำดับ DOM ใหม่ตามรายการที่ต้องแสดง
-      next.forEach((it) => {
-        if (!it.el) it.el = createItem(it);
-        else if (it.el.classList.contains('is-leaving')) resetItem(it.el);
-        grid.appendChild(it.el);
-      });
-      setSpans(next);
-
-      moreWrap.hidden = shown >= filtered().length;
-      if (!animate || reduceMotion()) return;
-
-      // LAST → INVERT → PLAY
-      let entering = 0;
-      next.forEach((it) => {
-        const el = it.el;
-        const from = first.get(el);
-        if (from) {
-          const to = el.getBoundingClientRect();
-          const dx = from.left - to.left;
-          const dy = from.top - to.top;
-          if (dx || dy) {
-            el.animate(
-              [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }],
-              { duration: 750, easing: EASE },
-            );
-          }
-        } else {
-          el.animate(
+        if (!animate || reduceMotion()) return next;
+        next.forEach((it, k) => {
+          it.el.animate(
             [{ opacity: 0, transform: 'translateY(28px) scale(.97)' }, { opacity: 1, transform: 'none' }],
-            { duration: 800, delay: 120 + Math.min(entering++, 10) * 60, easing: EASE, fill: 'backwards' },
+            { duration: 800, delay: 60 + Math.min(k, 10) * 60, easing: EASE, fill: 'backwards' },
           );
-        }
+        });
+        return next;
+      }
+
+      moreBtn.addEventListener('click', () => {
+        const added = showMore(step, true);
+        // ดูครบแล้วปุ่มจะหายไป → ย้ายโฟกัสไปภาพแรกที่เพิ่งเพิ่ม (ผู้ใช้คีย์บอร์ดไม่หลุดไปต้นหน้า)
+        if (added.length && moreBtn.parentElement.hidden) added[0].el.focus({ preventScroll: true });
       });
-    }
 
-    // ปุ่ม Filter
-    filterBtns.forEach((btn) => btn.addEventListener('click', () => {
-      if (btn.dataset.filter === filter) return;
-      filter = btn.dataset.filter;
-      shown = SETTINGS.initialCount || 12;
-      filterBtns.forEach((b) => {
-        const on = b === btn;
-        b.classList.toggle('is-active', on);
-        b.setAttribute('aria-pressed', String(on));
+      // คลิกภาพ → เปิด Lightbox (เลื่อนดูได้ทุกภาพในหมวดนี้)
+      grid.addEventListener('click', (e) => {
+        const el = e.target.closest('.gallery__item');
+        if (!el) return;
+        lightbox.open(list, list.indexOf(items[el.dataset.index]));
       });
-      render();
-    }));
 
-    // ดูผลงานเพิ่มเติม
-    moreBtn.addEventListener('click', () => {
-      shown += SETTINGS.loadMoreCount || 8;
-      render();
-    });
-
-    // คลิกภาพ → เปิด Lightbox (เลื่อนดูได้ทุกภาพในหมวดที่เลือกอยู่)
-    grid.addEventListener('click', (e) => {
-      const el = e.target.closest('.gallery__item');
-      if (!el || el.classList.contains('is-leaving')) return;
-      const list = filtered();
-      lightbox.open(list, list.indexOf(items[el.dataset.index]));
+      grids.push({ grid, visible });
+      showMore(initial, false);
     });
 
     // คำนวณ span ใหม่เมื่อความกว้างเปลี่ยน (หมุนจอ / ย่อหน้าต่าง)
-    let lastWidth = 0;
-    new ResizeObserver(([entry]) => {
-      const w = Math.round(entry.contentRect.width);
-      if (w === lastWidth) return;
-      lastWidth = w;
-      requestAnimationFrame(() => setSpans(visible())); // เลื่อนไปเฟรมถัดไป กัน ResizeObserver loop warning
-    }).observe(grid);
-
-    render(false);
+    const lastWidth = new WeakMap();
+    const ro = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        const w = Math.round(entry.contentRect.width);
+        if (w === lastWidth.get(entry.target)) return;
+        lastWidth.set(entry.target, w);
+        const g = grids.find((x) => x.grid === entry.target);
+        requestAnimationFrame(() => setSpans(g.grid, g.visible())); // เลื่อนไปเฟรมถัดไป กัน ResizeObserver loop warning
+      });
+    });
+    grids.forEach(({ grid }) => ro.observe(grid));
   }
 
   /* ---------- 5) Lightbox ---------- */
