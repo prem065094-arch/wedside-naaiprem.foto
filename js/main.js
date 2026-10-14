@@ -11,11 +11,35 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
   const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => reducedMotionQuery.matches;
-  const EASE = 'cubic-bezier(.22, 1, .36, 1)';
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
   const lockScroll = (on) => document.documentElement.classList.toggle('is-locked', on);
+  const finePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // ตัวเลขวิ่งนับขึ้นจาก 0 (ใช้กับตัวนับสถิติและราคาเริ่มต้น)
+  function countUp(el, target, format, duration = 1600) {
+    const t0 = performance.now();
+    const tick = (now) => {
+      const p = Math.min((now - t0) / duration, 1);
+      el.textContent = format(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    el.textContent = format(0);
+    requestAnimationFrame(tick);
+  }
+
+  // เรียก fn(el) ครั้งเดียวเมื่อ element เลื่อนเข้ามาในจอ
+  function onceVisible(els, fn, threshold = 0.6) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        fn(entry.target);
+      });
+    }, { threshold });
+    els.forEach((el) => io.observe(el));
+  }
 
   /* ---------- 1) ลิงก์ติดต่อจาก CONTACT ---------- */
   function initContacts() {
@@ -152,6 +176,15 @@
     const items = GALLERY.map((data, index) => ({ ...data, index, el: null }));
     const grids = [];
 
+    // ภาพค่อยๆ โผล่ขึ้นทีละภาพเมื่อเลื่อนมาเห็น
+    const revealIO = reduceMotion() || !('IntersectionObserver' in window) ? null : new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        revealIO.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -6% 0px' });
+
     function createItem(it) {
       const el = document.createElement('button');
       el.type = 'button';
@@ -207,28 +240,24 @@
       let shown = 0;
       const visible = () => list.slice(0, shown);
 
-      function showMore(count, animate) {
+      function showMore(count) {
         const next = list.slice(shown, shown + count);
         shown += next.length;
-        next.forEach((it) => {
+        const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length || 1;
+        next.forEach((it, k) => {
           it.el = createItem(it);
+          it.el.style.setProperty('--k', k % cols); // หน่วงเวลาไล่ตามคอลัมน์
           grid.appendChild(it.el);
+          if (revealIO) revealIO.observe(it.el);
+          else it.el.classList.add('is-in');
         });
         setSpans(grid, next);
         moreBtn.parentElement.hidden = shown >= list.length;
-
-        if (!animate || reduceMotion()) return next;
-        next.forEach((it, k) => {
-          it.el.animate(
-            [{ opacity: 0, transform: 'translateY(28px) scale(.97)' }, { opacity: 1, transform: 'none' }],
-            { duration: 800, delay: 60 + Math.min(k, 10) * 60, easing: EASE, fill: 'backwards' },
-          );
-        });
         return next;
       }
 
       moreBtn.addEventListener('click', () => {
-        const added = showMore(step, true);
+        const added = showMore(step);
         // ดูครบแล้วปุ่มจะหายไป → ย้ายโฟกัสไปภาพแรกที่เพิ่งเพิ่ม (ผู้ใช้คีย์บอร์ดไม่หลุดไปต้นหน้า)
         if (added.length && moreBtn.parentElement.hidden) added[0].el.focus({ preventScroll: true });
       });
@@ -241,7 +270,7 @@
       });
 
       grids.push({ grid, visible });
-      showMore(initial, false);
+      showMore(initial);
     });
 
     // คำนวณ span ใหม่เมื่อความกว้างเปลี่ยน (หมุนจอ / ย่อหน้าต่าง)
@@ -396,30 +425,9 @@
       </li>`).join('');
 
     if (reduceMotion()) return; // แสดงตัวเลขจริงทันที
-
-    const countUp = (el) => {
-      const target = Number(el.dataset.target);
-      const suffix = el.dataset.suffix;
-      const duration = 1600;
-      const t0 = performance.now();
-      const tick = (now) => {
-        const p = Math.min((now - t0) / duration, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = format(Math.round(target * eased), suffix);
-        if (p < 1) requestAnimationFrame(tick);
-      };
-      el.textContent = format(0, suffix);
-      requestAnimationFrame(tick);
-    };
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        io.unobserve(entry.target);
-        countUp(entry.target);
-      });
-    }, { threshold: 0.6 });
-    $$('.stat__num', list).forEach((el) => io.observe(el));
+    onceVisible($$('.stat__num', list), (el) => {
+      countUp(el, Number(el.dataset.target), (n) => format(n, el.dataset.suffix));
+    });
   }
 
   /* ---------- 7) สไลด์รีวิว ---------- */
@@ -559,8 +567,7 @@
 
   /* ---------- 11) Custom cursor (Desktop เท่านั้น) ---------- */
   function initCursor() {
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    if (!finePointer || reduceMotion()) return;
+    if (!finePointer() || reduceMotion()) return;
 
     const cursor = $('.cursor');
     const dot = $('.cursor__dot');
@@ -592,7 +599,7 @@
 
     // ขยายเมื่ออยู่บนภาพผลงาน / ย่อเมื่ออยู่บนลิงก์และปุ่ม
     document.addEventListener('mouseover', (e) => {
-      const onImage = !!e.target.closest('.gallery__item');
+      const onImage = !!e.target.closest('.gallery__item, .strip__item');
       cursor.classList.toggle('is-view', onImage);
       cursor.classList.toggle('is-link', !onImage && !!e.target.closest('a, button'));
     });
@@ -622,6 +629,104 @@
     }
   }
 
+  /* ---------- 13) ลูกเล่นตอนเลื่อนหน้า: แถบความคืบหน้า + โลโก้หมุน ---------- */
+  function initScrollFx() {
+    const bar = $('#navProgress');
+    const logo = $('.nav .logo');
+    if (reduceMotion()) return;
+    let ticking = false;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (bar) bar.style.transform = `scaleX(${max > 0 ? Math.min(window.scrollY / max, 1) : 0})`;
+      if (logo) logo.style.setProperty('--spin', `${(window.scrollY * 0.12).toFixed(1)}deg`);
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }, { passive: true });
+    update();
+  }
+
+  /* ---------- 14) ชื่อแบรนด์ใน Hero ขึ้นทีละตัวอักษร ---------- */
+  function initHeroBrand() {
+    const brand = $('.hero__brand');
+    if (!brand || reduceMotion()) return;
+    brand.setAttribute('aria-label', brand.textContent.trim());
+    brand.classList.remove('hero-in');
+    let c = 0;
+    const split = (node) => {
+      [...node.childNodes].forEach((child) => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const frag = document.createDocumentFragment();
+          [...child.textContent].forEach((ch) => {
+            const span = document.createElement('span');
+            span.className = 'char';
+            span.setAttribute('aria-hidden', 'true');
+            span.style.setProperty('--c', c++);
+            span.textContent = ch;
+            frag.appendChild(span);
+          });
+          child.replaceWith(frag);
+        } else {
+          split(child);
+        }
+      });
+    };
+    split(brand);
+  }
+
+  /* ---------- 15) แถบภาพวิ่ง ---------- */
+  function initStrip(lightbox) {
+    const wrap = $('#stripRows');
+    if (!wrap || typeof STRIP === 'undefined') return;
+    const bySrc = new Map(GALLERY.map((g) => [g.src, g]));
+    const list = STRIP.map((src) => bySrc.get(src)).filter(Boolean);
+    if (!list.length) { wrap.closest('section').hidden = true; return; }
+
+    const thumb = (src) => `images/strip/${src.split('/').pop()}`;
+    const rows = [list.filter((_, k) => k % 2 === 0), list.filter((_, k) => k % 2 === 1)].filter((r) => r.length);
+    const itemHtml = (it, copy) => `
+      <button type="button" class="strip__item" data-src="${esc(it.src)}" style="aspect-ratio: ${it.width} / ${it.height}"
+        ${copy ? 'aria-hidden="true" tabindex="-1"' : `aria-label="ดูภาพเต็มจอ: ${esc(it.title)}"`}>
+        <img src="${esc(thumb(it.src))}" alt="${copy ? '' : esc(it.alt)}" width="${it.width}" height="${it.height}" loading="lazy" decoding="async">
+      </button>`;
+    // ชุดภาพซ้ำ 2 รอบเพื่อให้วิ่งวนได้ต่อเนื่อง (ชุดที่ 2 ซ่อนจากโปรแกรมอ่านหน้าจอ)
+    wrap.innerHTML = rows.map((row) => `
+      <div class="strip__row">
+        <div class="strip__track" style="--strip-dur: ${row.length * 6}s">
+          ${row.map((it) => itemHtml(it, false)).join('')}${row.map((it) => itemHtml(it, true)).join('')}
+        </div>
+      </div>`).join('');
+
+    wrap.addEventListener('click', (e) => {
+      const btn = e.target.closest('.strip__item');
+      if (!btn) return;
+      lightbox.open(list, list.findIndex((it) => it.src === btn.dataset.src));
+    });
+  }
+
+  /* ---------- 16) การ์ดบริการ: เอียงตามเมาส์ + ราคาวิ่ง ---------- */
+  function initServices() {
+    const prices = $$('.service__price [data-count]');
+    if (!reduceMotion()) {
+      onceVisible(prices, (el) => countUp(el, Number(el.dataset.count), (n) => n.toLocaleString('en-US'), 1400), 0.8);
+    }
+
+    if (!finePointer() || reduceMotion()) return;
+    $$('.service').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;  // -0.5 … 0.5
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        const angle = Math.hypot(x, y) * 12;             // สูงสุดราว 6 องศา
+        card.style.rotate = `${-y} ${x} 0 ${angle.toFixed(2)}deg`;
+      });
+      card.addEventListener('pointerleave', () => { card.style.rotate = ''; });
+    });
+  }
+
   /* ---------- Start ---------- */
   if (typeof CONTACT === 'undefined' || typeof GALLERY === 'undefined') {
     console.error('naaiprem.foto: ไม่พบ js/data.js — ตรวจสอบว่าโหลด data.js ก่อน main.js');
@@ -629,15 +734,20 @@
     return;
   }
 
+  const lightbox = createLightbox();
   initContacts();
   initNav();
+  initHeroBrand();
   initHero();
-  initGallery(createLightbox());
+  initGallery(lightbox);
+  initStrip(lightbox);
   initStats();
+  initServices();
   initReviews();
   initFaq();
   initReveal(); // ต้องเรียกหลังสร้าง element จาก data (stats / reviews)
   initParallax();
   initCursor();
   initFab();
+  initScrollFx();
 })();

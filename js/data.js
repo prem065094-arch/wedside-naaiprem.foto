@@ -5,6 +5,7 @@
    • SETTINGS : เปิด-ปิดเอฟเฟกต์ และจำนวนภาพที่โหลดในแกลเลอรี
    • STATS    : ตัวเลขในตัวนับ
    • GALLERY  : รายการภาพผลงาน (เพิ่ม/ลบภาพแค่แก้ Array นี้)
+   • STRIP    : ภาพในแถบภาพวิ่ง
    • REVIEWS  : รีวิวจากลูกค้า
    ===================================================================== */
 
@@ -222,6 +223,37 @@ const GALLERY = [
   { src: 'images/portfolio/portfolio-34-portrait.jpg', category: 'portfolio', title: 'มุมผนังช่องลม', alt: 'เพื่อนนักเรียนหญิงนั่งเรียงกันที่มุมผนังช่องลมสีขาว', width: 1064, height: 1600 },
   { src: 'images/portfolio/portfolio-35-portrait.jpg', category: 'portfolio', title: 'ประตูลิฟต์', alt: 'เพื่อนนักเรียนโผล่หน้าจากประตูลิฟต์สองบาน', width: 1064, height: 1600 },
   { src: 'images/portfolio/portfolio-38-portrait.jpg', category: 'portfolio', title: 'คอลลาจเพื่อนรัก', alt: 'ภาพคอลลาจสามภาพ นักเรียนชายหญิงบนสนามหญ้า', width: 899, height: 1600 },
+];
+
+/* ---------- แถบภาพวิ่ง (ระหว่างส่วน "ทำไมต้องเรา" กับ "บริการ") ----------
+   ใส่ src ของภาพที่มีอยู่ใน GALLERY (คลิกแล้วเปิดภาพเต็มใน Lightbox) แบ่งวิ่งเป็น 2 แถวสลับทิศอัตโนมัติ
+   ต้องมีภาพย่อชื่อเดียวกันใน images/strip/ สร้างด้วย:
+   sips -Z 640 -s formatOptions 72 images/<หมวด>/<ไฟล์>.jpg --out images/strip/<ไฟล์>.jpg */
+const STRIP = [
+  'images/graduation/graduation-56.jpg',
+  'images/wedding/wedding-21.jpg',
+  'images/portfolio/portfolio-22.jpg',
+  'images/graduation/graduation-03-portrait.jpg',
+  'images/wedding/wedding-12-portrait.jpg',
+  'images/portfolio/portfolio-07-portrait.jpg',
+  'images/graduation/graduation-07-portrait.jpg',
+  'images/wedding/wedding-01-portrait.jpg',
+  'images/portfolio/portfolio-21.jpg',
+  'images/graduation/graduation-11-portrait.jpg',
+  'images/wedding/wedding-22-portrait.jpg',
+  'images/portfolio/portfolio-30-portrait.jpg',
+  'images/graduation/graduation-66.jpg',
+  'images/wedding/wedding-16-portrait.jpg',
+  'images/portfolio/portfolio-23.jpg',
+  'images/graduation/graduation-69-portrait.jpg',
+  'images/wedding/wedding-07.jpg',
+  'images/portfolio/portfolio-32-portrait.jpg',
+  'images/graduation/graduation-09-portrait.jpg',
+  'images/wedding/wedding-28-portrait.jpg',
+  'images/graduation/graduation-47.jpg',
+  'images/wedding/wedding-04-portrait.jpg',
+  'images/graduation/graduation-26-portrait.jpg',
+  'images/graduation/graduation-59.jpg',
 ];
 
 /* ---------- รีวิวจากลูกค้า ----------

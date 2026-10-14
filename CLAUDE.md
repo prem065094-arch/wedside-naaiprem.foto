@@ -23,12 +23,15 @@
 ```
 index.html        โครงทุก section (ข้อความไทย, meta/OG, Google Fonts)
 css/style.css     design tokens (:root) → base → components → sections → responsive → reduced-motion
-js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, REVIEWS
-js/main.js        logic ทั้งหมด (nav, hero, gallery แยกหมวด+masonry, lightbox, slider, faq, cursor, counter, parallax, fab)
+js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, STRIP, REVIEWS
+js/main.js        logic ทั้งหมด (nav, hero, gallery แยกหมวด+masonry, lightbox, แถบภาพวิ่ง, slider, faq, cursor, counter, parallax, fab, scroll progress)
 images/hero/        ภาพสไลด์ Hero (ต่อประเภทงาน: แนวนอนสำหรับคอม + *-portrait.jpg สำหรับมือถือ)
 images/wedding/ graduation/ portfolio/ event/   ภาพแกลเลอรีแยกตามหมวด
 images/services/    ภาพการ์ดบริการ
 images/cta/         ภาพพื้นหลัง Call to Action
+images/strip/       ภาพย่อ 640px สำหรับแถบภาพวิ่ง (ชื่อไฟล์เดียวกับภาพใน GALLERY)
+images/logo/        โลโก้: logo-mark.svg (ม่านรับแสง), favicon.svg, apple-touch-icon.png,
+                    logo-square.png (รูปโปรไฟล์โซเชียล), logo-horizontal.png (พื้นโปร่งใส)
 ```
 `data.js` ต้องโหลดก่อน `main.js` (ทั้งสองไฟล์ใช้ `defer`)
 
@@ -44,6 +47,7 @@ images/cta/         ภาพพื้นหลัง Call to Action
   5. ลำดับใน array = ลำดับในหมวดนั้น (8 ภาพแรกคือภาพที่คนเห็นก่อน)
   6. **ห้ามครอปภาพแนวนอนเป็นแนวตั้ง** แกลเลอรีแสดงตามสัดส่วนจริงเสมอ
 - **Hero** — Hero เต็มจอใช้ `object-fit: cover` จึงต้องมีภาพแนวตั้ง (`<source media="(orientation: portrait)">`) ให้มือถือ ไม่งั้นภาพแนวนอนจะถูกตัดเหลือแนวตั้ง
+- **STRIP** — รายการ src ของภาพ (ต้องอยู่ใน GALLERY) ที่วิ่งในแถบภาพ ต้องสร้างภาพย่อไว้ใน `images/strip/` ด้วย
 - **REVIEWS** — ต้องมีรีวิวครบทั้ง 4 ประเภทงาน
 - ข้อความ section อื่นๆ (บริการ, FAQ, ขั้นตอน, ระยะเวลาส่งงาน) อยู่ใน `index.html` โดยตรง และมีคอมเมนต์ `<!-- แก้: ... -->` กำกับไว้
 
@@ -61,7 +65,8 @@ sips -c 1363 909 in.jpg --out portrait.jpg                     # ครอปก
 - พื้นหลัง `--bg #0a0a0a`, `--bg-alt #141414`, `--surface #1b1b1b` (สลับพื้นแต่ละ section เพื่อแบ่งจังหวะ)
 - ข้อความ `--text #f2f2f2`, `--text-muted #a3a3a3`, `--text-dim #6b6b6b`
 - Accent `--accent #ffffff` (ขาวล้วน) ใช้อย่างประหยัด ปุ่มหลักเป็นพื้นขาวตัวอักษรดำ ปุ่มรองเป็นขอบขาว
-- ฟอนต์: Cormorant Garamond (ชื่อแบรนด์/ตัวเลข/eyebrow ภาษาอังกฤษ), Prompt (หัวข้อไทย), IBM Plex Sans Thai (เนื้อหา)
+- ฟอนต์: Cormorant Garamond (ชื่อแบรนด์/ตัวเลข/eyebrow ภาษาอังกฤษ), Prompt (หัวข้อไทย ใช้น้ำหนัก 500 ให้เด่น), IBM Plex Sans Thai (เนื้อหา 17px)
+- โลโก้: รูปม่านรับแสง 6 กลีบ + "naaiprem.foto" ตัวเอียง (Cormorant) — SVG inline ใน nav/footer หมุนตามการเลื่อนหน้า
 - Breakpoints: 480 / 768 / 1024 / 1200
 - Easing `--ease: cubic-bezier(.22,1,.36,1)` ระยะเวลา 600–900ms
 
@@ -82,7 +87,8 @@ cd ~/Desktop/Webside_naaiprem && python3 -m http.server 8000
 - [ ] URL Facebook Page / Messenger / Facebook ส่วนตัว ใน `CONTACT`
 - [ ] รีวิวจริงใน `REVIEWS`
 - [ ] ตัวเลขจริงใน `STATS`
-- [ ] ระยะเวลาส่งงานของแต่ละบริการ (ใน `index.html` และคำตอบใน FAQ)
+- [x] ระยะเวลาส่งงาน งานแต่ง/รับปริญญา ไม่เกิน 14 วัน
+- [ ] ระยะเวลาส่งงานพอร์ตนักเรียน/อีเวนต์ (ตอนนี้ใส่ 7 วันไว้ ยังไม่ได้ยืนยัน)
 - [x] ภาพจริงของหมวดงานแต่ง / รับปริญญา / พอร์ตนักเรียน
 - [ ] ภาพจริงของหมวดอีเวนต์ (แกลเลอรียังไม่มีหมวดอีเวนต์ / Hero สไลด์ 4 และการ์ดบริการอีเวนต์ยังใช้ภาพตัวอย่าง)
 - [ ] ภาพ OG (`og:image`) และ URL โดเมนจริง

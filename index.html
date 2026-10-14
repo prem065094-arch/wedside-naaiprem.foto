@@ -14,9 +14,11 @@
   <meta property="og:image" content="images/hero/hero-01-graduation.jpg">
   <meta property="og:locale" content="th_TH">
 
+  <link rel="icon" href="images/logo/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/logo/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Sans+Thai:wght@300;400;500&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Sans+Thai:wght@300;400;500&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="images/hero/hero-01-graduation-portrait.jpg" media="(orientation: portrait)">
   <link rel="preload" as="image" href="images/hero/hero-01-graduation.jpg" media="(orientation: landscape)">
   <link rel="stylesheet" href="css/style.css">
@@ -39,7 +41,7 @@
   <!-- ============================== NAVBAR ============================== -->
   <header class="nav" id="nav">
     <div class="nav__inner">
-      <a href="#home" class="logo" aria-label="naaiprem.foto กลับไปด้านบน">naaiprem<span>.foto</span></a>
+      <a href="#home" class="logo" aria-label="naaiprem.foto กลับไปด้านบน"><svg class="logo__mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M17.50 20.25L37.13 8.92M24.00 16.50L43.63 27.83M30.50 20.25L30.50 42.92M30.50 27.75L10.87 39.08M24.00 31.50L4.37 20.17M17.50 27.75L17.50 5.08"/></svg><span class="logo__text">naaiprem<span>.foto</span></span></a>
 
       <nav class="nav__menu" id="navMenu" aria-label="เมนูหลัก">
         <ul class="nav__links">
@@ -61,6 +63,7 @@
         <span></span><span></span>
       </button>
     </div>
+    <div class="nav__progress" id="navProgress" aria-hidden="true"></div>
   </header>
 
   <main>
@@ -156,7 +159,7 @@
           <p class="gallery__lead">ซ้อมย่อย ซ้อมใหญ่ วันรับจริง และถ่ายนอกรอบ เก็บครบทั้งภาพเดี่ยว ภาพคู่ และภาพกับครอบครัว</p>
           <p class="gallery__count" data-gallery-count></p>
         </header>
-        <div class="gallery__wrap reveal"><div class="gallery__grid" data-gallery-grid></div></div>
+        <div class="gallery__wrap"><div class="gallery__grid" data-gallery-grid></div></div>
         <div class="gallery__more"><button class="btn btn--ghost" type="button" data-load-more>ดูภาพรับปริญญาเพิ่มเติม</button></div>
       </section>
 
@@ -167,7 +170,7 @@
           <p class="gallery__lead">พิธีเช้า งานเลี้ยง และพรีเวดดิ้ง เก็บทั้งช่วงพิธีสำคัญและรอยยิ้มของทุกคนในงาน</p>
           <p class="gallery__count" data-gallery-count></p>
         </header>
-        <div class="gallery__wrap reveal"><div class="gallery__grid" data-gallery-grid></div></div>
+        <div class="gallery__wrap"><div class="gallery__grid" data-gallery-grid></div></div>
         <div class="gallery__more"><button class="btn btn--ghost" type="button" data-load-more>ดูภาพงานแต่งเพิ่มเติม</button></div>
       </section>
 
@@ -178,7 +181,7 @@
           <p class="gallery__lead">ภาพโปรไฟล์ยื่นมหาวิทยาลัย และภาพกลุ่มกับเพื่อนก่อนจบ ม.6 ในโทนใส เป็นธรรมชาติ</p>
           <p class="gallery__count" data-gallery-count></p>
         </header>
-        <div class="gallery__wrap reveal"><div class="gallery__grid" data-gallery-grid></div></div>
+        <div class="gallery__wrap"><div class="gallery__grid" data-gallery-grid></div></div>
         <div class="gallery__more"><button class="btn btn--ghost" type="button" data-load-more>ดูภาพพอร์ตนักเรียนเพิ่มเติม</button></div>
       </section>
 
@@ -261,6 +264,16 @@
       </div>
     </section>
 
+    <!-- ============================== แถบภาพวิ่ง ==============================
+         ภาพสร้างจาก STRIP ใน js/data.js (เอาเมาส์ชี้เพื่อหยุด / คลิกเพื่อดูภาพเต็ม) -->
+    <section class="strip" aria-labelledby="stripTitle">
+      <header class="strip__head container reveal">
+        <p class="eyebrow">Moments</p>
+        <h2 class="section-title" id="stripTitle">ทุกรอยยิ้ม คือเรื่องราวที่เราตั้งใจเก็บ</h2>
+      </header>
+      <div class="strip__rows" id="stripRows"></div>
+    </section>
+
     <!-- ============================== บริการ ==============================
          แก้: ภาพการ์ดอยู่ใน images/services/ ราคาเริ่มต้นอยู่ใน <p class="service__price"> และระยะเวลาส่งงานอยู่ใน <li class="service__delivery"> -->
     <section class="section services" id="services" aria-labelledby="servicesTitle">
@@ -279,13 +292,13 @@
             <div class="service__body">
               <p class="service__tags">พิธีเช้า · งานเลี้ยง · พรีเวดดิ้ง</p>
               <h3 class="service__title">งานแต่งงาน</h3>
-              <p class="service__price">เริ่มต้น <strong>5,500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
+              <p class="service__price">เริ่มต้น <strong data-count="5500">5,500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
               <p class="service__text">เล่าเรื่องวันสำคัญของคุณสองคนผ่านภาพที่เป็นธรรมชาติ ตั้งแต่พิธีเช้าจนจบงานเลี้ยง รวมถึงพรีเวดดิ้งในสถานที่ที่มีความหมาย</p>
               <ul class="service__list">
                 <li>บรีฟท่าโพสตลอดการถ่าย</li>
                 <li>ไม่จำกัดจำนวนรูป</li>
                 <li>คัดและแต่งทุกภาพ</li>
-                <li class="service__delivery">ส่งงานภายใน 30 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
+                <li class="service__delivery">ส่งงานไม่เกิน 14 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
               </ul>
               <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
             </div>
@@ -298,13 +311,13 @@
             <div class="service__body">
               <p class="service__tags">ซ้อมใหญ่ · วันรับจริง · ถ่ายนอกรอบ</p>
               <h3 class="service__title">รับปริญญา</h3>
-              <p class="service__price">เริ่มต้น <strong>3,500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
+              <p class="service__price">เริ่มต้น <strong data-count="3500">3,500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
               <p class="service__text">เก็บความภูมิใจของบัณฑิตและครอบครัว ทั้งภาพเดี่ยว ภาพหมู่กับเพื่อน และภาพครอบครัวแบบมีสไตล์</p>
               <ul class="service__list">
                 <li>บรีฟท่าโพสตลอดการถ่าย</li>
                 <li>ไม่จำกัดจำนวนรูป</li>
                 <li>คัดและแต่งทุกภาพ</li>
-                <li class="service__delivery">ส่งงานภายใน 14 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
+                <li class="service__delivery">ส่งงานไม่เกิน 14 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
               </ul>
               <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
             </div>
@@ -317,7 +330,7 @@
             <div class="service__body">
               <p class="service__tags">ยื่นมหาวิทยาลัย · ภาพโปรไฟล์</p>
               <h3 class="service__title">พอร์ตนักเรียน</h3>
-              <p class="service__price">เริ่มต้น <strong>500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
+              <p class="service__price">เริ่มต้น <strong data-count="500">500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
               <p class="service__text">ภาพพอร์ตและโปรไฟล์ที่ดูดีและเป็นตัวเอง พร้อมช่วยแนะนำชุด สถานที่ และท่าโพสที่เหมาะกับคณะที่จะยื่น</p>
               <ul class="service__list">
                 <li>บรีฟท่าโพสตลอดการถ่าย</li>
@@ -449,7 +462,7 @@
           <div class="faq__item">
             <h3><button class="faq__q" aria-expanded="false" aria-controls="faq5" id="faq5-btn">ใช้เวลาส่งงานกี่วัน?<i aria-hidden="true"></i></button></h3>
             <!-- แก้: ระยะเวลาส่งงาน (ให้ตรงกับการ์ดบริการ) -->
-            <div class="faq__a" id="faq5" role="region" aria-labelledby="faq5-btn"><div><p>นับจากวันถ่าย งานแต่งประมาณ 30 วัน รับปริญญา 14 วัน พอร์ตนักเรียนและอีเวนต์ 7 วัน ถ้าต้องการภาพด่วนแจ้งล่วงหน้าได้เลย</p></div></div>
+            <div class="faq__a" id="faq5" role="region" aria-labelledby="faq5-btn"><div><p>นับจากวันถ่าย งานแต่งและรับปริญญาไม่เกิน 14 วัน พอร์ตนักเรียนและอีเวนต์ 7 วัน ถ้าต้องการภาพด่วนแจ้งล่วงหน้าได้เลย</p></div></div>
           </div>
           <div class="faq__item">
             <h3><button class="faq__q" aria-expanded="false" aria-controls="faq6" id="faq6-btn">พอร์ตนักเรียน ช่วยแนะนำการแต่งตัวและสถานที่ไหม?<i aria-hidden="true"></i></button></h3>
@@ -494,7 +507,7 @@
   <footer class="footer">
     <div class="container footer__inner">
       <div class="footer__brand">
-        <a href="#home" class="logo logo--lg">naaiprem<span>.foto</span></a>
+        <a href="#home" class="logo logo--lg" aria-label="naaiprem.foto กลับไปด้านบน"><svg class="logo__mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M17.50 20.25L37.13 8.92M24.00 16.50L43.63 27.83M30.50 20.25L30.50 42.92M30.50 27.75L10.87 39.08M24.00 31.50L4.37 20.17M17.50 27.75L17.50 5.08"/></svg><span class="logo__text">naaiprem<span>.foto</span><small>Photography</small></span></a>
         <p>ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน และอีเวนต์<br>รับงานทั่วประเทศไทย</p>
       </div>
 
