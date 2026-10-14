@@ -19,6 +19,9 @@
 
   --accent: #ffffff;          /* สีเน้น (ขาวล้วน) */
   --accent-ink: #0a0a0a;      /* สีตัวอักษรบนพื้น accent */
+  --ok: #8fd19e;              /* ปฏิทินจอง: ว่าง */
+  --warn: #f2c46d;            /* ปฏิทินจอง: ว่างบางช่วง */
+  --danger: #ff9a8b;          /* ข้อความผิดพลาดในฟอร์ม */
 
   --font-display: 'Cormorant Garamond', 'Times New Roman', serif; /* ชื่อแบรนด์ / ตัวเลข / eyebrow */
   --font-heading: 'Prompt', 'IBM Plex Sans Thai', sans-serif;      /* หัวข้อภาษาไทย */
@@ -61,6 +64,7 @@ body {
 }
 
 img { display: block; max-width: 100%; height: auto; }
+[hidden] { display: none !important; } /* กัน display ของคลาสอื่นทับแอตทริบิวต์ hidden */
 [data-contact-text] { white-space: nowrap; } /* ไม่ให้เบอร์โทรถูกตัดบรรทัด */
 /* ตัวเลขของ Cormorant ให้สูงเท่ากัน (อ่านเบอร์โทร/สถิติง่ายขึ้น) */
 .stat__num, .hero__count, .step__num, .pain__num, .footer__phone, .nav__mobile-phone, .lightbox__count { font-variant-numeric: lining-nums tabular-nums; }
@@ -566,6 +570,186 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 @media (max-width: 1199px) { .services__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 599px)  { .services__grid { grid-template-columns: 1fr; } }
 
+/* ===== จองคิวออนไลน์ ===== */
+.booking { background: var(--bg); }
+.booking[hidden] { display: none; }
+.booking__form { position: relative; max-width: 1040px; margin: 0 auto; display: grid; gap: clamp(32px, 4.5vw, 48px); }
+.booking__step { margin: 0; padding: 0; border: 0; min-width: 0; transition: opacity .4s var(--ease); }
+.booking__step[disabled] { opacity: .4; }
+.booking__legend {
+  display: flex; align-items: baseline; gap: 14px; padding: 0; margin-bottom: 18px;
+  font-family: var(--font-heading); font-weight: 500; font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+}
+.booking__legend span { font-family: var(--font-display); font-weight: 400; color: var(--text-dim); font-variant-numeric: lining-nums; }
+.booking__legend small { font-size: .68em; font-weight: 400; color: var(--text-muted); }
+.booking__hint { color: var(--text-dim); }
+
+/* ตัวเลือกแบบปุ่ม (radio) */
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { position: relative; }
+.chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.chip span {
+  display: flex; flex-direction: column; justify-content: center; gap: 2px;
+  min-height: 52px; padding: 8px 22px; border: 1px solid var(--line-strong); border-radius: 14px;
+  font-family: var(--font-heading); font-size: 1.02rem; line-height: 1.4;
+  transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+}
+.chip small { font-family: var(--font-body); font-size: .85rem; color: var(--text-muted); transition: color .3s var(--ease); }
+.chip input:hover + span { border-color: rgba(255,255,255,.45); }
+.chip input:checked + span { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.chip input:checked + span small { color: rgba(10,10,10,.65); }
+.chip input:focus-visible + span { outline: 1px solid var(--accent); outline-offset: 3px; }
+.chip input:disabled { cursor: not-allowed; }
+.chips.is-invalid .chip span { border-color: var(--danger); }
+.chip input:disabled + span { opacity: .35; }
+
+/* ปฏิทิน */
+.booking__when { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 32px); align-items: stretch; }
+.cal, .booking__time { background: var(--bg-alt); border: 1px solid var(--line); border-radius: 8px; padding: clamp(16px, 2.4vw, 24px); }
+.cal__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.cal__title { font-family: var(--font-heading); font-weight: 500; font-size: 1.15rem; }
+.cal__nav { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--line-strong); border-radius: 50%; transition: background-color .3s, color .3s; }
+.cal__nav svg { width: 18px; height: 18px; }
+.cal__nav:hover:not(:disabled) { background: var(--accent); color: var(--accent-ink); }
+.cal__nav:disabled { opacity: .25; cursor: default; }
+.cal__week, .cal__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.cal__week span { padding-bottom: 6px; text-align: center; font-size: .85rem; color: var(--text-dim); }
+.cal__grid { min-height: 260px; }
+.cal__day {
+  position: relative; aspect-ratio: 1; display: grid; place-items: center;
+  border: 1px solid transparent; border-radius: 10px;
+  font-family: var(--font-display); font-size: 1.2rem; font-variant-numeric: lining-nums;
+  transition: background-color .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease);
+}
+.cal__day::after { content: ''; position: absolute; left: 50%; bottom: 12%; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; }
+.cal__day.is-free::after { background: var(--ok); }
+.cal__day.is-partial::after { background: var(--warn); }
+.cal__day.is-today { border-color: var(--line-strong); }
+.cal__day:not(:disabled):hover { border-color: rgba(255,255,255,.5); transform: translateY(-2px); }
+.cal__day.is-selected { background: var(--accent); color: var(--accent-ink); }
+.cal__day:disabled { color: var(--text-dim); cursor: default; }
+.cal__day.is-full { text-decoration: line-through; opacity: .55; }
+.cal__legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 16px; font-size: .88rem; color: var(--text-muted); }
+.cal__legend i { display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; vertical-align: middle; }
+.cal__legend .is-free { background: var(--ok); }
+.cal__legend .is-partial { background: var(--warn); }
+.cal__legend .is-full { background: var(--text-dim); }
+.cal__status { margin-top: 8px; font-size: .88rem; color: var(--text-dim); }
+.cal__status:empty { display: none; }
+.cal.is-loading .cal__grid { opacity: .4; }
+.cal.is-invalid { border-color: var(--danger); }
+
+.booking__time { display: flex; flex-direction: column; gap: 16px; }
+.booking__date { font-family: var(--font-heading); font-weight: 500; font-size: 1.3rem; }
+.booking__busy { display: grid; gap: 6px; font-size: .95rem; color: var(--text-muted); }
+.booking__busy:empty { display: none; }
+.booking__busy li::before { content: ''; display: inline-block; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%; background: var(--warn); vertical-align: middle; }
+.booking__hourly { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.booking__hourly[hidden] { display: none; }
+.booking__pick { margin-top: auto; padding: 14px 16px; border-radius: 8px; background: var(--surface); line-height: 1.6; }
+.booking__pick:empty { display: none; }
+.booking__pick strong { font-family: var(--font-heading); font-weight: 500; }
+.booking__pick.is-error { color: var(--danger); }
+
+/* ช่องกรอกข้อมูล */
+.booking__fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+.field { display: grid; gap: 8px; align-content: start; }
+.field--wide { grid-column: 1 / -1; }
+.field__label { font-size: .95rem; color: var(--text-muted); }
+.field__label b { font-weight: 400; color: var(--text); }
+.field__input {
+  width: 100%; min-height: 52px; padding: 12px 16px;
+  background: var(--bg-alt); color: var(--text);
+  border: 1px solid var(--line-strong); border-radius: 8px;
+  font: inherit; font-size: 1rem; /* 16px ขึ้นไป iPhone จะไม่ซูมตอนแตะ */
+  transition: border-color .3s var(--ease);
+}
+.field__input::placeholder { color: var(--text-dim); }
+.field__input:focus { outline: none; border-color: var(--accent); }
+.field__input.is-invalid { border-color: var(--danger); }
+textarea.field__input { min-height: 104px; resize: vertical; }
+select.field__input {
+  appearance: none; -webkit-appearance: none; padding-right: 44px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a3a3a3' stroke-width='1.6'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; background-size: 18px;
+}
+select.field__input option { background: var(--bg-alt); color: var(--text); }
+select.field__input option:disabled { color: var(--text-dim); }
+.booking__trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* มัดจำ + อัปโหลดสลิป */
+.deposit { display: grid; gap: 4px; margin-bottom: 16px; padding: 16px 18px; border-left: 2px solid var(--accent); background: var(--bg-alt); color: var(--text-muted); }
+.deposit:empty { display: none; }
+.deposit strong { font-family: var(--font-heading); font-weight: 500; color: var(--text); }
+.deposit:has(.deposit__qr) { grid-template-columns: auto 1fr; align-items: center; gap: 20px; }
+.deposit__qr { display: grid; gap: 8px; justify-items: center; }
+.deposit__qr img { width: 132px; height: auto; border-radius: 6px; background: #fff; }
+.deposit__qr a { font-size: .88rem; color: var(--text); border-bottom: 1px solid var(--line-strong); }
+.deposit__info { display: grid; gap: 4px; }
+@media (max-width: 479px) {
+  .deposit:has(.deposit__qr) { grid-template-columns: 1fr; justify-items: start; }
+  .deposit__qr img { width: 180px; }
+}
+.upload { position: relative; display: block; cursor: pointer; }
+.upload__input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.upload__box {
+  display: flex; align-items: center; gap: 18px; padding: 18px 20px;
+  border: 1px dashed var(--line-strong); border-radius: 10px;
+  transition: border-color .3s var(--ease), background-color .3s var(--ease);
+}
+.upload:hover .upload__box, .upload__input:focus-visible + .upload__box { border-color: var(--accent); background: rgba(255,255,255,.03); }
+.upload.is-invalid .upload__box { border-color: var(--danger); }
+.upload__preview { width: 72px; height: 96px; flex-shrink: 0; object-fit: cover; border-radius: 4px; }
+.upload__text { display: grid; gap: 4px; }
+.upload__text small { font-size: .88rem; color: var(--text-dim); }
+
+.booking__submit { display: grid; justify-items: start; gap: 18px; padding-top: 28px; border-top: 1px solid var(--line); }
+.check { display: flex; align-items: flex-start; gap: 12px; color: var(--text-muted); cursor: pointer; }
+.check input { flex-shrink: 0; width: 20px; height: 20px; margin: 4px 0 0; accent-color: #ffffff; }
+.check.is-invalid { color: var(--danger); }
+.booking__error { color: var(--danger); }
+.booking__error:empty { display: none; }
+[aria-busy="true"] { opacity: .6; pointer-events: none; }
+
+/* ส่งสำเร็จ */
+.booking__done {
+  max-width: 760px; margin: 0 auto; padding: clamp(28px, 5vw, 52px);
+  background: var(--bg-alt); border: 1px solid var(--line-strong); border-radius: 10px; text-align: center;
+}
+.booking__done[hidden] { display: none; }
+.booking__done:focus { outline: none; }
+.booking__done h3 { font-family: var(--font-heading); font-weight: 500; font-size: clamp(1.5rem, 3vw, 2rem); }
+.booking__code { margin: 10px 0 2px; font-family: var(--font-display); font-size: clamp(2.6rem, 7vw, 3.6rem); letter-spacing: .14em; line-height: 1.1; font-variant-numeric: lining-nums; }
+.booking__summary { display: grid; gap: 10px; margin: 28px 0; padding: 20px 22px; border-radius: 8px; background: var(--surface); text-align: left; }
+.booking__summary div { display: grid; grid-template-columns: 110px 1fr; gap: 12px; }
+.booking__summary dt { color: var(--text-muted); }
+.booking__summary dd { margin: 0; }
+.booking__done .deposit { text-align: left; }
+.booking__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 24px; }
+
+/* แนบสลิปภายหลัง */
+.booking__slip { max-width: 1040px; margin: clamp(36px, 5vw, 56px) auto 0; border: 1px solid var(--line-strong); border-radius: 10px; }
+.booking__slip summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 20px 24px; cursor: pointer; list-style: none;
+  font-family: var(--font-heading); font-weight: 500; font-size: 1.12rem;
+}
+.booking__slip summary::-webkit-details-marker { display: none; }
+.booking__slip summary::after { content: '+'; font-family: var(--font-display); font-size: 1.6rem; line-height: 1; transition: transform .4s var(--ease); }
+.booking__slip[open] summary::after { transform: rotate(45deg); }
+.booking__slip-form { display: grid; gap: 18px; padding: 0 24px 24px; }
+.booking__slip-form .btn { justify-self: start; }
+
+@media (max-width: 899px) { .booking__when { grid-template-columns: 1fr; } }
+@media (max-width: 599px) {
+  .booking__fields { grid-template-columns: 1fr; }
+  .booking__submit .btn, .booking__slip-form .btn { width: 100%; justify-self: stretch; }
+  .chip span { padding: 8px 18px; }
+  .cal__week, .cal__grid { gap: 4px; }
+  .cal__day { font-size: 1.05rem; border-radius: 8px; }
+  .booking__summary div { grid-template-columns: 1fr; gap: 0; }
+}
+
 /* ===== Process ===== */
 .process { background: var(--bg-alt); }
 .process__list { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; }
@@ -594,7 +778,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 }
 
 /* ===== Reviews ===== */
-.reviews { background: var(--bg); }
+.reviews { background: var(--bg-alt); }
 .reviews__slider { max-width: 900px; margin: 0 auto; }
 .reviews__track {
   display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
@@ -628,7 +812,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 .reviews__dot.is-active::after { background: var(--accent); }
 
 /* ===== FAQ ===== */
-.faq { background: var(--bg-alt); }
+.faq { background: var(--bg); }
 .faq__list { border-top: 1px solid var(--line-strong); }
 .faq__item { border-bottom: 1px solid var(--line-strong); }
 .faq__item h3 { font: inherit; }

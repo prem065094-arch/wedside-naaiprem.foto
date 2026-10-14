@@ -727,6 +727,461 @@
     });
   }
 
+  /* ---------- 17) ระบบจองคิวออนไลน์ (ข้อมูลไป Google Sheets ผ่าน Apps Script) ---------- */
+  function initBooking() {
+    const section = $('#booking');
+    if (!section || typeof BOOKING === 'undefined') return;
+    if (!BOOKING.endpoint) { section.hidden = true; return; } // ยังไม่เปิดระบบ → ปุ่มจองคิวพาไปทักแชทเหมือนเดิม
+
+    $$('[data-booking-link]').forEach((a) => {
+      a.href = '#booking';
+      a.removeAttribute('target');
+      a.removeAttribute('rel');
+    });
+
+    const form = $('#bookingForm');
+    const done = $('#bookingDone');
+    const slipBox = $('#slipBox');
+    const slipForm = $('#slipForm');
+    const el = {
+      types: $('#bookingTypes'), pkgStep: $('#bookingPkgStep'), pkgs: $('#bookingPkgs'),
+      cal: $('#bookingCal'), calTitle: $('#calTitle'), calGrid: $('#calGrid'), calStatus: $('#calStatus'),
+      date: $('#bookingDate'), busy: $('#bookingBusy'), hourly: $('#bookingHourly'),
+      start: $('#bookingStart'), hours: $('#bookingHours'), pick: $('#bookingPick'),
+      error: $('#bookingError'), submit: $('#bookingSubmit'),
+    };
+
+    /* --- เวลา / วันที่ --- */
+    const pad = (n) => String(n).padStart(2, '0');
+    const toMin = (hm) => { const [h, m] = hm.split(':').map(Number); return h * 60 + m; };
+    const toHM = (min) => `${pad(Math.floor(min / 60))}:${pad(min % 60)}`;
+    const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const parseYmd = (str) => { const [y, m, d] = str.split('-').map(Number); return new Date(y, m - 1, d); };
+    const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+    const thaiDate = (str) => parseYmd(str).toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const fmtRanges = (ranges) => ranges.map(([a, b]) => `${a}–${b} น.`).join(' และ ');
+    const digits = (v) => String(v || '').replace(/\D/g, '');
+
+    // รหัสคำขอ: ส่งซ้ำด้วยรหัสเดิม ระบบจะไม่สร้างการจองซ้ำ (เปลี่ยนใหม่หลังจองสำเร็จ)
+    const newRequestId = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+    let requestId = newRequestId();
+
+    const today = new Date();
+    let avail = { busy: {}, buffer: 0, minDate: ymd(addDays(today, 1)), maxDate: ymd(addDays(today, 400)) };
+    const state = { type: null, pkg: null, date: null, month: null };
+    state.month = parseYmd(avail.minDate);
+    state.month.setDate(1);
+
+    const currentType = () => BOOKING.types.find((t) => t.id === state.type) || null;
+    const currentPkg = () => currentType()?.packages.find((p) => p.id === state.pkg) || null;
+
+    /* --- ตรวจช่วงเวลาชนกัน (รวมเวลาเผื่อเดินทาง) — ต้องตรงกับ conflicts_ ใน Code.gs --- */
+    const clash = (date, ranges) => {
+      const busy = (avail.busy[date] || []).map(([a, b]) => [toMin(a), toMin(b)]);
+      return ranges.some(([a, b]) => busy.some(([bs, be]) => toMin(a) < be + avail.buffer && bs < toMin(b) + avail.buffer));
+    };
+    const hourlyStarts = (date, hours) => {
+      const out = [];
+      const until = toMin(BOOKING.hourlyUntil || '22:00');
+      for (let t = toMin(BOOKING.hourlyFrom || '06:00'); t + hours * 60 <= until; t += 30) {
+        out.push({ start: toHM(t), ok: !clash(date, [[toHM(t), toHM(t + hours * 60)]]) });
+      }
+      return out;
+    };
+    function dayState(date) {
+      if (date < avail.minDate || date > avail.maxDate) return 'off';
+      const pkg = currentPkg();
+      const fits = pkg && !pkg.hourly ? !clash(date, pkg.ranges) : hourlyStarts(date, 1).some((x) => x.ok);
+      if (!fits) return 'full';
+      return (avail.busy[date] || []).length ? 'partial' : 'free';
+    }
+
+    /* --- ปฏิทิน --- */
+    const STATE_LABEL = { off: 'ไม่เปิดจองออนไลน์', full: 'เต็ม', partial: 'ว่างบางช่วง', free: 'ว่าง' };
+    function renderCalendar() {
+      const y = state.month.getFullYear();
+      const m = state.month.getMonth();
+      const todayStr = ymd(today);
+      el.calTitle.textContent = state.month.toLocaleDateString('th-TH', { month: 'long', year: 'numeric' });
+      let html = '<span></span>'.repeat(new Date(y, m, 1).getDay());
+      const days = new Date(y, m + 1, 0).getDate();
+      for (let d = 1; d <= days; d++) {
+        const date = ymd(new Date(y, m, d));
+        const st = dayState(date);
+        const selected = date === state.date;
+        html += `<button type="button" class="cal__day is-${st}${date === todayStr ? ' is-today' : ''}${selected ? ' is-selected' : ''}"
+          data-date="${date}" aria-pressed="${selected}" aria-label="${thaiDate(date)} — ${STATE_LABEL[st]}"${st === 'off' || st === 'full' ? ' disabled' : ''}>${d}</button>`;
+      }
+      el.calGrid.innerHTML = html;
+      const first = (str) => { const d = parseYmd(str); d.setDate(1); return d; };
+      $('[data-cal="-1"]', el.cal).disabled = state.month <= first(avail.minDate);
+      $('[data-cal="1"]', el.cal).disabled = state.month >= first(avail.maxDate);
+    }
+
+    /* --- เวลาของวันที่เลือก --- */
+    function renderTime() {
+      const pkg = currentPkg();
+      el.hourly.hidden = true;
+      el.pick.classList.remove('is-error');
+      if (!state.date) {
+        el.date.textContent = 'ยังไม่ได้เลือกวันที่';
+        el.busy.innerHTML = '';
+        el.pick.textContent = pkg ? 'เลือกวันที่จากปฏิทิน' : 'เลือกประเภทงานและรูปแบบการจองก่อน แล้วปฏิทินจะแสดงวันที่ว่างให้';
+        return;
+      }
+      el.date.textContent = thaiDate(state.date);
+      el.busy.innerHTML = (avail.busy[state.date] || []).map(([a, b]) => (a === '00:00' && b === '24:00'
+        ? '<li>ปิดรับทั้งวัน</li>' : `<li>มีคิวแล้ว ${a}–${b} น.</li>`)).join('');
+      if (!pkg) { el.pick.textContent = 'เลือกรูปแบบการจองก่อน'; return; }
+      if (pkg.hourly) {
+        el.hourly.hidden = false;
+        const keepHours = Number(el.hours.value) || 1;
+        el.hours.innerHTML = Array.from({ length: pkg.maxHours || 8 }, (_, i) => `<option value="${i + 1}">${i + 1} ชั่วโมง</option>`).join('');
+        el.hours.value = String(Math.min(keepHours, pkg.maxHours || 8));
+        fillStarts(el.start.value);
+      }
+      updatePick();
+    }
+
+    function fillStarts(keep) {
+      const starts = hourlyStarts(state.date, Number(el.hours.value) || 1);
+      el.start.innerHTML = '<option value="">เลือกเวลา</option>' + starts.map((x) =>
+        `<option value="${x.start}"${x.ok ? '' : ' disabled'}>${x.start} น.${x.ok ? '' : ' (ไม่ว่าง)'}</option>`).join('');
+      if (keep && starts.some((x) => x.start === keep && x.ok)) el.start.value = keep;
+    }
+
+    function selectedRanges() {
+      const pkg = currentPkg();
+      if (!pkg || !state.date) return null;
+      let ranges = pkg.ranges;
+      if (pkg.hourly) {
+        if (!el.start.value) return null;
+        ranges = [[el.start.value, toHM(toMin(el.start.value) + Number(el.hours.value) * 60)]];
+      }
+      return clash(state.date, ranges) ? null : ranges;
+    }
+
+    function pkgLabel() {
+      const pkg = currentPkg();
+      return pkg.hourly ? `${pkg.label} (${el.hours.value} ชม.)` : pkg.label;
+    }
+
+    function updatePick() {
+      const ranges = selectedRanges();
+      el.pick.innerHTML = ranges
+        ? `<strong>${esc(currentType().label)} · ${esc(pkgLabel())}</strong><br>${esc(thaiDate(state.date))}<br>เวลา ${fmtRanges(ranges)}`
+        : 'เลือกเวลาเริ่มและจำนวนชั่วโมง';
+    }
+
+    /* --- ตัวเลือกประเภทงาน / รูปแบบ --- */
+    el.types.innerHTML = BOOKING.types.map((t) =>
+      `<label class="chip"><input type="radio" name="type" value="${esc(t.id)}"><span>${esc(t.label)}</span></label>`).join('');
+
+    function renderPkgs() {
+      const type = currentType();
+      el.pkgStep.disabled = !type;
+      if (!type) return;
+      el.pkgs.innerHTML = type.packages.map((p) => `
+        <label class="chip"><input type="radio" name="pkg" value="${esc(p.id)}">
+          <span>${esc(p.label)}<small>${p.hourly ? `เลือกเวลาเริ่มเอง · สูงสุด ${p.maxHours || 8} ชม.` : fmtRanges(p.ranges)}</small></span>
+        </label>`).join('');
+      if (type.packages.length === 1) {
+        $('input', el.pkgs).checked = true;
+        state.pkg = type.packages[0].id;
+      }
+    }
+
+    function onSelectionChange() {
+      // วันที่เลือกไว้อาจไม่ว่างแล้วสำหรับรูปแบบใหม่
+      if (state.date && dayState(state.date) === 'full') {
+        state.date = null;
+        renderCalendar();
+        renderTime();
+        el.pick.textContent = 'วันที่เลือกไว้ไม่ว่างสำหรับรูปแบบนี้ กรุณาเลือกวันใหม่';
+        el.pick.classList.add('is-error');
+        return;
+      }
+      renderCalendar();
+      renderTime();
+    }
+
+    el.types.addEventListener('change', (e) => {
+      state.type = e.target.value;
+      state.pkg = null;
+      renderPkgs();
+      onSelectionChange();
+    });
+    el.pkgs.addEventListener('change', (e) => {
+      state.pkg = e.target.value;
+      onSelectionChange();
+    });
+    el.calGrid.addEventListener('click', (e) => {
+      const btn = e.target.closest('.cal__day');
+      if (!btn || btn.disabled) return;
+      state.date = btn.dataset.date;
+      el.calGrid.closest('.cal').classList.remove('is-invalid');
+      renderCalendar();
+      renderTime();
+      $(`[data-date="${state.date}"]`, el.calGrid)?.focus();
+    });
+    $$('[data-cal]', el.cal).forEach((btn) => btn.addEventListener('click', () => {
+      state.month = new Date(state.month.getFullYear(), state.month.getMonth() + Number(btn.dataset.cal), 1);
+      renderCalendar();
+    }));
+    el.hours.addEventListener('change', () => { fillStarts(el.start.value); updatePick(); });
+    el.start.addEventListener('change', () => { el.start.classList.remove('is-invalid'); updatePick(); });
+
+    $('#bookingSource').innerHTML = '<option value="">เลือกช่องทาง</option>'
+      + (BOOKING.sources || []).map((x) => `<option>${esc(x)}</option>`).join('');
+
+    /* --- ข้อมูลมัดจำ --- */
+    const dep = BOOKING.deposit || {};
+    const depositLines = [
+      dep.note && `<span>${esc(dep.note)}</span>`,
+      dep.promptpay && `<span>พร้อมเพย์ <strong>${esc(dep.promptpay)}</strong></span>`,
+      dep.accountNo && `<span>${esc(dep.bank || 'บัญชี')} <strong>${esc(dep.accountNo)}</strong></span>`,
+      dep.accountName && `<span>ชื่อบัญชี <strong>${esc(dep.accountName)}</strong></span>`,
+    ].filter(Boolean).join('');
+    const depositHtml = dep.qr ? `
+      <div class="deposit__qr">
+        <img src="${esc(dep.qr)}" alt="QR พร้อมเพย์สำหรับโอนมัดจำ" width="548" height="900" loading="lazy" decoding="async">
+        <a href="${esc(dep.qr)}" download="naaiprem-promptpay-qr.jpg">บันทึกรูป QR</a>
+      </div>
+      <div class="deposit__info">${depositLines}</div>` : depositLines;
+    $$('[data-deposit]').forEach((box) => { box.innerHTML = depositHtml; });
+
+    /* --- โหลดตารางว่าง (โหลดเมื่อเลื่อนใกล้ถึงส่วนจอง เพื่อไม่ให้หน้าแรกช้า) --- */
+    async function loadAvailability() {
+      el.cal.classList.add('is-loading');
+      el.calStatus.textContent = 'กำลังโหลดตารางว่าง…';
+      try {
+        const res = await fetch(`${BOOKING.endpoint}?t=${Date.now()}`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error);
+        avail = { busy: data.busy || {}, buffer: Number(data.buffer) || 0, minDate: data.minDate, maxDate: data.maxDate };
+        el.calStatus.textContent = '';
+      } catch (err) {
+        el.calStatus.textContent = 'โหลดตารางว่างไม่สำเร็จ — ยังส่งคำขอได้ตามปกติ เราจะเช็กคิวให้อีกครั้ง';
+      }
+      el.cal.classList.remove('is-loading');
+      if (state.date && dayState(state.date) !== 'free' && dayState(state.date) !== 'partial') state.date = null;
+      renderCalendar();
+      renderTime();
+    }
+    renderCalendar();
+    renderTime();
+    new IntersectionObserver(([entry], io) => {
+      if (!entry.isIntersecting) return;
+      io.disconnect();
+      loadAvailability();
+    }, { rootMargin: '800px 0px' }).observe(section);
+
+    /* --- สลิป: แสดงตัวอย่าง + ย่อรูปก่อนส่ง --- */
+    $$('[data-slip-input]').forEach((input) => input.addEventListener('change', () => {
+      const box = input.closest('.upload');
+      const img = $('.upload__preview', box);
+      box.classList.remove('is-invalid');
+      if (img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+      const file = input.files[0];
+      img.hidden = !file;
+      if (file) img.src = URL.createObjectURL(file);
+      else img.removeAttribute('src');
+    }));
+
+    async function readSlip(input) {
+      const file = input.files[0];
+      if (!file) return '';
+      if (!file.type.startsWith('image/')) throw new Error('ไฟล์สลิปต้องเป็นรูปภาพ');
+      const url = URL.createObjectURL(file);
+      try {
+        const img = await new Promise((ok, fail) => {
+          const i = new Image();
+          i.onload = () => ok(i);
+          i.onerror = () => fail(new Error('เปิดรูปสลิปไม่ได้ ลองบันทึกเป็น JPG หรือ PNG แล้วเลือกใหม่'));
+          i.src = url;
+        });
+        const scale = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(img.naturalWidth * scale);
+        canvas.height = Math.round(img.naturalHeight * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        return canvas.toDataURL('image/jpeg', 0.85);
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    async function post(payload) {
+      let res;
+      try {
+        // ไม่ใส่ Content-Type เพื่อให้เป็น simple request (Apps Script ไม่รองรับ CORS preflight)
+        res = await fetch(BOOKING.endpoint, { method: 'POST', body: JSON.stringify(payload) });
+      } catch (err) {
+        return { ok: false, error: 'ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่ หรือทักแชทเพจ NAAI PREM' };
+      }
+      try { return await res.json(); } catch (err) {
+        // Google ตอบช้าตอนระบบเพิ่งตื่น — กดส่งซ้ำได้อย่างปลอดภัย (มีรหัสคำขอกันจองซ้ำ)
+        return { ok: false, error: 'ระบบตอบกลับช้า กรุณากดส่งอีกครั้ง (ข้อมูลจะไม่ถูกบันทึกซ้ำ)' };
+      }
+    }
+
+    /* --- ตรวจฟอร์ม --- */
+    function fail(errorEl, message, focusEl, markEl = focusEl) {
+      errorEl.textContent = message;
+      markEl?.classList.add('is-invalid');
+      focusEl?.focus({ preventScroll: true });
+      (markEl || errorEl).scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' });
+      return false;
+    }
+    [form, slipForm].forEach((f) => f.addEventListener('input', (e) => {
+      e.target.classList.remove('is-invalid');
+      e.target.closest('.is-invalid')?.classList.remove('is-invalid');
+    }));
+
+    function validateBooking(f) {
+      const err = el.error;
+      if (!state.type) return fail(err, 'กรุณาเลือกประเภทงาน', $('input', el.types), el.types);
+      if (!currentPkg()) return fail(err, 'กรุณาเลือกรูปแบบการจอง', $('input', el.pkgs), el.pkgs);
+      if (!state.date) return fail(err, 'กรุณาเลือกวันที่จากปฏิทิน', $('.cal__day:not(:disabled)', el.calGrid), el.cal);
+      if (!selectedRanges()) return fail(err, 'กรุณาเลือกเวลาเริ่มที่ว่าง', el.start);
+      if (f.elements.name.value.trim().length < 2) return fail(err, 'กรุณากรอกชื่อ-นามสกุล', f.elements.name);
+      if (!/^0\d{8,9}$/.test(digits(f.elements.phone.value))) return fail(err, 'กรุณากรอกเบอร์โทรให้ถูกต้อง (9–10 หลัก)', f.elements.phone);
+      if (!f.elements.place.value.trim()) return fail(err, 'กรุณากรอกสถานที่ถ่าย (ถ้ายังไม่แน่ใจ พิมพ์ว่า "ยังไม่แน่ใจ" ได้)', f.elements.place);
+      if (!f.elements.province.value.trim()) return fail(err, 'กรุณากรอกจังหวัด', f.elements.province);
+      if (!f.elements.source.value) return fail(err, 'กรุณาเลือกช่องทางที่รู้จักเรา', f.elements.source);
+      if (!f.elements.consent.checked) return fail(err, 'กรุณายอมรับการเก็บข้อมูลเพื่อการนัดหมาย', f.elements.consent, f.elements.consent.closest('.check'));
+      return true;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      el.error.textContent = '';
+      if (!validateBooking(form)) return;
+
+      el.submit.setAttribute('aria-busy', 'true');
+      el.submit.textContent = 'กำลังส่ง…';
+      try {
+        const slipInput = $('[data-slip-input]', form);
+        let slip = '';
+        try { slip = await readSlip(slipInput); } catch (err) {
+          fail(el.error, err.message, slipInput, slipInput.closest('.upload'));
+          return;
+        }
+        const ranges = selectedRanges();
+        const payload = {
+          action: 'book',
+          type: currentType().label,
+          pkg: pkgLabel(),
+          date: state.date,
+          ranges,
+          name: form.elements.name.value,
+          phone: digits(form.elements.phone.value),
+          contact: form.elements.contact.value,
+          place: form.elements.place.value,
+          province: form.elements.province.value,
+          people: form.elements.people.value,
+          source: form.elements.source.value,
+          note: form.elements.note.value,
+          consent: true,
+          slip,
+          website: form.elements.website.value,
+          requestId,
+        };
+        const res = await post(payload);
+        if (!res.ok) {
+          el.error.textContent = res.error || 'ส่งไม่สำเร็จ กรุณาลองใหม่';
+          if (res.code === 'conflict') { state.date = null; loadAvailability(); }
+          return;
+        }
+        requestId = newRequestId();
+        showDone(res.code, payload, Boolean(slip));
+      } finally {
+        el.submit.removeAttribute('aria-busy');
+        el.submit.textContent = 'ส่งคำขอจองคิว';
+      }
+    });
+
+    /* --- หน้าส่งสำเร็จ --- */
+    function showDone(code, p, hasSlip) {
+      const rows = [
+        ['งาน', `${p.type} · ${p.pkg}`],
+        ['วันที่', thaiDate(p.date)],
+        ['เวลา', fmtRanges(p.ranges)],
+        ['สถานที่', `${p.place} จ.${p.province}`],
+        ['ชื่อ', p.name],
+        ['เบอร์โทร', p.phone],
+      ];
+      done.innerHTML = `
+        <p class="eyebrow">Thank you</p>
+        <h3>ส่งคำขอจองเรียบร้อยแล้ว</h3>
+        <p class="booking__code">${esc(code)}</p>
+        <p class="booking__hint">รหัสจองของคุณ — แคปหน้าจอเก็บไว้ ใช้คู่กับเบอร์โทรตอนแนบสลิป</p>
+        <dl class="booking__summary">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+        <p>${hasSlip
+    ? 'ได้รับสลิปมัดจำแล้ว เราจะตรวจยอดและยืนยันคิวให้ภายใน 24 ชั่วโมง'
+    : 'เราจะติดต่อกลับเพื่อยืนยันรายละเอียดภายใน 24 ชั่วโมง โอนมัดจำแล้วแนบสลิปได้ทันทีด้วยรหัสนี้'}</p>
+        ${hasSlip ? '' : `<div class="deposit" style="margin-top:20px">${depositHtml}</div>`}
+        <div class="booking__actions">
+          ${hasSlip ? '' : '<button type="button" class="btn btn--primary" data-done="slip">แนบสลิปมัดจำ</button>'}
+          <a class="btn btn--outline" href="${esc(CONTACT.messenger)}" target="_blank" rel="noopener">ทักแชทเพจ</a>
+          <button type="button" class="btn btn--outline" data-done="again">จองคิวเพิ่ม</button>
+        </div>`;
+      form.hidden = true;
+      done.hidden = false;
+      done.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
+      done.focus({ preventScroll: true });
+
+      $('[data-done="slip"]', done)?.addEventListener('click', () => {
+        slipBox.open = true;
+        slipForm.elements.code.value = code;
+        slipForm.elements.phone.value = p.phone;
+        slipBox.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
+        $('summary', slipBox).focus({ preventScroll: true });
+      });
+      $('[data-done="again"]', done).addEventListener('click', () => {
+        form.reset();
+        Object.assign(state, { type: null, pkg: null, date: null });
+        el.pkgs.innerHTML = '<p class="booking__hint">เลือกประเภทงานก่อน</p>';
+        el.pkgStep.disabled = true;
+        $('.upload__preview', form).hidden = true;
+        done.hidden = true;
+        form.hidden = false;
+        loadAvailability();
+        section.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' });
+      });
+    }
+
+    /* --- แนบสลิปภายหลัง --- */
+    slipForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const err = $('.booking__error', slipForm);
+      const btn = $('button[type="submit"]', slipForm);
+      const input = $('[data-slip-input]', slipForm);
+      err.textContent = '';
+      const code = slipForm.elements.code.value.trim().toUpperCase();
+      if (!/^NP[A-Z0-9]{6}$/.test(code)) return fail(err, 'รหัสจองขึ้นต้นด้วย NP ตามด้วยตัวอักษร 6 ตัว', slipForm.elements.code);
+      if (!/^0\d{8,9}$/.test(digits(slipForm.elements.phone.value))) return fail(err, 'กรุณากรอกเบอร์โทรที่ใช้จอง', slipForm.elements.phone);
+      if (!input.files[0]) return fail(err, 'กรุณาเลือกรูปสลิป', input, input.closest('.upload'));
+
+      btn.setAttribute('aria-busy', 'true');
+      btn.textContent = 'กำลังส่ง…';
+      try {
+        let slip;
+        try { slip = await readSlip(input); } catch (x) { return fail(err, x.message, input, input.closest('.upload')); }
+        const res = await post({ action: 'slip', code, phone: digits(slipForm.elements.phone.value), slip });
+        if (!res.ok) { err.textContent = res.error || 'ส่งไม่สำเร็จ กรุณาลองใหม่'; return; }
+        slipForm.innerHTML = `<p class="booking__pick">ได้รับสลิปของรหัส <strong>${esc(code)}</strong> แล้ว ขอบคุณมากครับ
+          เราจะตรวจยอดและยืนยันคิวให้เร็วที่สุด</p>`;
+      } finally {
+        btn.removeAttribute('aria-busy');
+        btn.textContent = 'ส่งสลิป';
+      }
+    });
+  }
+
   /* ---------- Start ---------- */
   if (typeof CONTACT === 'undefined' || typeof GALLERY === 'undefined') {
     console.error('naaiprem.foto: ไม่พบ js/data.js — ตรวจสอบว่าโหลด data.js ก่อน main.js');
@@ -743,6 +1198,7 @@
   initStrip(lightbox);
   initStats();
   initServices();
+  initBooking();
   initReviews();
   initFaq();
   initReveal(); // ต้องเรียกหลังสร้าง element จาก data (stats / reviews)

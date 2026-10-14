@@ -57,7 +57,7 @@
         </div>
       </nav>
 
-      <a href="https://m.me/" data-contact="messenger" class="btn btn--primary btn--sm nav__cta">จองคิว</a>
+      <a href="https://m.me/" data-contact="messenger" data-booking-link class="btn btn--primary btn--sm nav__cta">จองคิว</a>
 
       <button class="nav__toggle" id="navToggle" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="navMenu">
         <span></span><span></span>
@@ -116,7 +116,7 @@
         </p>
         <div class="hero__actions hero-in" style="--i:5">
           <a href="#portfolio" class="btn btn--ghost">ดูผลงาน</a>
-          <a href="https://m.me/" data-contact="messenger" class="btn btn--primary">จองคิว</a>
+          <a href="https://m.me/" data-contact="messenger" data-booking-link class="btn btn--primary">จองคิว</a>
         </div>
       </div>
 
@@ -376,8 +376,8 @@
         <ol class="process__list">
           <li class="step reveal" data-delay="0">
             <span class="step__num">01</span>
-            <h3 class="step__title">ทักแชทหรือโทร</h3>
-            <p class="step__text">ทักเพจ NAAI PREM หรือโทร <span data-contact-text="phoneLabel">062-234-9685</span> แจ้งวันที่และประเภทงาน</p>
+            <h3 class="step__title">จองออนไลน์ หรือทักแชท</h3>
+            <p class="step__text">เลือกวันว่างและส่งคำขอจองได้ที่ฟอร์มด้านล่าง หรือทักเพจ NAAI PREM / โทร <span data-contact-text="phoneLabel">062-234-9685</span></p>
           </li>
           <li class="step reveal" data-delay="1">
             <span class="step__num">02</span>
@@ -387,7 +387,7 @@
           <li class="step reveal" data-delay="2">
             <span class="step__num">03</span>
             <h3 class="step__title">มัดจำล็อกคิว</h3>
-            <p class="step__text">โอนมัดจำเพื่อยืนยันวันที่ คิวของคุณจะถูกล็อกไว้ทันที</p>
+            <p class="step__text">โอนมัดจำแล้วแนบสลิปผ่านเว็บได้เลย เราตรวจยอดแล้วล็อกคิวให้ทันที</p>
           </li>
           <li class="step reveal" data-delay="3">
             <span class="step__num">04</span>
@@ -405,6 +405,157 @@
             <p class="step__text">รับภาพทั้งหมดผ่านลิงก์ออนไลน์ ดาวน์โหลดเก็บไว้ได้ทันที</p>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <!-- ============================== จองคิวออนไลน์ ==============================
+         แพ็กเกจ/เวลา/บัญชีรับมัดจำ แก้ที่ BOOKING ใน js/data.js
+         ข้อมูลส่งไป Google Sheets ผ่าน apps-script/Code.gs (ถ้ายังไม่ตั้ง BOOKING.endpoint ส่วนนี้จะถูกซ่อน) -->
+    <section class="section booking" id="booking" aria-labelledby="bookingTitle">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Booking</p>
+          <h2 class="section-title" id="bookingTitle">จองคิวออนไลน์</h2>
+          <p class="section-lead">เลือกประเภทงาน วันที่ และเวลาที่สะดวก ส่งคำขอได้ทันที แล้วเราจะติดต่อกลับเพื่อยืนยันภายใน 24 ชั่วโมง</p>
+        </header>
+
+        <form class="booking__form reveal" id="bookingForm" novalidate>
+          <fieldset class="booking__step">
+            <legend class="booking__legend"><span>01</span>ประเภทงาน</legend>
+            <div class="chips" id="bookingTypes"></div>
+          </fieldset>
+
+          <fieldset class="booking__step" id="bookingPkgStep" disabled>
+            <legend class="booking__legend"><span>02</span>รูปแบบการจอง</legend>
+            <div class="chips" id="bookingPkgs"><p class="booking__hint">เลือกประเภทงานก่อน</p></div>
+          </fieldset>
+
+          <fieldset class="booking__step">
+            <legend class="booking__legend"><span>03</span>วันที่และเวลา</legend>
+            <div class="booking__when">
+              <div class="cal" id="bookingCal">
+                <div class="cal__head">
+                  <button type="button" class="cal__nav" data-cal="-1" aria-label="เดือนก่อนหน้า"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+                  <p class="cal__title" id="calTitle" aria-live="polite"></p>
+                  <button type="button" class="cal__nav" data-cal="1" aria-label="เดือนถัดไป"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+                </div>
+                <div class="cal__week" aria-hidden="true"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
+                <div class="cal__grid" id="calGrid"></div>
+                <ul class="cal__legend">
+                  <li><i class="is-free"></i>ว่าง</li>
+                  <li><i class="is-partial"></i>ว่างบางช่วง</li>
+                  <li><i class="is-full"></i>เต็ม / ปิดรับ</li>
+                </ul>
+                <p class="cal__status" id="calStatus" role="status"></p>
+              </div>
+
+              <div class="booking__time" id="bookingTime">
+                <p class="booking__date" id="bookingDate">ยังไม่ได้เลือกวันที่</p>
+                <ul class="booking__busy" id="bookingBusy"></ul>
+                <div class="booking__hourly" id="bookingHourly" hidden>
+                  <label class="field">
+                    <span class="field__label">เวลาเริ่ม</span>
+                    <select class="field__input" id="bookingStart"></select>
+                  </label>
+                  <label class="field">
+                    <span class="field__label">จำนวนชั่วโมง</span>
+                    <select class="field__input" id="bookingHours"></select>
+                  </label>
+                </div>
+                <p class="booking__pick" id="bookingPick"></p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="booking__step">
+            <legend class="booking__legend"><span>04</span>ข้อมูลติดต่อ</legend>
+            <div class="booking__fields">
+              <label class="field">
+                <span class="field__label">ชื่อ-นามสกุล <b>*</b></span>
+                <input class="field__input" name="name" autocomplete="name" required maxlength="100">
+              </label>
+              <label class="field">
+                <span class="field__label">เบอร์โทร <b>*</b></span>
+                <input class="field__input" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="15" placeholder="08x-xxx-xxxx">
+              </label>
+              <label class="field">
+                <span class="field__label">LINE ID / ชื่อ Facebook</span>
+                <input class="field__input" name="contact" maxlength="100">
+              </label>
+              <label class="field">
+                <span class="field__label">จำนวนคนที่ถ่าย</span>
+                <input class="field__input" name="people" maxlength="30" placeholder="เช่น 1 คน / แขกประมาณ 200 คน">
+              </label>
+              <label class="field">
+                <span class="field__label">สถานที่ถ่าย <b>*</b></span>
+                <input class="field__input" name="place" required maxlength="200" placeholder="เช่น มหาวิทยาลัย / โรงแรม / ยังไม่แน่ใจ">
+              </label>
+              <label class="field">
+                <span class="field__label">จังหวัด <b>*</b></span>
+                <input class="field__input" name="province" required maxlength="100" autocomplete="address-level1">
+              </label>
+              <label class="field">
+                <span class="field__label">รู้จักเราจากช่องทางไหน <b>*</b></span>
+                <select class="field__input" name="source" id="bookingSource" required></select>
+              </label>
+              <label class="field field--wide">
+                <span class="field__label">รายละเอียดเพิ่มเติม</span>
+                <textarea class="field__input" name="note" rows="3" maxlength="1500" placeholder="เช่น คณะ / ธีมงาน / สไตล์ภาพที่ชอบ"></textarea>
+              </label>
+              <!-- ช่องกันบอท (ซ่อนจากคนจริง) -->
+              <label class="booking__trap" aria-hidden="true">เว็บไซต์ <input name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="booking__step">
+            <legend class="booking__legend"><span>05</span>สลิปมัดจำ <small>(ถ้าโอนแล้ว)</small></legend>
+            <div class="deposit" data-deposit></div>
+            <label class="upload">
+              <input type="file" accept="image/*" class="upload__input" data-slip-input>
+              <span class="upload__box">
+                <img class="upload__preview" alt="ตัวอย่างสลิปที่เลือก" hidden>
+                <span class="upload__text">แตะเพื่อเลือกรูปสลิป<small>ยังไม่ได้โอน? ส่งคำขอไปก่อนได้ แล้วค่อยแนบสลิปทีหลังด้วยรหัสจอง</small></span>
+              </span>
+            </label>
+          </fieldset>
+
+          <div class="booking__submit">
+            <label class="check">
+              <input type="checkbox" name="consent" required>
+              <span>ยินยอมให้เก็บข้อมูลนี้เพื่อใช้ติดต่อและนัดหมายการถ่ายภาพเท่านั้น</span>
+            </label>
+            <p class="booking__error" id="bookingError" role="alert"></p>
+            <button type="submit" class="btn btn--primary btn--lg" id="bookingSubmit">ส่งคำขอจองคิว</button>
+          </div>
+        </form>
+
+        <div class="booking__done" id="bookingDone" tabindex="-1" hidden></div>
+
+        <details class="booking__slip reveal" id="slipBox">
+          <summary>มีรหัสจองแล้ว? แนบสลิปมัดจำที่นี่</summary>
+          <form class="booking__slip-form" id="slipForm" novalidate>
+            <div class="deposit" data-deposit></div>
+            <div class="booking__fields">
+              <label class="field">
+                <span class="field__label">รหัสจอง <b>*</b></span>
+                <input class="field__input" name="code" required maxlength="12" placeholder="NPXXXXXX" autocapitalize="characters">
+              </label>
+              <label class="field">
+                <span class="field__label">เบอร์โทรที่ใช้จอง <b>*</b></span>
+                <input class="field__input" name="phone" type="tel" inputmode="tel" required maxlength="15">
+              </label>
+            </div>
+            <label class="upload">
+              <input type="file" accept="image/*" class="upload__input" data-slip-input required>
+              <span class="upload__box">
+                <img class="upload__preview" alt="ตัวอย่างสลิปที่เลือก" hidden>
+                <span class="upload__text">แตะเพื่อเลือกรูปสลิป</span>
+              </span>
+            </label>
+            <p class="booking__error" role="alert"></p>
+            <button type="submit" class="btn btn--primary">ส่งสลิป</button>
+          </form>
+        </details>
       </div>
     </section>
 

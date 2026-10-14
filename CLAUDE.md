@@ -13,7 +13,8 @@
 - กลุ่มเป้าหมาย: คู่บ่าวสาว, บัณฑิตและครอบครัว, นักเรียน ม.ปลายและผู้ปกครอง, องค์กร/ผู้จัดงาน
 
 ## ข้อกำหนดเด็ดขาด
-- HTML + CSS + JavaScript ล้วน แยกไฟล์ **ห้ามใช้ Framework / Library ภายนอก** (ยกเว้น Google Fonts) ไม่มี build step ไม่มีฐานข้อมูล
+- HTML + CSS + JavaScript ล้วน แยกไฟล์ **ห้ามใช้ Framework / Library ภายนอก** (ยกเว้น Google Fonts) ไม่มี build step ไม่มีฐานข้อมูลบนเว็บ
+  (ระบบจองเก็บข้อมูลใน Google Sheets ของเจ้าของผ่าน Google Apps Script — ไม่มีเซิร์ฟเวอร์ของเราเอง)
 - ข้อความบนเว็บเป็น **ภาษาไทยทั้งหมด** น้ำเสียงเป็นกันเองแต่มืออาชีพ **ห้ามใช้ Lorem Ipsum**
 - แสดงเฉพาะ **ราคาเริ่มต้น** บนการ์ดบริการ (งานแต่ง 5,500 / รับปริญญา 3,500 / พอร์ตนักเรียน 500 บาท — อีเวนต์ยังไม่มีราคา) ไม่ทำตารางแพ็กเกจ ปุ่มยังเป็น "สอบถามคิวและราคา" ให้ทักแชท
 - ทุกภาพต้องมี `alt` ภาษาไทย และใช้ `loading="lazy"` (ยกเว้นภาพ Hero แรก)
@@ -23,7 +24,7 @@
 ```
 index.html        โครงทุก section (ข้อความไทย, meta/OG, Google Fonts)
 css/style.css     design tokens (:root) → base → components → sections → responsive → reduced-motion
-js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, STRIP, REVIEWS
+js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, STRIP, BOOKING, REVIEWS
 js/main.js        logic ทั้งหมด (nav, hero, gallery แยกหมวด+masonry, lightbox, แถบภาพวิ่ง, slider, faq, cursor, counter, parallax, fab, scroll progress)
 images/hero/        ภาพสไลด์ Hero (ต่อประเภทงาน: แนวนอนสำหรับคอม + *-portrait.jpg สำหรับมือถือ)
 images/wedding/ graduation/ portfolio/ event/   ภาพแกลเลอรีแยกตามหมวด
@@ -32,6 +33,7 @@ images/cta/         ภาพพื้นหลัง Call to Action
 images/strip/       ภาพย่อ 640px สำหรับแถบภาพวิ่ง (ชื่อไฟล์เดียวกับภาพใน GALLERY)
 images/logo/        โลโก้: logo-mark.svg (ม่านรับแสง), favicon.svg, apple-touch-icon.png,
                     logo-square.png (รูปโปรไฟล์โซเชียล), logo-horizontal.png (พื้นโปร่งใส)
+apps-script/Code.gs   หลังบ้านระบบจอง (วางใน Apps Script ของ Google Sheet) — วิธีติดตั้ง: apps-script/SETUP.md
 ```
 `data.js` ต้องโหลดก่อน `main.js` (ทั้งสองไฟล์ใช้ `defer`)
 
@@ -48,6 +50,13 @@ images/logo/        โลโก้: logo-mark.svg (ม่านรับแส�
   6. **ห้ามครอปภาพแนวนอนเป็นแนวตั้ง** แกลเลอรีแสดงตามสัดส่วนจริงเสมอ
 - **Hero** — Hero เต็มจอใช้ `object-fit: cover` จึงต้องมีภาพแนวตั้ง (`<source media="(orientation: portrait)">`) ให้มือถือ ไม่งั้นภาพแนวนอนจะถูกตัดเหลือแนวตั้ง
 - **STRIP** — รายการ src ของภาพ (ต้องอยู่ใน GALLERY) ที่วิ่งในแถบภาพ ต้องสร้างภาพย่อไว้ใน `images/strip/` ด้วย
+- **BOOKING** — ระบบจองคิวออนไลน์
+  - `endpoint` = URL Web App ของ Apps Script (ว่าง = ซ่อนส่วนจอง และปุ่ม `data-booking-link` ยังพาไปทักแชท)
+  - `types[].packages[]`: `ranges` = ช่วงเวลาตายตัว (งานแต่ง พิธีเช้า/งานเลี้ยงเย็น, ครึ่งวัน/เต็มวัน) / `hourly: true` = รายชั่วโมง (`maxHours`)
+  - `deposit` = บัญชีรับมัดจำที่แสดงตอนแนบสลิป
+  - การเช็กเวลาชน (รวมเวลาเผื่อเดินทาง `BUFFER_MINUTES`) มีทั้งในเว็บ (`clash` ใน main.js) และหลังบ้าน (`conflicts_` ใน Code.gs) — **ต้องแก้ให้ตรงกันเสมอ**
+  - สถานะที่ทำให้ไม่ว่าง: `รอตรวจสลิป`, `มัดจำแล้ว` / `มัดจำแล้ว` ขึ้นไปลง Google Calendar อัตโนมัติ
+  - แก้ Code.gs แล้วต้อง Deploy → Manage deployments → New version (URL เดิม)
 - **REVIEWS** — ต้องมีรีวิวครบทั้ง 4 ประเภทงาน
 - ข้อความ section อื่นๆ (บริการ, FAQ, ขั้นตอน, ระยะเวลาส่งงาน) อยู่ใน `index.html` โดยตรง และมีคอมเมนต์ `<!-- แก้: ... -->` กำกับไว้
 
@@ -92,3 +101,5 @@ cd ~/Desktop/Webside_naaiprem && python3 -m http.server 8000
 - [x] ภาพจริงของหมวดงานแต่ง / รับปริญญา / พอร์ตนักเรียน
 - [ ] ภาพจริงของหมวดอีเวนต์ (แกลเลอรียังไม่มีหมวดอีเวนต์ / Hero สไลด์ 4 และการ์ดบริการอีเวนต์ยังใช้ภาพตัวอย่าง)
 - [ ] ภาพ OG (`og:image`) และ URL โดเมนจริง
+- [x] ติดตั้งระบบจอง + ใส่ `BOOKING.endpoint` และพร้อมเพย์ 062-234-9685 (QR: images/payment/promptpay-qr.jpg)
+- [ ] ยอดมัดจำของแต่ละงาน (ตอนนี้แจ้งว่า "จะแจ้งให้ตอนยืนยันรายละเอียด")

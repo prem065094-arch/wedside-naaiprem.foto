@@ -6,6 +6,7 @@
    • STATS    : ตัวเลขในตัวนับ
    • GALLERY  : รายการภาพผลงาน (เพิ่ม/ลบภาพแค่แก้ Array นี้)
    • STRIP    : ภาพในแถบภาพวิ่ง
+   • BOOKING  : ระบบจองคิวออนไลน์ (แพ็กเกจ เวลา บัญชีรับมัดจำ)
    • REVIEWS  : รีวิวจากลูกค้า
    ===================================================================== */
 
@@ -255,6 +256,58 @@ const STRIP = [
   'images/graduation/graduation-26-portrait.jpg',
   'images/graduation/graduation-59.jpg',
 ];
+
+/* ---------- ระบบจองคิวออนไลน์ ----------
+   ข้อมูลการจองถูกส่งไปเก็บใน Google Sheets ผ่าน Google Apps Script (ดูวิธีติดตั้งที่ apps-script/SETUP.md)
+   • endpoint ว่าง = ซ่อนส่วนจองคิว ปุ่ม "จองคิว" จะพาไปทักแชทแทน
+   • เวลาแพ็กเกจแก้ได้ที่ types ด้านล่าง (ranges = ช่วงเวลาตายตัว, hourly = จองรายชั่วโมง)
+   • เวลากันไว้เดินทางก่อน-หลังงาน และวันจองล่วงหน้า ตั้งใน apps-script/Code.gs (CONFIG) */
+const BOOKING = {
+  endpoint: 'https://script.google.com/macros/s/AKfycbz1WzIcNMSfSm8xeSIXUJv9JoGqGa7q3YPse4vkdUHn8heyTdpvgxNuyLtI9cZM9DBo/exec',
+
+  // แสดงในขั้นตอนแนบสลิป (ช่องที่ว่างจะไม่แสดง)
+  deposit: {
+    note: 'โอนมัดจำเพื่อล็อกคิว ยอดมัดจำจะแจ้งให้ตอนยืนยันรายละเอียด',
+    promptpay: '062-234-9685',
+    accountName: 'นายวชิรพล มะลิวัลย์',
+    bank: '',          // ถ้าจะแสดงเลขบัญชีธนาคารด้วย ใส่ชื่อธนาคาร
+    accountNo: '',     // และเลขบัญชีตรงนี้
+    qr: 'images/payment/promptpay-qr.jpg', // QR พร้อมเพย์ (ลูกค้ากดบันทึกรูปไปสแกนในแอปธนาคารได้)
+  },
+
+  // เวลาเริ่มที่เลือกได้สำหรับงานรายชั่วโมง (ทุก 30 นาที)
+  hourlyFrom: '06:00',
+  hourlyUntil: '22:00', // ต้องถ่ายเสร็จไม่เกินเวลานี้
+
+  types: [
+    { id: 'graduation', label: 'รับปริญญา', packages: [
+      { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 8 },
+      { id: 'morning', label: 'ครึ่งวันเช้า', ranges: [['07:00', '12:00']] },
+      { id: 'afternoon', label: 'ครึ่งวันบ่าย', ranges: [['13:00', '17:00']] },
+      { id: 'fullday', label: 'เต็มวัน', ranges: [['07:00', '17:00']] },
+    ] },
+    { id: 'wedding', label: 'งานแต่ง', packages: [
+      { id: 'ceremony', label: 'พิธีเช้า (เช้า–เที่ยง)', ranges: [['06:00', '12:00']] },
+      { id: 'reception', label: 'งานเลี้ยงช่วงเย็น', ranges: [['17:00', '22:00']] },
+      { id: 'both', label: 'พิธีเช้า + งานเลี้ยงเย็น', ranges: [['06:00', '12:00'], ['17:00', '22:00']] },
+    ] },
+    { id: 'prewedding', label: 'พรีเวดดิ้ง', packages: [
+      { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 8 },
+    ] },
+    { id: 'portfolio', label: 'พอร์ตนักเรียน', packages: [
+      { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 6 },
+    ] },
+    { id: 'event', label: 'อีเวนต์', packages: [
+      { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 10 },
+      { id: 'morning', label: 'ครึ่งวันเช้า', ranges: [['07:00', '12:00']] },
+      { id: 'afternoon', label: 'ครึ่งวันบ่าย', ranges: [['13:00', '17:00']] },
+      { id: 'fullday', label: 'เต็มวัน', ranges: [['07:00', '17:00']] },
+    ] },
+  ],
+
+  // ตัวเลือก "รู้จักเราจากช่องทางไหน"
+  sources: ['Facebook', 'Instagram', 'TikTok', 'Google', 'เพื่อน / คนรู้จักแนะนำ', 'เคยใช้บริการแล้ว', 'อื่นๆ'],
+};
 
 /* ---------- รีวิวจากลูกค้า ----------
    TODO: เปลี่ยนเป็นรีวิวจริง (ควรมีครบทั้ง 4 ประเภทงาน)
