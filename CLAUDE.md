@@ -30,9 +30,10 @@
 index.html        หน้าหลัก: โครงทุก section (ข้อความไทย, meta/OG, Google Fonts)
 booking.html      หน้าจองคิว (ภาพปกสลับ + การ์ดเลือกงานแบบภาพ + ปฏิทิน + การ์ดสรุปการจอง) ใช้ css/js ชุดเดียวกัน
 css/style.css     design tokens (:root) → base → components → sections → responsive → reduced-motion
-js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, STRIP, BOOKING, REVIEWS
-js/main.js        logic ทั้งหมด (nav, hero, gallery แยกหมวด+masonry, lightbox, แถบภาพวิ่ง, slider, faq, cursor, counter, parallax, fab, scroll progress)
-images/hero/        ภาพสไลด์ Hero (ต่อประเภทงาน: แนวนอนสำหรับคอม + *-portrait.jpg สำหรับมือถือ)
+js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, COVER, STRIP, BOOKING, REVIEWS
+js/main.js        logic ทั้งหมด (nav, หน้าปกคอลัมน์ภาพเฉียง, gallery แยกหมวด+masonry, lightbox, แถบภาพวิ่ง, slider, faq, cursor, counter, parallax, fab, scroll progress)
+images/cover/       ภาพย่อ 560px สำหรับหน้าปก (คอลัมน์ภาพเฉียง) — รายการอยู่ใน COVER
+images/hero/        (เลิกใช้บนหน้าเว็บแล้ว เหลือ hero-01-graduation.jpg ไว้เป็น og:image)
 images/wedding/ graduation/ portfolio/ event/   ภาพแกลเลอรีแยกตามหมวด
 images/services/    ภาพการ์ดบริการ
 images/cta/         ภาพพื้นหลัง Call to Action
@@ -45,7 +46,7 @@ apps-script/Code.gs   หลังบ้านระบบจอง (วาง�
 
 ## จุดที่ต้องแก้บ่อย (ทั้งหมดอยู่ใน `js/data.js`)
 - **CONTACT** — URL โซเชียลและเบอร์โทร ทุกลิงก์ในเว็บใช้แอตทริบิวต์ `data-contact="<key>"` แล้ว main.js จะเติม `href` ให้ แก้ที่ไฟล์นี้ที่เดียวก็เปลี่ยนทั้งเว็บ (ใน HTML ยังมี href สำรองไว้เผื่อ JS ไม่ทำงาน)
-- **SETTINGS** — `grayscaleHover` (เปิด/ปิดเอฟเฟกต์ขาวดำ→สี), `initialCount`, `loadMoreCount`, `heroInterval`
+- **SETTINGS** — `grayscaleHover` (เปิด/ปิดเอฟเฟกต์ขาวดำ→สี), `initialCount`, `loadMoreCount`
 - **STATS** — ตัวเลขในตัวนับ
 - **GALLERY** — แกลเลอรีแยกเป็นหมวดตามบล็อก `.gallery__group` ใน `index.html` (ลำดับปัจจุบัน: รับปริญญา → งานแต่ง → พอร์ตนักเรียน) หมวดที่ไม่มีภาพจะถูกซ่อนเอง เพิ่มภาพได้โดยไม่ต้องแก้ HTML:
   1. วางไฟล์ไว้ใน `images/<หมวด>/` ตั้งชื่อเป็น `<หมวด>-NN.jpg` (ถ้าเป็นภาพแนวตั้งให้ต่อท้าย `-portrait`)
@@ -55,7 +56,8 @@ apps-script/Code.gs   หลังบ้านระบบจอง (วาง�
   5. ลำดับใน array = ลำดับในหมวดนั้น (8 ภาพแรกคือภาพที่คนเห็นก่อน)
   6. **ห้ามครอปภาพแนวนอนเป็นแนวตั้ง** แกลเลอรีแสดงตามสัดส่วนจริงเสมอ
 - **Hero** — Hero เต็มจอใช้ `object-fit: cover` จึงต้องมีภาพแนวตั้ง (`<source media="(orientation: portrait)">`) ให้มือถือ ไม่งั้นภาพแนวนอนจะถูกตัดเหลือแนวตั้ง
-- **STRIP** — รายการ src ของภาพ (ต้องอยู่ใน GALLERY) ที่วิ่งในแถบภาพ ต้องสร้างภาพย่อไว้ใน `images/strip/` ด้วย
+- **COVER** — ภาพหน้าปกสไตล์นิตยสาร (คอลัมน์เฉียงเลื่อนสวนกัน + โลโก้ในวงกลม) ใส่ src จาก GALLERY และสร้างภาพย่อใน `images/cover/` (ยิ่งเยอะยิ่งไม่ซ้ำ แนะนำ 40+)
+- **STRIP** — รายการ src ของภาพ (ต้องอยู่ใน GALLERY) ที่วิ่งในแถบภาพ (หน้าแรก) และแถวภาพเฉียง (หัวหน้าจอง) ต้องสร้างภาพย่อไว้ใน `images/strip/` ด้วย
 - **BOOKING** — ระบบจองคิวออนไลน์
   - `endpoint` = URL Web App ของ Apps Script (ว่าง = ซ่อนส่วนจอง และปุ่ม `data-booking-link` ยังพาไปทักแชท)
   - `types[].packages[]`: `ranges` = ช่วงเวลาตายตัว (งานแต่ง พิธีเช้า/งานเลี้ยงเย็น, ครึ่งวัน/เต็มวัน) / `hourly: true` = รายชั่วโมง (`maxHours`)
@@ -64,7 +66,8 @@ apps-script/Code.gs   หลังบ้านระบบจอง (วาง�
   - สถานะที่ทำให้ไม่ว่าง: `รอตรวจสลิป`, `มัดจำแล้ว` / `มัดจำแล้ว` ขึ้นไปลง Google Calendar อัตโนมัติ
   - แก้ Code.gs แล้วต้อง Deploy → Manage deployments → New version (URL เดิม)
 - **REVIEWS** — ต้องมีรีวิวครบทั้ง 4 ประเภทงาน
-- ข้อความ section อื่นๆ (บริการ, FAQ, ขั้นตอน, ระยะเวลาส่งงาน) อยู่ใน `index.html` โดยตรง และมีคอมเมนต์ `<!-- แก้: ... -->` กำกับไว้
+- ข้อความ section อื่นๆ (แนะนำตัว, บริการ, FAQ, ขั้นตอน, ระยะเวลาส่งงาน) อยู่ใน `index.html` โดยตรง และมีคอมเมนต์ `<!-- แก้: ... -->` กำกับไว้
+- ส่วนแนะนำตัว (`#about`): "สวัสดีครับ ผมเปรม ช่างภาพเฟรนลี่…" + ภาพ 3 ใบแบบโพลารอยด์ — ถ้าได้รูปตัวเปรมเอง ให้ใส่แทนภาพตรงกลาง (`intro__photo--2`)
 
 ## การเตรียมภาพ (ใช้ `sips` ที่มากับ macOS)
 ```bash

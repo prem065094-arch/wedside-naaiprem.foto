@@ -101,64 +101,41 @@
     $$('main > section[id]').forEach((s) => spy.observe(s));
   }
 
-  /* ---------- 3) Hero: Crossfade สไลด์ ---------- */
-  function initHero() {
-    const hero = $('.hero');
-    const slides = $$('.hero__slide');
-    const bars = $('#heroBars');
-    const indexEl = $('#heroIndex');
-    const totalEl = $('#heroTotal');
-    const labelEl = $('#heroLabel');
-    if (!hero || !slides.length) return;
+  /* ---------- 3) หน้าปก: คอลัมน์ภาพเฉียง + แถวภาพเฉียง (หน้าจอง) ---------- */
+  // ภาพย่อจากรายการใน data.js (หน้าปกใช้ COVER → images/cover/, แถวภาพเฉียงใช้ STRIP → images/strip/)
+  function thumbsFrom(list, folder) {
+    if (!Array.isArray(list)) return [];
+    const bySrc = new Map(GALLERY.map((g) => [g.src, g]));
+    return list.map((src) => bySrc.get(src)).filter(Boolean).map((g) => ({
+      src: `images/${folder}/${g.src.split('/').pop()}`, w: g.width, h: g.height,
+    }));
+  }
 
-    const interval = SETTINGS.heroInterval || 6000;
-    const pad = (n) => String(n).padStart(2, '0');
-    hero.style.setProperty('--hero-interval', `${interval}ms`);
-    bars.innerHTML = slides.map(() => '<span class="hero__bar"></span>').join('');
-    if (totalEl) totalEl.textContent = pad(slides.length);
-    const barEls = $$('.hero__bar', bars);
-
-    let current = 0;
-    let timer = null;
-    let inView = true;
-    const autoplay = slides.length > 1 && !reduceMotion();
-
-    const schedule = () => {
-      clearTimeout(timer);
-      if (autoplay && inView && !document.hidden) timer = setTimeout(() => show(current + 1), interval);
-    };
-
-    function show(i) {
-      slides[current].classList.remove('is-active');
-      current = (i + slides.length) % slides.length;
-      slides[current].classList.add('is-active');
-      barEls.forEach((bar, k) => {
-        bar.classList.remove('is-active');
-        bar.classList.toggle('is-done', k < current || (!autoplay && k === current));
-      });
-      if (autoplay) {
-        void barEls[current].offsetWidth; // รีสตาร์ท animation ของแถบ
-        barEls[current].classList.add('is-active');
-      }
-      indexEl.textContent = pad(current + 1);
-      labelEl.textContent = slides[current].dataset.label || '';
-      schedule();
+  function initCover() {
+    const tilt = $('#coverTilt');
+    const thumbs = thumbsFrom(typeof COVER === 'undefined' ? [] : COVER, 'cover');
+    if (!tilt || !thumbs.length) return;
+    const cols = window.matchMedia('(max-width: 767px)').matches ? 6 : 9;
+    const perCol = 8;
+    let html = '';
+    for (let c = 0; c < cols; c++) {
+      // แต่ละคอลัมน์ใช้ภาพช่วงถัดไปของรายการ → คอลัมน์ติดกันไม่ซ้ำกัน (ภาพ 45 ภาพ = 5 คอลัมน์แรกไม่ซ้ำกันเลย)
+      const items = Array.from({ length: perCol }, (_, k) => thumbs[(c * perCol + k) % thumbs.length])
+        .map((t) => `<figure class="cover__item"><img src="${esc(t.src)}" alt="" width="${t.w}" height="${t.h}" decoding="async"></figure>`)
+        .join('');
+      // ชุดภาพซ้ำ 2 รอบ เพื่อให้เลื่อนวนได้ไม่สะดุด / แต่ละคอลัมน์เร็วไม่เท่ากัน
+      html += `<div class="cover__col"><div class="cover__track" style="--dur:${54 + (c % 4) * 9}s; --delay:-${(c * 7) % 30}s">${items}${items}</div></div>`;
     }
+    tilt.innerHTML = html;
+  }
 
-    show(0);
-    if (!autoplay) return;
-
-    // หยุดสไลด์เมื่อมองไม่เห็น Hero หรือสลับแท็บ (ประหยัดแบตเตอรี่)
-    new IntersectionObserver(([entry]) => {
-      const wasInView = inView;
-      inView = entry.isIntersecting;
-      if (inView && !wasInView) show(current);
-      if (!inView) clearTimeout(timer);
-    }).observe(hero);
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) clearTimeout(timer);
-      else show(current);
-    });
+  function initTiltRow() {
+    const track = $('[data-tiltrow]');
+    const thumbs = thumbsFrom(typeof STRIP === 'undefined' ? [] : STRIP, 'strip');
+    if (!track || !thumbs.length) return;
+    const items = thumbs.map((t) => `<figure class="tiltrow__item"><img src="${esc(t.src)}" alt="" width="${t.w}" height="${t.h}" loading="lazy" decoding="async"></figure>`).join('');
+    track.innerHTML = items + items;
+    track.style.setProperty('--dur', `${thumbs.length * 4}s`);
   }
 
   /* ---------- 4) Gallery: แยกหมวด + Masonry + Load more ---------- */
@@ -534,7 +511,7 @@
     els.forEach((el) => io.observe(el));
 
     // Hero / ภาพปก: เลื่อนกลับขึ้นมาบนสุด ตัวอักษรและข้อความจะเล่นแอนิเมชันใหม่
-    $$('.hero, .bhero').forEach((hero) => {
+    $$('.cover, .bhead').forEach((hero) => {
       new IntersectionObserver(([entry]) => {
         hero.classList.toggle('is-replay', !entry.isIntersecting);
       }).observe(hero);
@@ -1308,7 +1285,8 @@
   initContacts();
   initNav();
   initHeroBrand();
-  initHero();
+  initCover();
+  initTiltRow();
   initGallery(lightbox);
   initStrip(lightbox);
   initStats();

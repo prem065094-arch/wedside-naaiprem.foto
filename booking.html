@@ -19,8 +19,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Sans+Thai:wght@300;400;500&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="images/hero/hero-01-graduation-portrait.jpg" media="(orientation: portrait)">
-  <link rel="preload" as="image" href="images/hero/hero-01-graduation.jpg" media="(orientation: landscape)">
   <link rel="stylesheet" href="css/style.css">
   <!-- บอก CSS ว่า JS ทำงาน (ถ้าไม่มี JS เนื้อหาจะแสดงทันทีโดยไม่มี animation) -->
   <script>document.documentElement.classList.add('js');</script>
@@ -67,26 +65,21 @@
   </header>
 
   <main>
-    <!-- ============================== ภาพปก ==============================
-         ภาพสลับ 3 ภาพ (ใช้ไฟล์เดียวกับ Hero หน้าแรก — แนวตั้งสำหรับมือถือ) -->
-    <section class="bhero">
-      <div class="bhero__media" aria-hidden="true">
-        <picture class="bhero__slide"><source media="(orientation: portrait)" srcset="images/hero/hero-01-graduation-portrait.jpg"><img src="images/hero/hero-01-graduation.jpg" alt="" width="2000" height="1331" fetchpriority="high" decoding="async"></picture>
-        <picture class="bhero__slide"><source media="(orientation: portrait)" srcset="images/hero/hero-02-wedding-portrait.jpg"><img src="images/hero/hero-02-wedding.jpg" alt="" width="2000" height="1331" loading="lazy" decoding="async"></picture>
-        <picture class="bhero__slide"><source media="(orientation: portrait)" srcset="images/hero/hero-03-portfolio-portrait.jpg"><img src="images/hero/hero-03-portfolio.jpg" alt="" width="2000" height="1331" loading="lazy" decoding="async"></picture>
-      </div>
-      <div class="bhero__shade" aria-hidden="true"></div>
-      <div class="bhero__content container">
-        <p class="hero__eyebrow hero-in" style="--i:0">Booking · naaiprem.foto</p>
-        <h1 class="bhero__title hero-in" style="--i:1" id="bheroTitle">จองคิวถ่ายภาพ</h1>
-        <p class="bhero__lead hero-in" style="--i:2">เลือกงาน วันที่ และเวลาที่สะดวก ส่งคำขอได้ทันที เราจะติดต่อกลับเพื่อยืนยันภายใน 24 ชั่วโมง</p>
-        <ol class="bhero__steps hero-in" style="--i:3">
+    <!-- ============================== หัวหน้าจอง ==============================
+         ชื่อหน้าอยู่ซ้าย + แถวภาพเฉียงเลื่อนแนวนอน (สร้างจาก STRIP ใน js/data.js) -->
+    <header class="bhead">
+      <div class="container bhead__inner">
+        <p class="eyebrow eyebrow--left hero-in" style="--i:0">Booking</p>
+        <h1 class="bhead__title hero-in" style="--i:1" id="bheroTitle">จองคิวถ่ายภาพ</h1>
+        <p class="bhead__lead hero-in" style="--i:2">เลือกงาน วันที่ และเวลาที่สะดวก ส่งคำขอได้ทันที เราจะติดต่อกลับเพื่อยืนยันภายใน 24 ชั่วโมง</p>
+        <ol class="bhead__steps hero-in" style="--i:3">
           <li><span>1</span>เลือกงานและวันว่าง</li>
           <li><span>2</span>ส่งคำขอ / แนบสลิปมัดจำ</li>
           <li><span>3</span>รอยืนยันคิว</li>
         </ol>
       </div>
-    </section>
+      <div class="tiltrow" aria-hidden="true"><div class="tiltrow__track" data-tiltrow></div></div>
+    </header>
 
     <!-- ============================== ฟอร์มจอง ==============================
          แพ็กเกจ/เวลา/ภาพการ์ด/บัญชีรับมัดจำ แก้ที่ BOOKING ใน js/data.js

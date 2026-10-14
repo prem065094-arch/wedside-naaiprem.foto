@@ -5,6 +5,7 @@
    • SETTINGS : เปิด-ปิดเอฟเฟกต์ และจำนวนภาพที่โหลดในแกลเลอรี
    • STATS    : ตัวเลขในตัวนับ
    • GALLERY  : รายการภาพผลงาน (เพิ่ม/ลบภาพแค่แก้ Array นี้)
+   • COVER    : ภาพในหน้าปก (คอลัมน์ภาพเฉียง)
    • STRIP    : ภาพในแถบภาพวิ่ง
    • BOOKING  : ระบบจองคิวออนไลน์ (แพ็กเกจ เวลา บัญชีรับมัดจำ)
    • REVIEWS  : รีวิวจากลูกค้า
@@ -28,7 +29,6 @@ const SETTINGS = {
   grayscaleHover: false, // true = ภาพในแกลเลอรีเริ่มเป็นขาวดำเล็กน้อยแล้วเป็นสีเมื่อ hover | false = แสดงภาพสีตลอด
   initialCount: 12,     // จำนวนภาพที่แสดงครั้งแรก (ต่อหมวด)
   loadMoreCount: 12,    // จำนวนภาพที่เพิ่มเมื่อกด "ดูเพิ่มเติม" (ต่อหมวด)
-  heroInterval: 6000,   // เวลาเปลี่ยนภาพ Hero (มิลลิวินาที)
   reviewInterval: 6500, // เวลาเลื่อนรีวิวอัตโนมัติ (มิลลิวินาที)
 };
 
@@ -223,6 +223,58 @@ const GALLERY = [
   { src: 'images/portfolio/portfolio-34-portrait.jpg', category: 'portfolio', title: 'มุมผนังช่องลม', alt: 'เพื่อนนักเรียนหญิงนั่งเรียงกันที่มุมผนังช่องลมสีขาว', width: 1064, height: 1600 },
   { src: 'images/portfolio/portfolio-35-portrait.jpg', category: 'portfolio', title: 'ประตูลิฟต์', alt: 'เพื่อนนักเรียนโผล่หน้าจากประตูลิฟต์สองบาน', width: 1064, height: 1600 },
   { src: 'images/portfolio/portfolio-38-portrait.jpg', category: 'portfolio', title: 'คอลลาจเพื่อนรัก', alt: 'ภาพคอลลาจสามภาพ นักเรียนชายหญิงบนสนามหญ้า', width: 899, height: 1600 },
+];
+
+/* ---------- ภาพหน้าปก (คอลัมน์ภาพเฉียง) ----------
+   ใส่ src ของภาพที่มีอยู่ใน GALLERY — ต้องมีภาพย่อชื่อเดียวกันใน images/cover/ สร้างด้วย:
+   sips -Z 560 -s formatOptions 70 images/<หมวด>/<ไฟล์>.jpg --out images/cover/<ไฟล์>.jpg
+   ภาพยิ่งเยอะยิ่งไม่ซ้ำกันบนจอ (แนะนำ 40 ภาพขึ้นไป) */
+const COVER = [
+  'images/graduation/graduation-56.jpg',
+  'images/wedding/wedding-21.jpg',
+  'images/portfolio/portfolio-22.jpg',
+  'images/graduation/graduation-03-portrait.jpg',
+  'images/wedding/wedding-12-portrait.jpg',
+  'images/portfolio/portfolio-07-portrait.jpg',
+  'images/graduation/graduation-07-portrait.jpg',
+  'images/wedding/wedding-01-portrait.jpg',
+  'images/portfolio/portfolio-21.jpg',
+  'images/graduation/graduation-14.jpg',
+  'images/wedding/wedding-18.jpg',
+  'images/portfolio/portfolio-30-portrait.jpg',
+  'images/graduation/graduation-69-portrait.jpg',
+  'images/wedding/wedding-22-portrait.jpg',
+  'images/portfolio/portfolio-17.jpg',
+  'images/graduation/graduation-09-portrait.jpg',
+  'images/wedding/wedding-16-portrait.jpg',
+  'images/portfolio/portfolio-32-portrait.jpg',
+  'images/graduation/graduation-66.jpg',
+  'images/wedding/wedding-07.jpg',
+  'images/portfolio/portfolio-23.jpg',
+  'images/graduation/graduation-26-portrait.jpg',
+  'images/wedding/wedding-28-portrait.jpg',
+  'images/portfolio/portfolio-03-portrait.jpg',
+  'images/graduation/graduation-47.jpg',
+  'images/wedding/wedding-04-portrait.jpg',
+  'images/portfolio/portfolio-37.jpg',
+  'images/graduation/graduation-11-portrait.jpg',
+  'images/wedding/wedding-20-portrait.jpg',
+  'images/portfolio/portfolio-02-portrait.jpg',
+  'images/graduation/graduation-59.jpg',
+  'images/wedding/wedding-11-portrait.jpg',
+  'images/portfolio/portfolio-16.jpg',
+  'images/graduation/graduation-73-portrait.jpg',
+  'images/wedding/wedding-13.jpg',
+  'images/portfolio/portfolio-12-portrait.jpg',
+  'images/graduation/graduation-33-portrait.jpg',
+  'images/wedding/wedding-29-portrait.jpg',
+  'images/portfolio/portfolio-28.jpg',
+  'images/graduation/graduation-28.jpg',
+  'images/wedding/wedding-24.jpg',
+  'images/portfolio/portfolio-06.jpg',
+  'images/graduation/graduation-40.jpg',
+  'images/wedding/wedding-27-portrait.jpg',
+  'images/graduation/graduation-30-portrait.jpg',
 ];
 
 /* ---------- แถบภาพวิ่ง (ระหว่างส่วน "ทำไมต้องเรา" กับ "บริการ") ----------

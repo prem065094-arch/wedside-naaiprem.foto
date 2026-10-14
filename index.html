@@ -19,8 +19,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Sans+Thai:wght@300;400;500&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="images/hero/hero-01-graduation-portrait.jpg" media="(orientation: portrait)">
-  <link rel="preload" as="image" href="images/hero/hero-01-graduation.jpg" media="(orientation: landscape)">
   <link rel="stylesheet" href="css/style.css">
   <!-- บอก CSS ว่า JS ทำงาน (ถ้าไม่มี JS เนื้อหาจะแสดงทันทีโดยไม่มี animation) -->
   <script>document.documentElement.classList.add('js');</script>
@@ -67,69 +65,56 @@
   </header>
 
   <main>
-    <!-- ============================== HERO ==============================
-         แก้ภาพ: เปลี่ยนไฟล์ใน images/hero/ (ใช้ 1 ภาพต่อ 1 ประเภทงาน)
-         แต่ละสไลด์มี 2 ไฟล์ เพราะ Hero เต็มจอ ถ้าใช้ภาพแนวนอนบนมือถือ (จอแนวตั้ง) ภาพจะถูกตัดซ้าย-ขวาจนเหลือแนวตั้ง
-           • <source> = ภาพแนวตั้ง *-portrait.jpg สำหรับจอแนวตั้ง (มือถือ / แท็บเล็ต) ขนาดแนะนำ 1600px
-           • <img>    = ภาพแนวนอน สำหรับจอแนวนอน (คอมพิวเตอร์) ขนาดแนะนำ 2000px
-         ภาพแนวตั้งควรเลือกภาพที่ตัวแบบอยู่ช่วงบน-กลางภาพ เพราะช่วงล่างจะมีข้อความทับ
-         data-label = ชื่อหมวดที่แสดงมุมขวาล่าง -->
-    <section class="hero" id="home" aria-label="หน้าแรก">
-      <div class="hero__media" data-parallax="0.25">
-        <figure class="hero__slide is-active" data-label="รับปริญญา">
-          <picture>
-            <source media="(orientation: portrait)" srcset="images/hero/hero-01-graduation-portrait.jpg" width="1065" height="1600">
-            <img src="images/hero/hero-01-graduation.jpg" alt="เพื่อนบัณฑิตหญิงสี่คนกอดคอหัวเราะหน้าป้ายมหาวิทยาลัย" width="2000" height="1331" fetchpriority="high" decoding="async">
-          </picture>
-        </figure>
-        <figure class="hero__slide" data-label="งานแต่ง">
-          <picture>
-            <source media="(orientation: portrait)" srcset="images/hero/hero-02-wedding-portrait.jpg" width="1065" height="1600">
-            <img src="images/hero/hero-02-wedding.jpg" alt="บ่าวสาวยิ้มให้กันท่ามกลางกลีบดอกไม้ที่โปรยลงมา" width="2000" height="1331" loading="lazy" decoding="async">
-          </picture>
-        </figure>
-        <figure class="hero__slide" data-label="พอร์ตนักเรียน">
-          <picture>
-            <source media="(orientation: portrait)" srcset="images/hero/hero-03-portfolio-portrait.jpg" width="1065" height="1600">
-            <img src="images/hero/hero-03-portfolio.jpg" alt="ภาพมุมต่ำ เพื่อนนักเรียนจับมือชูขึ้นฟ้าสีคราม" width="2000" height="1331" loading="lazy" decoding="async">
-          </picture>
-        </figure>
-        <!-- TODO: ยังเป็นภาพตัวอย่าง รอภาพอีเวนต์จริง -->
-        <figure class="hero__slide" data-label="อีเวนต์">
-          <picture>
-            <source media="(orientation: portrait)" srcset="images/hero/hero-04-event-portrait.jpg" width="909" height="1363">
-            <img src="images/hero/hero-04-event.jpg" alt="กลุ่มเพื่อนเกาะตาข่ายทำหน้าตลกอย่างสนุกสนาน" width="2000" height="1331" loading="lazy" decoding="async">
-          </picture>
-        </figure>
+    <!-- ============================== หน้าปก ==============================
+         ภาพคอลัมน์เฉียงสไตล์นิตยสาร สร้างจาก STRIP ใน js/data.js (ใช้ภาพย่อใน images/strip/)
+         คอลัมน์คู่-คี่เลื่อนสวนทางกัน / โลโก้อยู่ในวงกลมกลางจอ -->
+    <section class="cover" id="home" aria-label="หน้าแรก">
+      <div class="cover__collage" aria-hidden="true">
+        <div class="cover__tilt" id="coverTilt"></div>
       </div>
-      <div class="hero__shade" aria-hidden="true"></div>
+      <div class="cover__shade" aria-hidden="true"></div>
 
-      <div class="hero__content container">
-        <p class="hero__eyebrow hero-in" style="--i:0">รับปริญญา · งานแต่ง · พอร์ตนักเรียน · อีเวนต์</p>
-        <h1 class="hero__brand hero-in" style="--i:1">naaiprem<span>.foto</span></h1>
+      <div class="cover__content container">
+        <div class="cover__badge">
+          <svg class="cover__mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M17.50 20.25L37.13 8.92M24.00 16.50L43.63 27.83M30.50 20.25L30.50 42.92M30.50 27.75L10.87 39.08M24.00 31.50L4.37 20.17M17.50 27.75L17.50 5.08"/></svg>
+          <h1 class="hero__brand cover__brand">naaiprem<span>.foto</span></h1>
+          <p class="cover__sub" aria-hidden="true">Photography</p>
+        </div>
+        <p class="cover__eyebrow hero-in" style="--i:3">รับปริญญา · งานแต่ง · พอร์ตนักเรียน · อีเวนต์</p>
         <!-- แก้: สโลแกน -->
-        <p class="hero__slogan hero-in" style="--i:2">เก็บรอยยิ้มจริง ในโทนภาพใสๆ ที่เป็นคุณ</p>
-        <p class="hero__sub hero-in" style="--i:3">โพสท่าไม่เป็นก็ได้ภาพสวย ช่างภาพบรีฟให้ตลอดการถ่าย และไม่จำกัดจำนวนรูป</p>
-        <p class="hero__badge hero-in" style="--i:4">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-          รับงานทั่วประเทศไทย
-        </p>
-        <div class="hero__actions hero-in" style="--i:5">
+        <p class="cover__slogan hero-in" style="--i:4">เก็บรอยยิ้มจริง ในโทนภาพใสๆ ที่เป็นคุณ</p>
+        <div class="cover__actions hero-in" style="--i:5">
           <a href="#portfolio" class="btn btn--ghost">ดูผลงาน</a>
           <a href="booking.html" class="btn btn--primary">จองคิว</a>
         </div>
       </div>
 
-      <div class="hero__meta" aria-hidden="true">
-        <span class="hero__count"><span id="heroIndex">01</span> / <span id="heroTotal">04</span></span>
-        <span class="hero__label" id="heroLabel">รับปริญญา</span>
-        <div class="hero__bars" id="heroBars"></div>
-      </div>
-
-      <a href="#portfolio" class="hero__scroll" aria-label="เลื่อนลงไปดูผลงาน">
-        <span>เลื่อนดูผลงาน</span>
+      <a href="#about" class="hero__scroll" aria-label="เลื่อนลงไปทำความรู้จัก">
+        <span>เลื่อนลง</span>
         <i aria-hidden="true"></i>
       </a>
+    </section>
+
+    <!-- ============================== แนะนำตัว ==============================
+         แก้: ข้อความแนะนำตัว / ภาพ 3 ใบ (ถ้ามีรูปตัวเอง ใส่แทนภาพตรงกลาง intro__photo--2 ได้เลย) -->
+    <section class="section intro" id="about" aria-labelledby="introTitle">
+      <div class="container intro__inner">
+        <div class="intro__photos" aria-hidden="true">
+          <figure class="intro__photo intro__photo--1 reveal" data-delay="0"><img src="images/strip/graduation-11-portrait.jpg" alt="" width="426" height="640" loading="lazy" decoding="async"></figure>
+          <figure class="intro__photo intro__photo--2 reveal" data-delay="1"><img src="images/strip/wedding-22-portrait.jpg" alt="" width="426" height="640" loading="lazy" decoding="async"></figure>
+          <figure class="intro__photo intro__photo--3 reveal" data-delay="2"><img src="images/strip/portfolio-30-portrait.jpg" alt="" width="426" height="640" loading="lazy" decoding="async"></figure>
+        </div>
+        <div class="intro__text">
+          <p class="eyebrow eyebrow--left reveal">Hello, I'm Prem</p>
+          <h2 class="intro__title reveal" data-delay="1" id="introTitle">สวัสดีครับ<br>ผมเปรม</h2>
+          <p class="intro__lead reveal" data-delay="2">ช่างภาพเฟรนลี่ โพสไม่เป็นเราบรีฟท่าให้ คุยเล่นได้สนุก ถ่ายรูปด้วยกันแบบไม่ต้องเกร็ง</p>
+          <p class="intro__sign reveal" data-delay="3">— Prem · naaiprem.foto</p>
+          <div class="intro__actions reveal" data-delay="4">
+            <a href="booking.html" class="btn btn--primary">จองคิวกับเปรม</a>
+            <a href="#portfolio" class="btn btn--ghost">ดูผลงาน</a>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============================== GALLERY ==============================
