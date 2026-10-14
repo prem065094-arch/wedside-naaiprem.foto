@@ -383,7 +383,7 @@
     const format = (n, suffix) => `${n.toLocaleString('en-US')}${suffix}`;
     list.innerHTML = STATS.map((s, k) => `
       <li class="stat reveal" data-delay="${k}">
-        <span class="stat__num" data-target="${Number(s.value) || 0}" data-suffix="${esc(s.suffix || '')}">${format(Number(s.value) || 0, esc(s.suffix || ''))}</span>
+        <span class="stat__value"><span class="stat__num" data-target="${Number(s.value) || 0}" data-suffix="${esc(s.suffix || '')}">${format(Number(s.value) || 0, esc(s.suffix || ''))}</span>${s.unit ? `<span class="stat__unit">${esc(s.unit)}</span>` : ''}</span>
         <span class="stat__label">${esc(s.label)}</span>
       </li>`).join('');
 
