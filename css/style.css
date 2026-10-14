@@ -278,7 +278,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
   .nav__mobile-extra { display: grid; gap: 14px; opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease) .2s, transform .5s var(--ease) .2s; }
   .nav.is-open .nav__mobile-extra { opacity: 1; transform: none; }
   .nav__mobile-label { margin-top: 6px; font-size: .85rem; color: var(--text-dim); }
-  .nav__quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .nav__quick { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .nav__quick a {
     display: grid; gap: 2px; padding: 12px 10px; border: 1px solid var(--line-strong); border-radius: 12px;
     text-align: center; transition: border-color .3s var(--ease), background-color .3s var(--ease);
@@ -601,7 +601,6 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 }
 .strip__item img { height: 100%; width: auto; transition: transform 1s var(--ease); }
 @media (hover: hover) and (pointer: fine) {
-  .strip__rows:hover .strip__track { animation-play-state: paused; }
   .strip__item:hover img { transform: scale(1.06); }
 }
 
@@ -933,7 +932,11 @@ select.field__input option:disabled { color: var(--text-dim); }
 .booking__closed h2 { font-family: var(--font-heading); font-weight: 500; font-size: 1.6rem; }
 
 /* การ์ดเลือกประเภทงาน (ภาพ) */
-.tcards { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.tcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (min-width: 768px) {
+  .tcards .tcard__media { aspect-ratio: 4 / 3; } /* 3 × 2 การ์ดบนจอใหญ่ ไม่ให้สูงเกินไป */
+  .tcards .tcard__media img { object-position: 50% 28%; }
+}
 .tcard {
   position: relative; overflow: hidden; border-radius: 14px; cursor: pointer;
   border: 1px solid var(--line-strong); background: var(--surface);

@@ -45,7 +45,8 @@ const CATEGORIES = {
   wedding: 'งานแต่ง',
   graduation: 'รับปริญญา',
   portfolio: 'พอร์ตนักเรียน',
-  event: 'อีเวนต์',
+  ordination: 'งานอุปสมบท',
+  event: 'อีเวนต์', // ใช้กับรีวิวเดิม
 };
 
 /* ---------- แกลเลอรีผลงาน ----------
@@ -223,6 +224,55 @@ const GALLERY = [
   { src: 'images/portfolio/portfolio-34-portrait.jpg', category: 'portfolio', title: 'มุมผนังช่องลม', alt: 'เพื่อนนักเรียนหญิงนั่งเรียงกันที่มุมผนังช่องลมสีขาว', width: 1064, height: 1600 },
   { src: 'images/portfolio/portfolio-35-portrait.jpg', category: 'portfolio', title: 'ประตูลิฟต์', alt: 'เพื่อนนักเรียนโผล่หน้าจากประตูลิฟต์สองบาน', width: 1064, height: 1600 },
   { src: 'images/portfolio/portfolio-38-portrait.jpg', category: 'portfolio', title: 'คอลลาจเพื่อนรัก', alt: 'ภาพคอลลาจสามภาพ นักเรียนชายหญิงบนสนามหญ้า', width: 899, height: 1600 },
+  /* ---- ordination (48 ภาพ) ---- */
+  { src: 'images/ordination/ordination-23-portrait.jpg', category: 'ordination', title: 'นาคขึ้นบ่า', alt: 'นาคนั่งบนบ่าญาติพนมมือ ใต้ร่มสีทองท่ามกลางต้นไม้', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-05-portrait.jpg', category: 'ordination', title: 'นาคชุดเต็มยศ', alt: 'นาคสวมชฎาในชุดสีทองยืนหน้าเวทีพิธี', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-16-portrait.jpg', category: 'ordination', title: 'พระบวชใหม่', alt: 'พระบวชใหม่ยืนพนมมือหน้าพระพุทธรูปสีขาว', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-22.jpg', category: 'ordination', title: 'แห่นาค', alt: 'ญาติแห่นาคที่นั่งบนบ่าใต้ร่มสีทอง', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-43-portrait.jpg', category: 'ordination', title: 'รอยยิ้มของนาค', alt: 'นาคชุดสีทองพนมมือยิ้ม มองขึ้นด้านบน', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-10.jpg', category: 'ordination', title: 'ครองผ้าครั้งแรก', alt: 'พระพี่เลี้ยงช่วยจัดจีวรให้พระบวชใหม่', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-28.jpg', category: 'ordination', title: 'ภาพหมู่ครอบครัว', alt: 'ครอบครัวและญาติยืนถ่ายภาพหมู่กับนาคใต้ร่มสีทอง', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-33-portrait.jpg', category: 'ordination', title: 'ประตูโบสถ์', alt: 'พระบวชใหม่ยืนพนมมือที่ประตูโบสถ์ ภาพย้อนแสง', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-02.jpg', category: 'ordination', title: 'พิธีทำขวัญนาค', alt: 'นาคในชุดสีทองนั่งพนมมือหน้าบายศรีในพิธีทำขวัญนาค', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-27.jpg', category: 'ordination', title: 'มองฟ้า', alt: 'พระบวชใหม่เงยหน้ามองฟ้าสีคราม', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-24.jpg', category: 'ordination', title: 'แห่รอบโบสถ์', alt: 'ขบวนแห่นาครอบโบสถ์ ใต้ร่มสีทองและท้องฟ้าสดใส', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-42-portrait.jpg', category: 'ordination', title: 'ทางเดินในวัด', alt: 'พระบวชใหม่ยืนพนมมือบนทางเดินในวัด', width: 1066, height: 1600 },
+  { src: 'images/ordination/ordination-13.jpg', category: 'ordination', title: 'ปลงผมขาวดำ', alt: 'ภาพขาวดำ ผู้ใหญ่กำลังโกนผมนาคที่หลับตา', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-47-portrait.jpg', category: 'ordination', title: 'ถือตาลปัตร', alt: 'พระบวชใหม่ถือตาลปัตรยืนหน้าพระพุทธรูปสีขาว', width: 1066, height: 1600 },
+  { src: 'images/ordination/ordination-40.jpg', category: 'ordination', title: 'ในพระอุโบสถ', alt: 'พระบวชใหม่นั่งในพระอุโบสถที่ตกแต่งสีทอง', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-09-portrait.jpg', category: 'ordination', title: 'กราบพระบวชใหม่', alt: 'หญิงสาวนั่งพนมมือหน้าพระบวชใหม่บนทางเดินในวัด', width: 1066, height: 1600 },
+  { src: 'images/ordination/ordination-01.jpg', category: 'ordination', title: 'รายละเอียดผ้าพิธี', alt: 'ภาพใกล้ผ้าลูกไม้สีขาวประดับพู่ในงานอุปสมบท', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-03.jpg', category: 'ordination', title: 'ลอดผ้าเหลือง', alt: 'นาคชุดขาวพนมมือ ถ่ายลอดผ่านผ้าสีเหลืองฉากหน้า', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-04.jpg', category: 'ordination', title: 'กล่าวคำขอบวช', alt: 'นาคในชุดสีทองพนมมือพูดใส่ไมโครโฟน', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-06-portrait.jpg', category: 'ordination', title: 'ดอกไม้ธูปเทียน', alt: 'ภาพใกล้มือนาคถือดอกไม้และธนบัตรพับ', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-07.jpg', category: 'ordination', title: 'ทำขวัญยามค่ำ', alt: 'นาคและญาติพนมมือยิ้ม ฉากหลังเป็นไฟประดับยามค่ำ', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-08.jpg', category: 'ordination', title: 'ปลงผม', alt: 'ภาพใกล้มือกำลังโกนผมนาค', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-11.jpg', category: 'ordination', title: 'ระเบียงโบสถ์', alt: 'พระบวชใหม่เดินตามพระพี่เลี้ยงข้างระเบียงโบสถ์สีขาว', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-12.jpg', category: 'ordination', title: 'จัดจีวร', alt: 'พระพี่เลี้ยงช่วยจัดจีวรให้พระบวชใหม่หน้าประตู', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-14.jpg', category: 'ordination', title: 'ญาติร่วมยินดี', alt: 'พระบวชใหม่ยืนท่ามกลางญาติที่ถ่ายรูปแสดงความยินดี', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-15.jpg', category: 'ordination', title: 'ลานพระพุทธรูป', alt: 'พระบวชใหม่เดินบนลานหน้าพระพุทธรูปสีขาวเรียงแถว', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-17.jpg', category: 'ordination', title: 'เวทีกราบอุปสมบท', alt: 'ฉากเวทีพิธีอุปสมบทตกแต่งดอกไม้สีขาวและธรรมจักร', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-18.jpg', category: 'ordination', title: 'รับพรจากผู้ใหญ่', alt: 'ผู้ใหญ่ป้อนขนมให้นาคในพิธีทำขวัญ', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-19.jpg', category: 'ordination', title: 'ป้ายงานบวช', alt: 'ป้ายชื่องานอุปสมบทบนผ้าม่านสีทอง', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-20-portrait.jpg', category: 'ordination', title: 'นาคชุดขาว', alt: 'นาคสวมหมวกและชุดขาว ถือดอกไม้ยืนหน้าป้ายงาน', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-21.jpg', category: 'ordination', title: 'รายละเอียดเวที', alt: 'บายศรีและเครื่องบวชหน้าเวทีกราบอุปสมบท', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-25-portrait.jpg', category: 'ordination', title: 'เข้าโบสถ์', alt: 'นาคชุดขาวพนมมือเดินเข้าโบสถ์', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-26.jpg', category: 'ordination', title: 'รายละเอียดจีวร', alt: 'ภาพใกล้มือพระถือซองปัจจัยข้างจีวร', width: 1600, height: 1064 },
+  { src: 'images/ordination/ordination-29.jpg', category: 'ordination', title: 'ประนมมือในโบสถ์', alt: 'พระบวชใหม่พนมมือในโบสถ์', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-30.jpg', category: 'ordination', title: 'ขบวนแห่', alt: 'ขบวนแห่นาคพร้อมญาติถือเครื่องบวช', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-31.jpg', category: 'ordination', title: 'สะพายบาตร', alt: 'พระบวชใหม่สะพายบาตรเดินในวัด', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-32.jpg', category: 'ordination', title: 'ขาวดำในพิธี', alt: 'ภาพขาวดำ พระบวชใหม่พนมมือระหว่างพิธี', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-34.jpg', category: 'ordination', title: 'ขลิบผม', alt: 'พระกำลังขลิบผมนาคที่นั่งหน้าฉากดอกไม้', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-35.jpg', category: 'ordination', title: 'คอลลาจรายละเอียด', alt: 'ภาพคอลลาจเก้าช่อง รายละเอียดในงานบวช', width: 1600, height: 1600 },
+  { src: 'images/ordination/ordination-36-portrait.jpg', category: 'ordination', title: 'โปสเตอร์นาค', alt: 'ภาพโปสเตอร์นาคชุดขาวพนมมือหน้าเวที', width: 1065, height: 1600 },
+  { src: 'images/ordination/ordination-37.jpg', category: 'ordination', title: 'คอลลาจวันบวช', alt: 'ภาพคอลลาจสี่ช่อง การ์ดเชิญและพระบวชใหม่', width: 1600, height: 1600 },
+  { src: 'images/ordination/ordination-38.jpg', category: 'ordination', title: 'บาตรพระ', alt: 'ภาพใกล้บาตรพระสะพายข้างจีวร', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-39-portrait.jpg', category: 'ordination', title: 'โปสเตอร์พระใหม่', alt: 'พระบวชใหม่ถือตาลปัตรยืนในวัด', width: 1066, height: 1600 },
+  { src: 'images/ordination/ordination-41.jpg', category: 'ordination', title: 'ครองจีวร', alt: 'ภาพใกล้มือช่วยจัดจีวรให้พระบวชใหม่', width: 1600, height: 1065 },
+  { src: 'images/ordination/ordination-44-portrait.jpg', category: 'ordination', title: 'หน้าโบสถ์', alt: 'พระบวชใหม่สวมแว่นยืนหน้าโบสถ์', width: 1066, height: 1600 },
+  { src: 'images/ordination/ordination-45-portrait.jpg', category: 'ordination', title: 'ข้างโบสถ์', alt: 'พระบวชใหม่ยืนบนทางเดินข้างโบสถ์', width: 1066, height: 1600 },
+  { src: 'images/ordination/ordination-46-portrait.jpg', category: 'ordination', title: 'โปสเตอร์นาคพนมมือ', alt: 'นาคพนมมือหน้าฉากดอกไม้สีส้มและป้ายงาน', width: 1066, height: 1600 },
+  { src: 'images/ordination/ordination-48-portrait.jpg', category: 'ordination', title: 'พระใหม่กับบาตร', alt: 'พระบวชใหม่สะพายบาตรถือตาลปัตรข้างกำแพงวัด', width: 1066, height: 1600 },
 ];
 
 /* ---------- ภาพหน้าปก (คอลัมน์ภาพเฉียง) ----------
@@ -333,6 +383,7 @@ const BOOKING = {
 
   // ranges = ช่วงเวลาตายตัว / hourly = เลือกเวลาเริ่มเอง (minHours–maxHours ชม.) / price = ข้อความราคาบนปุ่ม
   // ตัวเลขสำหรับคำนวณ "รวมค่าใช้จ่าย": amount = ราคาตายตัว / hourlyRate = ต่อชั่วโมง / pairRate = ราคาเหมา 2 ชม.
+  //   days = จำนวนวันติดกัน (เช่นงานบวช 2 วัน) / addon: amount = ครั้งเดียว, perDay = คิดต่อวัน
   //   from: true = ราคาเริ่มต้น (แสดงว่า "เริ่มต้น")
   // addons = ตัวเลือกเพิ่มที่ลูกค้ากดเลือกได้ / note = หมายเหตุใต้ตัวเลือกแพ็กเกจ
   // ⚠️ ราคาให้ตรงกับการ์ดบริการใน index.html
@@ -363,10 +414,20 @@ const BOOKING = {
       { id: 'group10', label: 'กลุ่ม 6–10 คน', price: '3,000 บาท / 3 ชม.', amount: 3000, hourly: true, minHours: 3, maxHours: 3 },
       { id: 'class', label: 'ถ่ายทั้งห้อง', price: 'เริ่มต้น 4,000 บาท / 3 ชม.', amount: 4000, from: true, hourly: true, minHours: 3, maxHours: 6 },
     ] },
-    { id: 'event', label: 'อีเวนต์', price: 'สอบถามราคา', image: 'images/services/service-event.jpg', packages: [
-      { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 10 },
-      { id: 'morning', label: 'ครึ่งวันเช้า', ranges: [['07:00', '12:00']] },
-      { id: 'afternoon', label: 'ครึ่งวันบ่าย', ranges: [['13:00', '17:00']] },
+    { id: 'ordination', label: 'งานอุปสมบท', price: 'เริ่มต้น 6,000 บาท', image: 'images/strip/ordination-05-portrait.jpg',
+      note: 'ช่างภาพ 1 คน กล้อง 2 ตัว + ไฟสตูดิโอ · ไม่จำกัดรูป · ราคายังไม่รวมค่าเดินทาง',
+      addons: [
+        { id: 'photographer', label: 'เพิ่มช่างภาพอีก 1 คน', detail: 'เก็บได้หลายมุมพร้อมกัน ไม่พลาดทุกช่วงสำคัญ', price: '+3,000 บาท/วัน', perDay: 3000 },
+      ],
+      packages: [
+      { id: 'day1', label: '1 วัน', price: '6,000 บาท', amount: 6000, ranges: [['06:00', '18:00']] },
+      { id: 'day2', label: '2 วัน', price: '7,500 บาท', amount: 7500, days: 2, ranges: [['06:00', '18:00']] }, // days: 2 = ใช้ 2 วันติดกัน (วันที่เลือก + วันถัดไป)
+    ] },
+    // งานประเภทอื่น: ลูกค้าเลือกวันเวลา แล้วต้องเล่ารายละเอียดงานในช่อง "รายละเอียด" (requireNote)
+    { id: 'other', label: 'งานอื่นๆ', price: 'ระบุรายละเอียดงาน', image: 'images/strip/graduation-47.jpg', requireNote: true,
+      note: 'เช่น งานวันเกิด งานบริษัท สัมมนา ปาร์ตี้ ถ่ายครอบครัว — เล่ารายละเอียดงานในขั้นตอนที่ 04 แล้วเราจะแจ้งราคาให้',
+      packages: [
+      { id: 'hourly', label: 'ระบุเวลาเอง', hourly: true, maxHours: 12 },
       { id: 'fullday', label: 'เต็มวัน', ranges: [['07:00', '17:00']] },
     ] },
   ],

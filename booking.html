@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>จองคิวถ่ายภาพ — naaiprem.foto</title>
-  <meta name="description" content="จองคิวถ่ายภาพออนไลน์กับ naaiprem.foto รับปริญญา งานแต่ง พรีเวดดิ้ง พอร์ตนักเรียน อีเวนต์ เลือกวันว่างจากปฏิทิน ส่งคำขอและแนบสลิปมัดจำได้ทันที">
+  <meta name="description" content="จองคิวถ่ายภาพออนไลน์กับ naaiprem.foto รับปริญญา งานแต่ง พรีเวดดิ้ง พอร์ตนักเรียน งานบวช และงานอื่นๆ เลือกวันว่างจากปฏิทิน ส่งคำขอและแนบสลิปมัดจำได้ทันที">
   <meta name="theme-color" content="#0a0a0a">
 
   <!-- หน้าจองคิว (ฟอร์มสร้างจาก BOOKING ใน js/data.js) -->
@@ -57,6 +57,7 @@
             <li><a href="booking.html?type=graduation"><span>รับปริญญา</span><small>เริ่มต้น 1,200</small></a></li>
             <li><a href="booking.html?type=wedding"><span>งานแต่ง</span><small>เริ่มต้น 5,500</small></a></li>
             <li><a href="booking.html?type=portfolio"><span>พอร์ตนักเรียน</span><small>เริ่มต้น 600</small></a></li>
+            <li><a href="booking.html?type=ordination"><span>งานบวช</span><small>เริ่มต้น 6,000</small></a></li>
           </ul>
           <div class="nav__mobile-contact">
             <a href="tel:0622349685" data-contact="phone" class="nav__mobile-phone"><span data-contact-text="phoneLabel">062-234-9685</span></a>
@@ -188,7 +189,7 @@
                 <select class="field__input" name="source" id="bookingSource" required></select>
               </label>
               <label class="field field--wide">
-                <span class="field__label">รายละเอียดเพิ่มเติม</span>
+                <span class="field__label" id="noteLabel">รายละเอียดเพิ่มเติม</span>
                 <textarea class="field__input" name="note" rows="3" maxlength="1500" placeholder="เช่น คณะ / ธีมงาน / สไตล์ภาพที่ชอบ"></textarea>
               </label>
               <!-- ช่องกันบอท (ซ่อนจากคนจริง) -->
@@ -277,7 +278,7 @@
     <div class="container footer__inner">
       <div class="footer__brand">
         <a href="index.html" class="logo logo--lg" aria-label="naaiprem.foto กลับหน้าหลัก"><svg class="logo__mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M17.50 20.25L37.13 8.92M24.00 16.50L43.63 27.83M30.50 20.25L30.50 42.92M30.50 27.75L10.87 39.08M24.00 31.50L4.37 20.17M17.50 27.75L17.50 5.08"/></svg><span class="logo__text">naaiprem<span>.foto</span><small>Photography</small></span></a>
-        <p>ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน และอีเวนต์<br>รับงานทั่วประเทศไทย</p>
+        <p>ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน และงานอุปสมบท<br>รับงานทั่วประเทศไทย</p>
       </div>
 
       <div class="footer__col">

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>naaiprem.foto — ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน อีเวนต์ | รับงานทั่วประเทศไทย</title>
-  <meta name="description" content="naaiprem.foto ช่างภาพอิสระ รับถ่ายงานแต่ง รับปริญญา พอร์ตนักเรียน และอีเวนต์ ภาพโทนใส เน้นแคนดิด บรีฟท่าโพสให้ตลอด ไม่จำกัดจำนวนรูป รับงานทั่วประเทศไทย">
+  <title>naaiprem.foto — ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน งานบวช | รับงานทั่วประเทศไทย</title>
+  <meta name="description" content="naaiprem.foto ช่างภาพอิสระ รับถ่ายงานแต่ง รับปริญญา พอร์ตนักเรียน และงานอุปสมบท ภาพโทนใส เน้นแคนดิด บรีฟท่าโพสให้ตลอด ไม่จำกัดจำนวนรูป รับงานทั่วประเทศไทย">
   <meta name="theme-color" content="#0a0a0a">
 
   <!-- Open Graph (แก้: เปลี่ยน og:image เป็น URL เต็มของโดเมนจริงเมื่อขึ้นเว็บ) -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="naaiprem.foto — เก็บรอยยิ้มจริง ในโทนภาพใสๆ ที่เป็นคุณ">
-  <meta property="og:description" content="รับถ่ายงานแต่ง รับปริญญา พอร์ตนักเรียน อีเวนต์ บรีฟท่าโพสให้ตลอด ไม่จำกัดจำนวนรูป รับงานทั่วประเทศไทย">
+  <meta property="og:description" content="รับถ่ายงานแต่ง รับปริญญา พอร์ตนักเรียน งานบวช บรีฟท่าโพสให้ตลอด ไม่จำกัดจำนวนรูป รับงานทั่วประเทศไทย">
   <meta property="og:image" content="images/hero/hero-01-graduation.jpg">
   <meta property="og:locale" content="th_TH">
 
@@ -57,6 +57,7 @@
             <li><a href="booking.html?type=graduation"><span>รับปริญญา</span><small>เริ่มต้น 1,200</small></a></li>
             <li><a href="booking.html?type=wedding"><span>งานแต่ง</span><small>เริ่มต้น 5,500</small></a></li>
             <li><a href="booking.html?type=portfolio"><span>พอร์ตนักเรียน</span><small>เริ่มต้น 600</small></a></li>
+            <li><a href="booking.html?type=ordination"><span>งานบวช</span><small>เริ่มต้น 6,000</small></a></li>
           </ul>
           <div class="nav__mobile-contact">
             <a href="tel:0622349685" data-contact="phone" class="nav__mobile-phone"><span data-contact-text="phoneLabel">062-234-9685</span></a>
@@ -94,7 +95,7 @@
           <h1 class="hero__brand cover__brand">naaiprem<span>.foto</span></h1>
           <p class="cover__sub" aria-hidden="true">Photography</p>
         </div>
-        <p class="cover__eyebrow hero-in" style="--i:3">รับปริญญา · งานแต่ง · พอร์ตนักเรียน · อีเวนต์</p>
+        <p class="cover__eyebrow hero-in" style="--i:3">รับปริญญา · งานแต่ง · พอร์ตนักเรียน · งานบวช</p>
         <!-- แก้: สโลแกน -->
         <p class="cover__slogan hero-in" style="--i:4">เก็บความทรงจำดีๆ ในวันสำคัญของคุณ</p>
         <div class="cover__actions hero-in" style="--i:5">
@@ -147,6 +148,7 @@
           <a class="filter" href="#work-graduation" data-jump="graduation">รับปริญญา</a>
           <a class="filter" href="#work-wedding" data-jump="wedding">งานแต่ง</a>
           <a class="filter" href="#work-portfolio" data-jump="portfolio">พอร์ตนักเรียน</a>
+          <a class="filter" href="#work-ordination" data-jump="ordination">งานบวช</a>
         </nav>
       </div>
 
@@ -184,8 +186,16 @@
         <div class="gallery__more"><button class="btn btn--ghost" type="button" data-load-more>ดูภาพพอร์ตนักเรียนเพิ่มเติม</button></div>
       </section>
 
-      <!-- TODO: เมื่อมีภาพอีเวนต์จริงใน GALLERY ให้คัดลอกบล็อกด้านบนมาวางตรงนี้ แล้วเปลี่ยนเป็น
-           id="work-event" data-category="event" (และเพิ่มลิงก์ data-jump="event" ในแถบด้านบน) -->
+      <section class="gallery__group" id="work-ordination" data-category="ordination" aria-labelledby="workOrdinationTitle">
+        <header class="gallery__head container reveal">
+          <p class="gallery__eyebrow">Ordination</p>
+          <h3 class="gallery__heading" id="workOrdinationTitle">งานอุปสมบท</h3>
+          <p class="gallery__lead">ทำขวัญนาค แห่นาค และพิธีอุปสมบท เก็บทุกช่วงเวลาแห่งบุญและความภูมิใจของครอบครัว</p>
+          <p class="gallery__count" data-gallery-count></p>
+        </header>
+        <div class="gallery__wrap"><div class="gallery__grid" data-gallery-grid></div></div>
+        <div class="gallery__more"><button class="btn btn--ghost" type="button" data-load-more>ดูภาพงานบวชเพิ่มเติม</button></div>
+      </section>
     </section>
 
     <!-- ============================== STATS ==============================
@@ -264,7 +274,7 @@
     </section>
 
     <!-- ============================== แถบภาพวิ่ง ==============================
-         ภาพสร้างจาก STRIP ใน js/data.js (เอาเมาส์ชี้เพื่อหยุด / คลิกเพื่อดูภาพเต็ม) -->
+         ภาพสร้างจาก STRIP ใน js/data.js (วิ่งตลอด / คลิกเพื่อดูภาพเต็ม) -->
     <section class="strip" aria-labelledby="stripTitle">
       <header class="strip__head container reveal">
         <p class="eyebrow">Moments</p>
@@ -280,7 +290,7 @@
         <header class="section-head reveal">
           <p class="eyebrow">Services</p>
           <h2 class="section-title" id="servicesTitle">บริการถ่ายภาพ</h2>
-          <p class="section-lead">ราคาชัดเจน ไม่จำกัดจำนวนรูป เลือกแพ็กเกจที่ใช่แล้วกดจองคิวได้เลย หรือทักมาสอบถามรายละเอียดเพิ่มเติมที่เพจ</p>
+          <p class="section-lead">ราคาชัดเจน ไม่จำกัดจำนวนรูป เลือกแพ็กเกจที่ใช่แล้วกดจองคิวได้เลย หรือทักมาสอบถามรายละเอียดเพิ่มเติมที่เพจ งานประเภทอื่นจองได้ในหน้าจองคิว (เลือก "งานอื่นๆ")</p>
         </header>
 
         <div class="services__grid">
@@ -373,22 +383,29 @@
 
           <article class="service reveal" data-delay="3">
             <div class="service__media">
-              <img src="images/services/service-event.jpg" alt="กลุ่มคนพูดคุยกันในทางเดินอาคาร ตัวอย่างภาพงานอีเวนต์" width="799" height="1000" loading="lazy" decoding="async">
+              <img src="images/services/service-ordination.jpg" alt="นาคสวมชฎาในชุดสีทองยืนหน้าเวทีพิธี ตัวอย่างภาพงานอุปสมบท" width="800" height="1000" loading="lazy" decoding="async">
             </div>
             <div class="service__body">
-              <p class="service__tags">สัมมนา · ปาร์ตี้ · งานบริษัท · วันเกิด</p>
-              <h3 class="service__title">งานอีเวนต์</h3>
-              <p class="service__price service__price--ask">ราคาตามรูปแบบงาน</p><!-- แก้: ใส่ราคาเริ่มต้นได้เหมือนการ์ดอื่น -->
-              <p class="service__text">เก็บบรรยากาศ บุคคลสำคัญ และไฮไลต์ของงานได้ครบ ได้ภาพที่นำไปใช้ประชาสัมพันธ์ต่อได้ทันที</p>
-              <ul class="service__list">
-                <li>บรีฟท่าโพสสำหรับภาพหมู่</li>
-                <li>ไม่จำกัดจำนวนรูป</li>
-                <li>คัดและแต่งทุกภาพ</li>
-                <li class="service__delivery">ส่งงานภายใน 7 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
+              <p class="service__tags">ทำขวัญนาค · แห่นาค · พิธีอุปสมบท</p>
+              <h3 class="service__title">งานอุปสมบท</h3>
+              <p class="service__price">เริ่มต้น <strong data-count="6000">6,000</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
+              <p class="service__text">เก็บทุกช่วงเวลาแห่งบุญ ตั้งแต่ทำขวัญนาค แห่นาค จนถึงวันที่ได้ห่มผ้าเหลือง</p>
+              <!-- แก้: ราคาแต่ละแพ็กเกจ (ให้ตรงกับ BOOKING ใน js/data.js) -->
+              <ul class="service__prices">
+                <li><span>1 วัน</span><b>6,000 บาท</b></li>
+                <li><span>2 วัน</span><b>7,500 บาท</b></li>
+                <li><span>เพิ่มช่างภาพ</span><b>+3,000 บาท/วัน</b></li>
               </ul>
+              <ul class="service__list">
+                <li>ช่างภาพ 1 คน กล้อง 2 ตัว</li>
+                <li>ไฟสตูดิโอเพิ่มความสว่างให้งาน</li>
+                <li>ไม่จำกัดจำนวนรูป คัดและแต่งทุกภาพ</li>
+                <li class="service__delivery">ส่งงานไม่เกิน 14 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
+              </ul>
+              <p class="service__note">* ราคายังไม่รวมค่าเดินทาง</p>
               <div class="service__actions">
-                <a href="booking.html?type=event" class="btn btn--primary btn--block">จองคิว</a>
-                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามราคา</a>
+                <a href="booking.html?type=ordination" class="btn btn--primary btn--block">จองคิว</a>
+                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามเพิ่มเติม</a>
               </div>
             </div>
           </article>
@@ -494,7 +511,7 @@
           <div class="faq__item">
             <h3><button class="faq__q" aria-expanded="false" aria-controls="faq5" id="faq5-btn">ใช้เวลาส่งงานกี่วัน?<i aria-hidden="true"></i></button></h3>
             <!-- แก้: ระยะเวลาส่งงาน (ให้ตรงกับการ์ดบริการ) -->
-            <div class="faq__a" id="faq5" role="region" aria-labelledby="faq5-btn"><div><p>นับจากวันถ่าย งานแต่งและรับปริญญาไม่เกิน 14 วัน พอร์ตนักเรียนและอีเวนต์ 7 วัน ถ้าต้องการภาพด่วนแจ้งล่วงหน้าได้เลย</p></div></div>
+            <div class="faq__a" id="faq5" role="region" aria-labelledby="faq5-btn"><div><p>นับจากวันถ่าย งานแต่ง งานบวช และรับปริญญาไม่เกิน 14 วัน พอร์ตนักเรียน 7 วัน ถ้าต้องการภาพด่วนแจ้งล่วงหน้าได้เลย</p></div></div>
           </div>
           <div class="faq__item">
             <h3><button class="faq__q" aria-expanded="false" aria-controls="faq6" id="faq6-btn">พอร์ตนักเรียน ช่วยแนะนำการแต่งตัวและสถานที่ไหม?<i aria-hidden="true"></i></button></h3>
@@ -544,7 +561,7 @@
     <div class="container footer__inner">
       <div class="footer__brand">
         <a href="#home" class="logo logo--lg" aria-label="naaiprem.foto กลับไปด้านบน"><svg class="logo__mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M17.50 20.25L37.13 8.92M24.00 16.50L43.63 27.83M30.50 20.25L30.50 42.92M30.50 27.75L10.87 39.08M24.00 31.50L4.37 20.17M17.50 27.75L17.50 5.08"/></svg><span class="logo__text">naaiprem<span>.foto</span><small>Photography</small></span></a>
-        <p>ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน และอีเวนต์<br>รับงานทั่วประเทศไทย</p>
+        <p>ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน และงานอุปสมบท<br>รับงานทั่วประเทศไทย</p>
       </div>
 
       <div class="footer__col">

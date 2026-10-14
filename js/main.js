@@ -807,10 +807,21 @@
       }
       return out;
     };
+    // วันที่ทั้งหมดที่แพ็กเกจใช้ (งาน 2 วัน = วันที่เลือก + วันถัดไป)
+    const pkgDates = (date, pkg) => Array.from({ length: pkg?.days || 1 }, (_, k) => ymd(addDays(parseYmd(date), k)));
+    const fixedFits = (date, pkg) => pkgDates(date, pkg).every((d) => d <= avail.maxDate && !clash(d, pkg.ranges));
+    const shortDate = (str) => parseYmd(str).toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+    function dateLabel() {
+      const pkg = currentPkg();
+      if (!state.date) return '';
+      const ds = pkgDates(state.date, pkg);
+      return ds.length > 1 ? `${thaiDate(ds[0])} – ${thaiDate(ds[ds.length - 1])}` : thaiDate(state.date);
+    }
+
     function dayState(date) {
       if (date < avail.minDate || date > avail.maxDate) return 'off';
       const pkg = currentPkg();
-      const fits = pkg && !pkg.hourly ? !clash(date, pkg.ranges) : hourlyStarts(date, pkg?.minHours || 1).some((x) => x.ok);
+      const fits = pkg && !pkg.hourly ? fixedFits(date, pkg) : hourlyStarts(date, pkg?.minHours || 1).some((x) => x.ok);
       if (!fits) return 'full';
       return (avail.busy[date] || []).length ? 'partial' : 'free';
     }
@@ -881,18 +892,24 @@
         if (!el.start.value) return null;
         ranges = [[el.start.value, toHM(toMin(el.start.value) + Number(el.hours.value) * 60)]];
       }
+      if (!pkg.hourly) return fixedFits(state.date, pkg) ? ranges : null;
       return clash(state.date, ranges) ? null : ranges;
     }
 
     function pkgLabel() {
       const pkg = currentPkg();
-      return pkg.hourly ? `${pkg.label} (${el.hours.value} ชม.)` : pkg.label;
+      if (pkg.hourly) return `${pkg.label} (${el.hours.value} ชม.)`;
+      if (pkg.days > 1 && state.date) {
+        const ds = pkgDates(state.date, pkg);
+        return `${pkg.label} (${shortDate(ds[0])} – ${shortDate(ds[ds.length - 1])})`;
+      }
+      return pkg.label;
     }
 
     function updatePick() {
       const ranges = selectedRanges();
       el.pick.innerHTML = ranges
-        ? `<strong>${esc(currentType().label)} · ${esc(pkgLabel())}</strong><br>${esc(thaiDate(state.date))}<br>เวลา ${fmtRanges(ranges)}`
+        ? `<strong>${esc(currentType().label)} · ${esc(pkgLabel())}</strong><br>${esc(dateLabel())}<br>เวลา ${fmtRanges(ranges)}${currentPkg().days > 1 ? ' (ทุกวัน)' : ''}`
         : 'เลือกเวลาเริ่มและจำนวนชั่วโมง';
       updateTicket();
     }
@@ -908,10 +925,11 @@
       else if (pkg.hourlyRate) base = h * pkg.hourlyRate;
       else if (pkg.amount) base = pkg.amount;
       if (base == null) return null;
-      const addons = (currentType().addons || []).filter((a) => state.addons.has(a.id));
+      const addons = (currentType().addons || []).filter((a) => state.addons.has(a.id))
+        .map((a) => ({ label: a.label, amount: a.amount ?? (a.perDay || 0) * (pkg.days || 1) }));
       return {
         base, addons, from: Boolean(pkg.from),
-        total: base + addons.reduce((sum, a) => sum + (a.amount || 0), 0),
+        total: base + addons.reduce((sum, a) => sum + a.amount, 0),
       };
     }
     const totalText = (est) => (est ? `${est.from ? 'เริ่มต้น ' : ''}${baht(est.total)}` : 'สอบถามราคา');
@@ -950,7 +968,7 @@
             ${type.note && /เดินทาง/.test(type.note) ? '<small>ยังไม่รวมค่าเดินทาง</small>' : ''}`;
         }
       }
-      ticket.date.textContent = state.date ? thaiDate(state.date) : '—';
+      ticket.date.textContent = state.date ? dateLabel() : '—';
       ticket.time.textContent = ranges ? fmtRanges(ranges) : '—';
       const F = form.elements;
       const contactOk = F.name.value.trim().length >= 2 && /^0\d{8,9}$/.test(digits(F.phone.value))
@@ -998,6 +1016,16 @@
       }
     }
 
+    // งานอื่นๆ → ช่องรายละเอียดกลายเป็นช่องบังคับ พร้อมคำแนะนำว่าต้องเล่าอะไร
+    const noteLabel = $('#noteLabel');
+    const noteDefault = { label: noteLabel?.innerHTML, placeholder: form.elements.note.placeholder };
+    function updateNoteField() {
+      const need = currentType()?.requireNote;
+      if (noteLabel) noteLabel.innerHTML = need ? 'รายละเอียดงาน <b>*</b>' : noteDefault.label;
+      form.elements.note.placeholder = need ? 'เล่างานของคุณ เช่น งานอะไร มีกี่คน สถานที่ ช่วงเวลาสำคัญ และสไตล์ภาพที่อยากได้' : noteDefault.placeholder;
+      form.elements.note.required = Boolean(need);
+    }
+
     function onSelectionChange() {
       // วันที่เลือกไว้อาจไม่ว่างแล้วสำหรับรูปแบบใหม่
       if (state.date && dayState(state.date) === 'full') {
@@ -1017,6 +1045,7 @@
       state.pkg = null;
       state.addons = new Set();
       renderPkgs();
+      updateNoteField();
       onSelectionChange();
     });
     el.pkgs.addEventListener('change', (e) => {
@@ -1102,6 +1131,7 @@
       presetInput.checked = true;
       state.type = preset;
       renderPkgs();
+      updateNoteField();
     }
     renderCalendar();
     renderTime();
@@ -1187,6 +1217,9 @@
       if (!f.elements.place.value.trim()) return fail(err, 'กรุณากรอกสถานที่ถ่าย (ถ้ายังไม่แน่ใจ พิมพ์ว่า "ยังไม่แน่ใจ" ได้)', f.elements.place);
       if (!f.elements.province.value.trim()) return fail(err, 'กรุณากรอกจังหวัด', f.elements.province);
       if (!f.elements.source.value) return fail(err, 'กรุณาเลือกช่องทางที่รู้จักเรา', f.elements.source);
+      if (currentType()?.requireNote && f.elements.note.value.trim().length < 10) {
+        return fail(err, 'กรุณาเล่ารายละเอียดงานสักนิด เช่น ประเภทงาน จำนวนคน และสไตล์ที่อยากได้', f.elements.note);
+      }
       if (!f.elements.consent.checked) return fail(err, 'กรุณายอมรับการเก็บข้อมูลเพื่อการนัดหมาย', f.elements.consent, f.elements.consent.closest('.check'));
       return true;
     }
@@ -1232,7 +1265,7 @@
           return;
         }
         requestId = newRequestId();
-        showDone(res.code, payload, Boolean(slip));
+        showDone(res.code, { ...payload, dateText: dateLabel() }, Boolean(slip));
       } finally {
         el.submit.removeAttribute('aria-busy');
         el.submit.textContent = 'ส่งคำขอจองคิว';
@@ -1243,7 +1276,7 @@
     function showDone(code, p, hasSlip) {
       const rows = [
         ['งาน', `${p.type} · ${p.pkg}`],
-        ['วันที่', thaiDate(p.date)],
+        ['วันที่', p.dateText || thaiDate(p.date)],
         ['เวลา', fmtRanges(p.ranges)],
         ['สถานที่', `${p.place} จ.${p.province}`],
         ['ชื่อ', p.name],
@@ -1279,6 +1312,7 @@
       $('[data-done="again"]', done).addEventListener('click', () => {
         form.reset();
         Object.assign(state, { type: null, pkg: null, date: null, addons: new Set() });
+        updateNoteField();
         el.pkgs.innerHTML = '<p class="booking__hint">เลือกประเภทงานก่อน</p>';
         el.pkgStep.disabled = true;
         $('.upload__preview', form).hidden = true;
