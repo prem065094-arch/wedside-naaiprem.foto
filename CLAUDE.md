@@ -28,7 +28,7 @@
 ## โครงสร้างไฟล์
 ```
 index.html        หน้าหลัก: โครงทุก section (ข้อความไทย, meta/OG, Google Fonts)
-booking.html      หน้าจองคิว (ภาพปกสลับ + การ์ดเลือกงานแบบภาพ + ปฏิทิน + การ์ดสรุปการจอง) ใช้ css/js ชุดเดียวกัน
+booking.html      หน้าจองคิว (หัวหน้าภาพแนวตั้ง 4 ช่อง + การ์ดเลือกงานแบบภาพ + ปฏิทิน + การ์ดสรุป/รวมค่าใช้จ่าย) ใช้ css/js ชุดเดียวกัน
 css/style.css     design tokens (:root) → base → components → sections → responsive → reduced-motion
 js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, COVER, STRIP, BOOKING, REVIEWS
 js/main.js        logic ทั้งหมด (nav, หน้าปกคอลัมน์ภาพเฉียง, gallery แยกหมวด+masonry, lightbox, แถบภาพวิ่ง, slider, faq, cursor, counter, parallax, fab, scroll progress)
@@ -38,6 +38,7 @@ images/wedding/ graduation/ portfolio/ event/   ภาพแกลเลอร�
 images/services/    ภาพการ์ดบริการ
 images/cta/         ภาพพื้นหลัง Call to Action
 images/strip/       ภาพย่อ 640px สำหรับแถบภาพวิ่ง (ชื่อไฟล์เดียวกับภาพใน GALLERY)
+images/booking/     ภาพแนวตั้ง 4 ช่องของหัวหน้าจอง (720×1080 เปลี่ยนไฟล์ได้ใน booking.html)
 images/logo/        โลโก้: logo-mark.svg (ม่านรับแสง), favicon.svg, apple-touch-icon.png,
                     logo-square.png (รูปโปรไฟล์โซเชียล), logo-horizontal.png (พื้นโปร่งใส)
 apps-script/Code.gs   หลังบ้านระบบจอง (วางใน Apps Script ของ Google Sheet) — วิธีติดตั้ง: apps-script/SETUP.md
@@ -57,11 +58,13 @@ apps-script/Code.gs   หลังบ้านระบบจอง (วาง�
   6. **ห้ามครอปภาพแนวนอนเป็นแนวตั้ง** แกลเลอรีแสดงตามสัดส่วนจริงเสมอ
 - **Hero** — Hero เต็มจอใช้ `object-fit: cover` จึงต้องมีภาพแนวตั้ง (`<source media="(orientation: portrait)">`) ให้มือถือ ไม่งั้นภาพแนวนอนจะถูกตัดเหลือแนวตั้ง
 - **COVER** — ภาพหน้าปกสไตล์นิตยสาร (คอลัมน์เฉียงเลื่อนสวนกัน + โลโก้ในวงกลม) ใส่ src จาก GALLERY และสร้างภาพย่อใน `images/cover/` (ยิ่งเยอะยิ่งไม่ซ้ำ แนะนำ 40+)
-- **STRIP** — รายการ src ของภาพ (ต้องอยู่ใน GALLERY) ที่วิ่งในแถบภาพ (หน้าแรก) และแถวภาพเฉียง (หัวหน้าจอง) ต้องสร้างภาพย่อไว้ใน `images/strip/` ด้วย
+- **STRIP** — รายการ src ของภาพ (ต้องอยู่ใน GALLERY) ที่วิ่งในแถบภาพหน้าแรก ต้องสร้างภาพย่อไว้ใน `images/strip/` ด้วย
 - **BOOKING** — ระบบจองคิวออนไลน์
   - `endpoint` = URL Web App ของ Apps Script (ว่าง = ซ่อนส่วนจอง และปุ่ม `data-booking-link` ยังพาไปทักแชท)
   - `types[].packages[]`: `ranges` = ช่วงเวลาตายตัว (งานแต่ง พิธีเช้า/งานเลี้ยงเย็น, ครึ่งวัน/เต็มวัน) / `hourly: true` = รายชั่วโมง (`maxHours`)
   - `deposit` = บัญชีรับมัดจำที่แสดงตอนแนบสลิป
+  - รวมค่าใช้จ่าย: `amount` / `hourlyRate` / `pairRate` (เหมา 2 ชม.) / `from` + `addons` (เช่น เพิ่มช่างภาพ +4,000) → แสดงยอดรวมในการ์ดสรุปและเหนือปุ่มส่ง และส่งไปกับคอลัมน์ "แพ็กเกจ" ในชีต
+  - ⚠️ "พิธีเช้า + งานเลี้ยง" ตั้งไว้ 11,000 (5,500×2) — รอยืนยันราคาเหมา
   - การเช็กเวลาชน (รวมเวลาเผื่อเดินทาง `BUFFER_MINUTES`) มีทั้งในเว็บ (`clash` ใน main.js) และหลังบ้าน (`conflicts_` ใน Code.gs) — **ต้องแก้ให้ตรงกันเสมอ**
   - สถานะที่ทำให้ไม่ว่าง: `รอตรวจสลิป`, `มัดจำแล้ว` / `มัดจำแล้ว` ขึ้นไปลง Google Calendar อัตโนมัติ
   - แก้ Code.gs แล้วต้อง Deploy → Manage deployments → New version (URL เดิม)

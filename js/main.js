@@ -101,8 +101,8 @@
     $$('main > section[id]').forEach((s) => spy.observe(s));
   }
 
-  /* ---------- 3) หน้าปก: คอลัมน์ภาพเฉียง + แถวภาพเฉียง (หน้าจอง) ---------- */
-  // ภาพย่อจากรายการใน data.js (หน้าปกใช้ COVER → images/cover/, แถวภาพเฉียงใช้ STRIP → images/strip/)
+  /* ---------- 3) หน้าปก: คอลัมน์ภาพเฉียง ---------- */
+  // ภาพย่อจากรายการใน data.js (หน้าปกใช้ COVER → images/cover/)
   function thumbsFrom(list, folder) {
     if (!Array.isArray(list)) return [];
     const bySrc = new Map(GALLERY.map((g) => [g.src, g]));
@@ -127,15 +127,6 @@
       html += `<div class="cover__col"><div class="cover__track" style="--dur:${54 + (c % 4) * 9}s; --delay:-${(c * 7) % 30}s">${items}${items}</div></div>`;
     }
     tilt.innerHTML = html;
-  }
-
-  function initTiltRow() {
-    const track = $('[data-tiltrow]');
-    const thumbs = thumbsFrom(typeof STRIP === 'undefined' ? [] : STRIP, 'strip');
-    if (!track || !thumbs.length) return;
-    const items = thumbs.map((t) => `<figure class="tiltrow__item"><img src="${esc(t.src)}" alt="" width="${t.w}" height="${t.h}" loading="lazy" decoding="async"></figure>`).join('');
-    track.innerHTML = items + items;
-    track.style.setProperty('--dur', `${thumbs.length * 4}s`);
   }
 
   /* ---------- 4) Gallery: แยกหมวด + Masonry + Load more ---------- */
@@ -775,7 +766,8 @@
 
     const ticket = {
       media: $('#ticketMedia'), type: $('#ticketType'), pkg: $('#ticketPkg'), date: $('#ticketDate'),
-      time: $('#ticketTime'), price: $('#ticketPrice'), bar: $('#ticketBar'), hint: $('#ticketHint'),
+      time: $('#ticketTime'), price: $('#ticketPrice'), extra: $('#ticketExtra'), total: $('#ticketTotal'),
+      bar: $('#ticketBar'), hint: $('#ticketHint'),
     };
 
     /* --- เวลา / วันที่ --- */
@@ -795,7 +787,7 @@
 
     const today = new Date();
     let avail = { busy: {}, buffer: 0, minDate: ymd(addDays(today, 1)), maxDate: ymd(addDays(today, 400)) };
-    const state = { type: null, pkg: null, date: null, month: null };
+    const state = { type: null, pkg: null, date: null, month: null, addons: new Set() };
     state.month = parseYmd(avail.minDate);
     state.month.setDate(1);
 
@@ -905,6 +897,27 @@
       updateTicket();
     }
 
+    /* --- รวมค่าใช้จ่าย (ประมาณการจากราคาใน BOOKING) --- */
+    const baht = (n) => `${n.toLocaleString('en-US')} บาท`;
+    function estimate() {
+      const pkg = currentPkg();
+      if (!pkg) return null;
+      const h = Number(el.hours.value) || pkg.minHours || 1;
+      let base = null;
+      if (pkg.pairRate) base = Math.floor(h / 2) * pkg.pairRate + (h % 2) * pkg.hourlyRate; // เหมา 2 ชม. ถูกกว่า
+      else if (pkg.hourlyRate) base = h * pkg.hourlyRate;
+      else if (pkg.amount) base = pkg.amount;
+      if (base == null) return null;
+      const addons = (currentType().addons || []).filter((a) => state.addons.has(a.id));
+      return {
+        base, addons, from: Boolean(pkg.from),
+        total: base + addons.reduce((sum, a) => sum + (a.amount || 0), 0),
+      };
+    }
+    const totalText = (est) => (est ? `${est.from ? 'เริ่มต้น ' : ''}${baht(est.total)}` : 'สอบถามราคา');
+    const addonLabels = () => (currentType()?.addons || []).filter((a) => state.addons.has(a.id)).map((a) => a.label);
+    const sumBox = $('#bookingSum');
+
     /* --- การ์ดสรุปการจอง: ภาพเปลี่ยนตามประเภทงาน + แถบความคืบหน้า --- */
     if (ticket.media) {
       ticket.media.innerHTML = BOOKING.types.filter((t) => t.image).map((t, k) =>
@@ -921,6 +934,22 @@
       ticket.type.textContent = type ? type.label : 'ยังไม่ได้เลือกงาน';
       ticket.pkg.textContent = pkg ? pkgLabel() : '—';
       if (ticket.price) ticket.price.textContent = pkg?.price || type?.price || '—';
+      const est = estimate();
+      const extras = addonLabels();
+      if (ticket.extra) {
+        ticket.extra.closest('div').hidden = !extras.length;
+        ticket.extra.textContent = extras.join(', ');
+      }
+      if (ticket.total) ticket.total.textContent = pkg ? totalText(est) : '—';
+      if (sumBox) {
+        sumBox.hidden = !pkg;
+        if (pkg) {
+          const parts = est ? [`${pkgLabel()} ${baht(est.base)}`, ...est.addons.map((a) => `${a.label} ${baht(a.amount)}`)] : [];
+          sumBox.innerHTML = `<span>รวมค่าใช้จ่ายโดยประมาณ</span><strong>${esc(totalText(est))}</strong>
+            ${parts.length > 1 ? `<small>${esc(parts.join(' + '))}</small>` : ''}
+            ${type.note && /เดินทาง/.test(type.note) ? '<small>ยังไม่รวมค่าเดินทาง</small>' : ''}`;
+        }
+      }
       ticket.date.textContent = state.date ? thaiDate(state.date) : '—';
       ticket.time.textContent = ranges ? fmtRanges(ranges) : '—';
       const F = form.elements;
@@ -954,7 +983,15 @@
         <label class="chip"><input type="radio" name="pkg" value="${esc(p.id)}">
           <span>${esc(p.label)}${p.price ? `<em>${esc(p.price)}</em>` : ''}<small>${timeInfo(p)}</small></span>
         </label>`).join('')
-        + (type.note ? `<p class="booking__note">${esc(type.note)}</p>` : '');
+        + (type.note ? `<p class="booking__note">${esc(type.note)}</p>` : '')
+        + (type.addons?.length ? `<div class="addons">${type.addons.map((a) => `
+          <label class="addon">
+            <input type="checkbox" name="addon" value="${esc(a.id)}"${state.addons.has(a.id) ? ' checked' : ''}>
+            <span class="addon__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.3l1.4-2h5.6l1.4 2h2.3A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/><circle cx="12" cy="13" r="3.3"/></svg></span>
+            <span class="addon__text"><b>${esc(a.label)}</b>${a.detail ? `<small>${esc(a.detail)}</small>` : ''}</span>
+            <span class="addon__price">${esc(a.price || '')}</span>
+            <span class="addon__switch" aria-hidden="true"></span>
+          </label>`).join('')}</div>` : '');
       if (type.packages.length === 1) {
         $('input', el.pkgs).checked = true;
         state.pkg = type.packages[0].id;
@@ -978,10 +1015,17 @@
     el.types.addEventListener('change', (e) => {
       state.type = e.target.value;
       state.pkg = null;
+      state.addons = new Set();
       renderPkgs();
       onSelectionChange();
     });
     el.pkgs.addEventListener('change', (e) => {
+      if (e.target.name === 'addon') { // เพิ่มช่างภาพ ฯลฯ → คำนวณยอดใหม่
+        if (e.target.checked) state.addons.add(e.target.value);
+        else state.addons.delete(e.target.value);
+        updateTicket();
+        return;
+      }
       state.pkg = e.target.value;
       onSelectionChange();
     });
@@ -1165,7 +1209,7 @@
         const payload = {
           action: 'book',
           type: currentType().label,
-          pkg: pkgLabel(),
+          pkg: [pkgLabel(), ...addonLabels()].join(' + ') + ` · ${totalText(estimate())}`,
           date: state.date,
           ranges,
           name: form.elements.name.value,
@@ -1234,7 +1278,7 @@
       });
       $('[data-done="again"]', done).addEventListener('click', () => {
         form.reset();
-        Object.assign(state, { type: null, pkg: null, date: null });
+        Object.assign(state, { type: null, pkg: null, date: null, addons: new Set() });
         el.pkgs.innerHTML = '<p class="booking__hint">เลือกประเภทงานก่อน</p>';
         el.pkgStep.disabled = true;
         $('.upload__preview', form).hidden = true;
@@ -1286,7 +1330,6 @@
   initNav();
   initHeroBrand();
   initCover();
-  initTiltRow();
   initGallery(lightbox);
   initStrip(lightbox);
   initStats();

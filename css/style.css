@@ -219,7 +219,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 }
 .nav__link:hover, .nav__link.is-active { color: var(--text); }
 .nav__link:hover::after, .nav__link.is-active::after { transform: scaleX(1); }
-.nav__mobile-contact { display: none; }
+.nav__mobile-extra, .nav__item--mobile { display: none; }
 .nav__progress {
   position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
   background: linear-gradient(90deg, rgba(255,255,255,.35), var(--accent));
@@ -244,26 +244,56 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
   .nav.is-open .nav__toggle span:first-child { transform: rotate(45deg); }
   .nav.is-open .nav__toggle span:last-child { transform: rotate(-45deg); }
 
+  /* เมนูมือถือ: ลิงก์ขนาดพอดี + เลขลำดับ + ทางลัดจองแต่ละงาน + ช่องทางติดต่อ */
   .nav__menu {
     position: fixed; inset: 0; z-index: 1;
-    display: flex; flex-direction: column; justify-content: center; gap: 48px;
-    padding: calc(var(--nav-h) + 24px) var(--gutter) 48px;
+    display: flex; flex-direction: column; gap: 28px;
+    padding: calc(var(--nav-h) + 20px) var(--gutter) calc(32px + env(safe-area-inset-bottom));
+    overflow-y: auto; overscroll-behavior: contain;
     background: var(--bg);
     opacity: 0; visibility: hidden;
     transition: opacity .5s var(--ease), visibility 0s .5s;
   }
   .nav.is-open .nav__menu { opacity: 1; visibility: visible; transition: opacity .5s var(--ease); }
-  .nav__links { flex-direction: column; gap: 8px; }
-  .nav__link { display: inline-block; font-size: clamp(1.6rem, 7vw, 2.2rem); font-weight: 300; color: var(--text); padding: 6px 0; }
-  .nav__link::after { display: none; }
-  .nav__links li { opacity: 0; transform: translateY(16px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+  .nav__item--mobile { display: block; }
+  .nav__links { flex-direction: column; gap: 0; counter-reset: navitem; border-top: 1px solid var(--line); }
+  .nav__links li { counter-increment: navitem; border-bottom: 1px solid var(--line); opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+  .nav__link {
+    display: flex; align-items: baseline; gap: 14px; padding: 13px 0;
+    font-size: 1.12rem; font-weight: 400; color: var(--text);
+  }
+  .nav__link::before { content: counter(navitem, decimal-leading-zero); font-family: var(--font-display); font-size: .95rem; color: var(--text-dim); }
+  .nav__link::after {
+    content: '→'; position: static; height: auto; margin-left: auto; background: none; transform: none;
+    color: var(--text-dim); transition: transform .3s var(--ease);
+  }
+  .nav__link:hover::after, .nav__link.is-active::after { transform: translateX(4px); }
   .nav.is-open .nav__links li { opacity: 1; transform: none; }
-  .nav.is-open .nav__links li:nth-child(2) { transition-delay: .05s; }
-  .nav.is-open .nav__links li:nth-child(3) { transition-delay: .1s; }
-  .nav.is-open .nav__links li:nth-child(4) { transition-delay: .15s; }
-  .nav.is-open .nav__links li:nth-child(5) { transition-delay: .2s; }
-  .nav__mobile-contact { display: block; color: var(--text-muted); border-top: 1px solid var(--line); padding-top: 24px; }
-  .nav__mobile-phone { font-family: var(--font-display); font-size: 1.8rem; color: var(--text); }
+  .nav.is-open .nav__links li:nth-child(2) { transition-delay: .04s; }
+  .nav.is-open .nav__links li:nth-child(3) { transition-delay: .08s; }
+  .nav.is-open .nav__links li:nth-child(4) { transition-delay: .12s; }
+  .nav.is-open .nav__links li:nth-child(5) { transition-delay: .16s; }
+  .nav.is-open .nav__links li:nth-child(6) { transition-delay: .2s; }
+
+  .nav__mobile-extra { display: grid; gap: 14px; opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease) .2s, transform .5s var(--ease) .2s; }
+  .nav.is-open .nav__mobile-extra { opacity: 1; transform: none; }
+  .nav__mobile-label { margin-top: 6px; font-size: .85rem; color: var(--text-dim); }
+  .nav__quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .nav__quick a {
+    display: grid; gap: 2px; padding: 12px 10px; border: 1px solid var(--line-strong); border-radius: 12px;
+    text-align: center; transition: border-color .3s var(--ease), background-color .3s var(--ease);
+  }
+  .nav__quick a:hover { border-color: var(--accent); background: rgba(255,255,255,.04); }
+  .nav__quick span { font-family: var(--font-heading); font-weight: 500; font-size: .92rem; }
+  .nav__quick small { font-size: .75rem; color: var(--text-muted); }
+  .nav__mobile-contact { display: grid; gap: 6px; margin-top: 6px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--text-muted); font-size: .88rem; }
+  .nav__mobile-phone { font-family: var(--font-display); font-size: 1.6rem; color: var(--text); }
+  .nav__social { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .nav__social a {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px;
+    border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text); font-size: .88rem;
+  }
+  .nav__social svg { width: 18px; height: 18px; }
 }
 /* มือถือจอเล็ก: ย่อโลโก้และปุ่มให้พอดีแถบเมนู */
 @media (max-width: 400px) {
@@ -647,6 +677,50 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 .chip em { font-style: normal; font-family: var(--font-heading); font-weight: 500; font-size: .92rem; color: var(--text); transition: color .3s var(--ease); }
 .chip input:checked + span em { color: var(--accent-ink); }
 .booking__note { flex-basis: 100%; margin-top: 4px; font-size: .9rem; color: var(--text-muted); }
+
+/* ตัวเลือกเพิ่ม (เช่น เพิ่มช่างภาพ) — กดเปิด/ปิดได้ */
+.addons { flex-basis: 100%; display: grid; gap: 10px; margin-top: 8px; }
+.addon {
+  position: relative; display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 14px;
+  padding: 14px 16px; border: 1px dashed var(--line-strong); border-radius: 14px; cursor: pointer;
+  transition: border-color .35s var(--ease), background-color .35s var(--ease);
+}
+.addon input { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.addon__icon { position: relative; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: var(--surface); }
+.addon__icon svg { width: 24px; height: 24px; }
+.addon__icon::after {
+  content: '+'; position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--accent); color: var(--accent-ink); font: 600 15px/20px var(--font-heading); text-align: center;
+  transition: transform .5s var(--ease), background-color .3s var(--ease);
+}
+.addon__text b { display: block; font-family: var(--font-heading); font-weight: 500; font-size: 1.02rem; }
+.addon__text small { font-size: .85rem; color: var(--text-muted); }
+.addon__price { font-family: var(--font-heading); font-weight: 500; white-space: nowrap; }
+.addon__switch { position: relative; width: 48px; height: 28px; border-radius: 999px; background: var(--line-strong); transition: background-color .3s var(--ease); }
+.addon__switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.4); transition: transform .4s var(--ease);
+}
+.addon:hover { border-color: rgba(255,255,255,.45); }
+.addon:has(input:checked) { border-style: solid; border-color: var(--accent); background: rgba(255,255,255,.05); }
+.addon:has(input:checked) .addon__switch { background: var(--ok); }
+.addon:has(input:checked) .addon__switch::after { transform: translateX(20px); }
+.addon:has(input:checked) .addon__icon::after { content: '✓'; background: var(--ok); transform: rotate(360deg); }
+.addon:has(input:focus-visible) { outline: 1px solid var(--accent); outline-offset: 3px; }
+@media (max-width: 479px) {
+  .addon { grid-template-columns: auto 1fr auto; grid-template-areas: "icon text switch" "icon price switch"; row-gap: 2px; }
+  .addon__icon { grid-area: icon; } .addon__text { grid-area: text; } .addon__switch { grid-area: switch; }
+  .addon__price { grid-area: price; font-size: .92rem; }
+}
+
+/* ยอดรวมเหนือปุ่มส่ง (แสดงทุกขนาดจอ) */
+.booking__sum {
+  display: grid; gap: 2px; width: 100%; padding: 16px 20px;
+  border: 1px solid var(--line-strong); border-radius: 12px; background: var(--bg-alt);
+}
+.booking__sum span { font-size: .92rem; color: var(--text-muted); }
+.booking__sum strong { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.9rem, 4vw, 2.4rem); line-height: 1.15; font-variant-numeric: lining-nums; }
+.booking__sum small { font-size: .85rem; color: var(--text-dim); }
 .chip input:hover + span { border-color: rgba(255,255,255,.45); }
 .chip input:checked + span { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .chip input:checked + span small { color: rgba(10,10,10,.65); }
@@ -812,31 +886,45 @@ select.field__input option:disabled { color: var(--text-dim); }
 }
 
 /* ===== หน้าจองคิว (booking.html) ===== */
-/* หัวหน้าจอง: ชื่อซ้าย + แถวภาพเฉียงแถวเดียว */
-.bhead { position: relative; overflow: hidden; padding: calc(var(--nav-h) + clamp(28px, 5vw, 56px)) 0 0; }
-.bhead__title { margin: 8px 0 12px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(2.5rem, 6vw, 4.2rem); line-height: 1.2; }
-.bhead__lead { max-width: 600px; font-size: clamp(1.02rem, 1.5vw, 1.15rem); color: var(--text-muted); }
+/* หัวหน้าจอง: พื้นหลังภาพแนวตั้ง 4 ช่อง + ชื่อชิดซ้าย */
+.bhead {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; align-items: flex-end;
+  min-height: clamp(460px, 62vh, 600px);
+  padding: calc(var(--nav-h) + 40px) 0 clamp(36px, 5vw, 60px);
+}
+.bhead__bg { position: absolute; inset: 0; z-index: -2; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.bhead__panel { margin: 0; overflow: hidden; animation: panelIn 1.3s var(--ease) both; animation-delay: calc(var(--i) * 130ms); }
+.bhead__panel img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; transition: transform 1.4s var(--ease); }
+@keyframes panelIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+@media (hover: hover) and (pointer: fine) { .bhead__panel:hover img { transform: scale(1.06); } }
+.bhead__shade {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(10,10,10,.88) 0%, rgba(10,10,10,.55) 45%, rgba(10,10,10,.15) 100%),
+    linear-gradient(0deg, var(--bg) 0%, rgba(10,10,10,0) 45%),
+    linear-gradient(180deg, rgba(10,10,10,.6) 0%, rgba(10,10,10,0) 25%);
+}
+.bhead__title { margin: 8px 0 12px; font-family: var(--font-heading); font-weight: 500; font-size: clamp(2.5rem, 6vw, 4.2rem); line-height: 1.2; text-shadow: 0 2px 24px rgba(0,0,0,.5); }
+.bhead__lead { max-width: 560px; font-size: clamp(1.02rem, 1.5vw, 1.15rem); color: rgba(242,242,242,.85); }
 .bhead__steps { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .bhead__steps li {
   display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px 6px 6px;
-  border: 1px solid var(--line-strong); border-radius: 999px; background: var(--bg-alt);
+  border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(10,10,10,.45);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   font-family: var(--font-heading); font-size: .95rem;
 }
 .bhead__steps span {
   display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
   background: var(--accent); color: var(--accent-ink); font-family: var(--font-display); font-weight: 500;
 }
-.tiltrow { margin: clamp(30px, 4vw, 48px) -5% 0; padding: 22px 0 clamp(40px, 5vw, 64px); rotate: -3deg; }
-.tiltrow__track { display: flex; width: max-content; animation: tiltMove var(--dur, 70s) linear infinite; will-change: transform; }
-@keyframes tiltMove { to { transform: translateX(-50%); } }
-.tiltrow__item {
-  flex-shrink: 0; height: clamp(130px, 15vw, 210px); margin: 0 clamp(8px, 1vw, 14px) 0 0; padding: 5px;
-  background: #fff; border-radius: 12px; box-shadow: 0 14px 34px rgba(0,0,0,.45);
+.is-replay .bhead__panel { animation: none; }
+@media (max-width: 767px) {
+  .bhead { min-height: 560px; }
+  .bhead__bg { gap: 2px; }
+  .bhead__shade { background: linear-gradient(0deg, var(--bg) 0%, rgba(10,10,10,.75) 45%, rgba(10,10,10,.35) 100%); }
 }
-.tiltrow__item:nth-child(odd) { rotate: 2deg; }
-.tiltrow__item:nth-child(3n) { rotate: -2deg; }
-.tiltrow__item img { height: 100%; width: auto; border-radius: 8px; }
-.page-booking .nav .logo { font-size: 1.9rem; } /* ชื่อแบรนด์มุมซ้ายให้เด่นขึ้น */
+@media (min-width: 768px) { .page-booking .nav .logo { font-size: 1.9rem; } } /* ชื่อแบรนด์มุมซ้ายให้เด่นขึ้น (จอใหญ่) */
 
 .page-booking .booking { padding: clamp(40px, 6vw, 72px) 0 var(--section-y); }
 .booking__layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: clamp(32px, 4vw, 56px); align-items: start; }
@@ -895,6 +983,9 @@ select.field__input option:disabled { color: var(--text-dim); }
 .ticket__rows div { display: grid; grid-template-columns: 62px 1fr; gap: 10px; font-size: .95rem; }
 .ticket__rows dt { color: var(--text-dim); }
 .ticket__rows dd { margin: 0; }
+.ticket__total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: -4px 0 16px; }
+.ticket__total span { font-size: .92rem; color: var(--text-muted); }
+.ticket__total strong { font-family: var(--font-display); font-weight: 500; font-size: 1.7rem; font-variant-numeric: lining-nums; }
 .ticket__progress { height: 3px; overflow: hidden; border-radius: 3px; background: var(--line-strong); }
 .ticket__progress span { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease); }
 .ticket__hint { margin-top: 10px; font-size: .88rem; color: var(--text-muted); }
@@ -1169,7 +1260,7 @@ select.field__input option:disabled { color: var(--text-dim); }
   .js .gallery__item { opacity: 1; transform: none; }
   .js .reveal .eyebrow::before, .js .reveal .eyebrow::after { transform: none; }
   .strip__track { animation: none; }
-  .cover__track, .tiltrow__track, .cover__mark { animation: none; }
+  .cover__track, .cover__mark, .bhead__panel { animation: none; }
   .strip__row { overflow-x: auto; scrollbar-width: none; }
   .nav__progress { display: none; }
   .hero__scroll i::after { display: none; }
