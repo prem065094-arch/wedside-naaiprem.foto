@@ -225,6 +225,7 @@ const GALLERY = [
   { src: 'images/portfolio/portfolio-35-portrait.jpg', category: 'portfolio', title: 'ประตูลิฟต์', alt: 'เพื่อนนักเรียนโผล่หน้าจากประตูลิฟต์สองบาน', width: 1064, height: 1600 },
   { src: 'images/portfolio/portfolio-38-portrait.jpg', category: 'portfolio', title: 'คอลลาจเพื่อนรัก', alt: 'ภาพคอลลาจสามภาพ นักเรียนชายหญิงบนสนามหญ้า', width: 899, height: 1600 },
   /* ---- ordination (48 ภาพ) ---- */
+  { src: 'images/ordination/ordination-46-portrait.jpg', category: 'ordination', title: 'โปสเตอร์นาคพนมมือ', alt: 'นาคพนมมือหน้าฉากดอกไม้สีส้มและป้ายงาน', width: 1066, height: 1600 },
   { src: 'images/ordination/ordination-23-portrait.jpg', category: 'ordination', title: 'นาคขึ้นบ่า', alt: 'นาคนั่งบนบ่าญาติพนมมือ ใต้ร่มสีทองท่ามกลางต้นไม้', width: 1065, height: 1600 },
   { src: 'images/ordination/ordination-05-portrait.jpg', category: 'ordination', title: 'นาคชุดเต็มยศ', alt: 'นาคสวมชฎาในชุดสีทองยืนหน้าเวทีพิธี', width: 1065, height: 1600 },
   { src: 'images/ordination/ordination-16-portrait.jpg', category: 'ordination', title: 'พระบวชใหม่', alt: 'พระบวชใหม่ยืนพนมมือหน้าพระพุทธรูปสีขาว', width: 1065, height: 1600 },
@@ -271,7 +272,6 @@ const GALLERY = [
   { src: 'images/ordination/ordination-41.jpg', category: 'ordination', title: 'ครองจีวร', alt: 'ภาพใกล้มือช่วยจัดจีวรให้พระบวชใหม่', width: 1600, height: 1065 },
   { src: 'images/ordination/ordination-44-portrait.jpg', category: 'ordination', title: 'หน้าโบสถ์', alt: 'พระบวชใหม่สวมแว่นยืนหน้าโบสถ์', width: 1066, height: 1600 },
   { src: 'images/ordination/ordination-45-portrait.jpg', category: 'ordination', title: 'ข้างโบสถ์', alt: 'พระบวชใหม่ยืนบนทางเดินข้างโบสถ์', width: 1066, height: 1600 },
-  { src: 'images/ordination/ordination-46-portrait.jpg', category: 'ordination', title: 'โปสเตอร์นาคพนมมือ', alt: 'นาคพนมมือหน้าฉากดอกไม้สีส้มและป้ายงาน', width: 1066, height: 1600 },
   { src: 'images/ordination/ordination-48-portrait.jpg', category: 'ordination', title: 'พระใหม่กับบาตร', alt: 'พระบวชใหม่สะพายบาตรถือตาลปัตรข้างกำแพงวัด', width: 1066, height: 1600 },
 ];
 
@@ -414,7 +414,7 @@ const BOOKING = {
       { id: 'group10', label: 'กลุ่ม 6–10 คน', price: '3,000 บาท / 3 ชม.', amount: 3000, hourly: true, minHours: 3, maxHours: 3 },
       { id: 'class', label: 'ถ่ายทั้งห้อง', price: 'เริ่มต้น 4,000 บาท / 3 ชม.', amount: 4000, from: true, hourly: true, minHours: 3, maxHours: 6 },
     ] },
-    { id: 'ordination', label: 'งานอุปสมบท', price: 'เริ่มต้น 6,000 บาท', image: 'images/strip/ordination-05-portrait.jpg',
+    { id: 'ordination', label: 'งานอุปสมบท', price: 'เริ่มต้น 6,000 บาท', image: 'images/strip/ordination-46-portrait.jpg',
       note: 'ช่างภาพ 1 คน กล้อง 2 ตัว + ไฟสตูดิโอ · ไม่จำกัดรูป · ราคายังไม่รวมค่าเดินทาง',
       addons: [
         { id: 'photographer', label: 'เพิ่มช่างภาพอีก 1 คน', detail: 'เก็บได้หลายมุมพร้อมกัน ไม่พลาดทุกช่วงสำคัญ', price: '+3,000 บาท/วัน', perDay: 3000 },
