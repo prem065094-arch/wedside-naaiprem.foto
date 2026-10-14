@@ -309,6 +309,8 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
   animation-delay: calc(var(--c) * 55ms + 300ms);
 }
 @keyframes charIn { from { opacity: 0; transform: translateY(.45em) rotate(8deg); } to { opacity: 1; transform: none; } }
+/* เลื่อนพ้น Hero แล้ว → รีเซ็ตแอนิเมชัน เพื่อให้เล่นใหม่ตอนเลื่อนกลับขึ้นมา (main.js ใส่ .is-replay) */
+.is-replay .hero-in, .is-replay .char { animation: none; }
 .hero__slogan { font-family: var(--font-heading); font-weight: 400; font-size: clamp(1.45rem, 3vw, 2.2rem); line-height: 1.5; }
 .hero__sub { margin-top: 10px; max-width: 560px; font-size: 1.08rem; color: rgba(242,242,242,.75); }
 .hero__badge {
@@ -559,6 +561,12 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 }
 .service__price--ask { font-family: var(--font-heading); color: var(--text); font-size: 1.05rem; min-height: 2.3rem; align-items: center; }
 .service__text { color: var(--text-muted); font-size: 1rem; }
+.service__prices { display: grid; gap: 10px; margin: 20px 0 4px; padding: 16px 0; border-block: 1px solid var(--line); }
+.service__prices li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: .98rem; }
+.service__prices span { color: var(--text-muted); }
+.service__prices small { display: block; font-size: .82rem; color: var(--text-dim); }
+.service__prices b { flex-shrink: 0; font-family: var(--font-heading); font-weight: 500; color: var(--text); text-align: right; }
+.service__note { margin: -14px 0 22px; font-size: .88rem; color: var(--text-dim); }
 .service__list { margin: 20px 0 26px; display: grid; gap: 8px; font-size: 1rem; }
 .service__list li { position: relative; padding-left: 24px; }
 .service__list li::before {
@@ -595,6 +603,9 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
   transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
 }
 .chip small { font-family: var(--font-body); font-size: .85rem; color: var(--text-muted); transition: color .3s var(--ease); }
+.chip em { font-style: normal; font-family: var(--font-heading); font-weight: 500; font-size: .92rem; color: var(--text); transition: color .3s var(--ease); }
+.chip input:checked + span em { color: var(--accent-ink); }
+.booking__note { flex-basis: 100%; margin-top: 4px; font-size: .9rem; color: var(--text-muted); }
 .chip input:hover + span { border-color: rgba(255,255,255,.45); }
 .chip input:checked + span { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .chip input:checked + span small { color: rgba(10,10,10,.65); }

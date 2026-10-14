@@ -279,23 +279,30 @@ const BOOKING = {
   hourlyFrom: '06:00',
   hourlyUntil: '22:00', // ต้องถ่ายเสร็จไม่เกินเวลานี้
 
+  // ranges = ช่วงเวลาตายตัว / hourly = เลือกเวลาเริ่มเอง (minHours–maxHours ชม.) / price = ข้อความราคาบนปุ่ม
+  // note = หมายเหตุใต้ตัวเลือกแพ็กเกจ — ราคาให้ตรงกับการ์ดบริการใน index.html
   types: [
-    { id: 'graduation', label: 'รับปริญญา', price: 'เริ่มต้น 3,500 บาท', image: 'images/strip/graduation-07-portrait.jpg', packages: [
-      { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 8 },
-      { id: 'morning', label: 'ครึ่งวันเช้า', ranges: [['07:00', '12:00']] },
-      { id: 'afternoon', label: 'ครึ่งวันบ่าย', ranges: [['13:00', '17:00']] },
-      { id: 'fullday', label: 'เต็มวัน', ranges: [['07:00', '17:00']] },
+    { id: 'graduation', label: 'รับปริญญา', price: 'เริ่มต้น 1,200 บาท', image: 'images/strip/graduation-07-portrait.jpg', packages: [
+      { id: 'hourly', label: 'รายชั่วโมง', price: '1,200 บาท/ชม.', hourly: true, maxHours: 8 },
+      { id: 'morning', label: 'ครึ่งวันเช้า', price: '3,500 บาท', ranges: [['07:00', '12:00']] },
+      { id: 'afternoon', label: 'ครึ่งวันบ่าย', price: '3,500 บาท', ranges: [['13:00', '17:00']] },
+      { id: 'fullday', label: 'เต็มวัน', price: '5,500 บาท', ranges: [['07:00', '17:00']] },
     ] },
-    { id: 'wedding', label: 'งานแต่ง', price: 'เริ่มต้น 5,500 บาท', image: 'images/strip/wedding-12-portrait.jpg', packages: [
-      { id: 'ceremony', label: 'พิธีเช้า (เช้า–เที่ยง)', ranges: [['06:00', '12:00']] },
-      { id: 'reception', label: 'งานเลี้ยงช่วงเย็น', ranges: [['17:00', '22:00']] },
-      { id: 'both', label: 'พิธีเช้า + งานเลี้ยงเย็น', ranges: [['06:00', '12:00'], ['17:00', '22:00']] },
+    { id: 'wedding', label: 'งานแต่ง', price: 'เริ่มต้น 5,500 บาท', image: 'images/strip/wedding-12-portrait.jpg',
+      note: 'ช่างภาพ 1 คน กล้อง 2 ตัว + ไฟสตูดิโอ · ไม่จำกัดรูป · ไม่รวมค่าเดินทาง · เพิ่มช่างภาพ +4,000 บาท', packages: [
+      { id: 'ceremony', label: 'พิธีเช้า (เช้า–เที่ยง)', price: '5,500 บาท', ranges: [['06:00', '12:00']] },
+      { id: 'reception', label: 'งานเลี้ยง (เย็น–ดึก)', price: '5,500 บาท', ranges: [['17:00', '22:00']] },
+      { id: 'both', label: 'พิธีเช้า + งานเลี้ยง', ranges: [['06:00', '12:00'], ['17:00', '22:00']] },
     ] },
     { id: 'prewedding', label: 'พรีเวดดิ้ง', price: 'สอบถามราคา', image: 'images/strip/wedding-16-portrait.jpg', packages: [
       { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 8 },
     ] },
-    { id: 'portfolio', label: 'พอร์ตนักเรียน', price: 'เริ่มต้น 500 บาท', image: 'images/strip/portfolio-07-portrait.jpg', packages: [
-      { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 6 },
+    { id: 'portfolio', label: 'พอร์ตนักเรียน', price: 'เริ่มต้น 600 บาท', image: 'images/strip/portfolio-07-portrait.jpg', packages: [
+      { id: 'solo', label: 'ถ่ายเดี่ยว', price: '600 บาท/ชม. · 2 ชม. 1,000', hourly: true, maxHours: 4 },
+      { id: 'small', label: 'กลุ่มเล็ก 2–3 คน', price: '1,200 บาท/ชม. · 2 ชม. 2,000', hourly: true, maxHours: 4 },
+      { id: 'group6', label: 'กลุ่ม 4–6 คน', price: '2,300 บาท / 3 ชม.', hourly: true, minHours: 3, maxHours: 3 },
+      { id: 'group10', label: 'กลุ่ม 6–10 คน', price: '3,000 บาท / 3 ชม.', hourly: true, minHours: 3, maxHours: 3 },
+      { id: 'class', label: 'ถ่ายทั้งห้อง', price: 'เริ่มต้น 4,000 บาท / 3 ชม.', hourly: true, minHours: 3, maxHours: 6 },
     ] },
     { id: 'event', label: 'อีเวนต์', price: 'สอบถามราคา', image: 'images/services/service-event.jpg', packages: [
       { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 10 },

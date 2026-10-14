@@ -281,7 +281,7 @@
         <header class="section-head reveal">
           <p class="eyebrow">Services</p>
           <h2 class="section-title" id="servicesTitle">บริการถ่ายภาพ</h2>
-          <p class="section-lead">เลือกประเภทงานที่ต้องการ แล้วทักมาคุยรายละเอียดกันได้เลย ราคาด้านล่างเป็นราคาเริ่มต้น ปรับตามรูปแบบงานและสถานที่</p>
+          <p class="section-lead">ราคาชัดเจน ไม่จำกัดจำนวนรูป เลือกแพ็กเกจที่ใช่แล้วกดจองคิวได้เลย หรือทักมาสอบถามรายละเอียดเพิ่มเติมที่เพจ</p>
         </header>
 
         <div class="services__grid">
@@ -293,16 +293,23 @@
               <p class="service__tags">พิธีเช้า · งานเลี้ยง · พรีเวดดิ้ง</p>
               <h3 class="service__title">งานแต่งงาน</h3>
               <p class="service__price">เริ่มต้น <strong data-count="5500">5,500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
-              <p class="service__text">เล่าเรื่องวันสำคัญของคุณสองคนผ่านภาพที่เป็นธรรมชาติ ตั้งแต่พิธีเช้าจนจบงานเลี้ยง รวมถึงพรีเวดดิ้งในสถานที่ที่มีความหมาย</p>
+              <p class="service__text">เล่าเรื่องวันสำคัญของคุณสองคนผ่านภาพที่เป็นธรรมชาติ ตั้งแต่พิธีเช้าจนจบงานเลี้ยง</p>
+              <!-- แก้: ราคาแต่ละแพ็กเกจ (ให้ตรงกับ BOOKING ใน js/data.js) -->
+              <ul class="service__prices">
+                <li><span>พิธีเช้า <small>เช้า–เที่ยง</small></span><b>5,500 บาท</b></li>
+                <li><span>งานเลี้ยง <small>เย็น–ดึก</small></span><b>5,500 บาท</b></li>
+                <li><span>เพิ่มช่างภาพ</span><b>+4,000 บาท</b></li>
+              </ul>
               <ul class="service__list">
-                <li>บรีฟท่าโพสตลอดการถ่าย</li>
-                <li>ไม่จำกัดจำนวนรูป</li>
-                <li>คัดและแต่งทุกภาพ</li>
+                <li>ช่างภาพ 1 คน กล้อง 2 ตัว</li>
+                <li>ไฟสตูดิโอเพิ่มความสว่างให้งาน</li>
+                <li>ไม่จำกัดจำนวนรูป คัดและแต่งทุกภาพ</li>
                 <li class="service__delivery">ส่งงานไม่เกิน 14 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
               </ul>
+              <p class="service__note">* ราคายังไม่รวมค่าเดินทาง</p>
               <div class="service__actions">
                 <a href="booking.html?type=wedding" class="btn btn--primary btn--block">จองคิว</a>
-                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามราคา</a>
+                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามเพิ่มเติม</a>
               </div>
             </div>
           </article>
@@ -314,8 +321,14 @@
             <div class="service__body">
               <p class="service__tags">ซ้อมใหญ่ · วันรับจริง · ถ่ายนอกรอบ</p>
               <h3 class="service__title">รับปริญญา</h3>
-              <p class="service__price">เริ่มต้น <strong data-count="3500">3,500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
+              <p class="service__price">เริ่มต้น <strong data-count="1200">1,200</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
               <p class="service__text">เก็บความภูมิใจของบัณฑิตและครอบครัว ทั้งภาพเดี่ยว ภาพหมู่กับเพื่อน และภาพครอบครัวแบบมีสไตล์</p>
+              <!-- แก้: ราคาแต่ละแพ็กเกจ (ให้ตรงกับ BOOKING ใน js/data.js) -->
+              <ul class="service__prices">
+                <li><span>รายชั่วโมง</span><b>1,200 บาท/ชม.</b></li>
+                <li><span>ครึ่งวัน <small>เช้า หรือ บ่าย</small></span><b>3,500 บาท</b></li>
+                <li><span>เต็มวัน</span><b>5,500 บาท</b></li>
+              </ul>
               <ul class="service__list">
                 <li>บรีฟท่าโพสตลอดการถ่าย</li>
                 <li>ไม่จำกัดจำนวนรูป</li>
@@ -324,7 +337,7 @@
               </ul>
               <div class="service__actions">
                 <a href="booking.html?type=graduation" class="btn btn--primary btn--block">จองคิว</a>
-                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามราคา</a>
+                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามเพิ่มเติม</a>
               </div>
             </div>
           </article>
@@ -336,8 +349,16 @@
             <div class="service__body">
               <p class="service__tags">ยื่นมหาวิทยาลัย · ภาพโปรไฟล์</p>
               <h3 class="service__title">พอร์ตนักเรียน</h3>
-              <p class="service__price">เริ่มต้น <strong data-count="500">500</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
-              <p class="service__text">ภาพพอร์ตและโปรไฟล์ที่ดูดีและเป็นตัวเอง พร้อมช่วยแนะนำชุด สถานที่ และท่าโพสที่เหมาะกับคณะที่จะยื่น</p>
+              <p class="service__price">เริ่มต้น <strong data-count="600">600</strong> บาท</p><!-- แก้: ราคาเริ่มต้น -->
+              <p class="service__text">ภาพพอร์ตและโปรไฟล์ที่ดูดีและเป็นตัวเอง หรือภาพกลุ่มกับเพื่อนก่อนจบ พร้อมช่วยแนะนำชุด สถานที่ และท่าโพส</p>
+              <!-- แก้: ราคาแต่ละแพ็กเกจ (ให้ตรงกับ BOOKING ใน js/data.js) -->
+              <ul class="service__prices">
+                <li><span>ถ่ายเดี่ยว <small>2 ชม. 1,000 บาท</small></span><b>600 บาท/ชม.</b></li>
+                <li><span>กลุ่มเล็ก 2–3 คน <small>2 ชม. 2,000 บาท</small></span><b>1,200 บาท/ชม.</b></li>
+                <li><span>กลุ่ม 4–6 คน</span><b>2,300 บาท/3 ชม.</b></li>
+                <li><span>กลุ่ม 6–10 คน</span><b>3,000 บาท/3 ชม.</b></li>
+                <li><span>ถ่ายทั้งห้อง <small>ราคาเริ่มต้น</small></span><b>4,000 บาท/3 ชม.</b></li>
+              </ul>
               <ul class="service__list">
                 <li>บรีฟท่าโพสตลอดการถ่าย</li>
                 <li>ไม่จำกัดจำนวนรูป</li>
@@ -346,7 +367,7 @@
               </ul>
               <div class="service__actions">
                 <a href="booking.html?type=portfolio" class="btn btn--primary btn--block">จองคิว</a>
-                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามราคา</a>
+                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามเพิ่มเติม</a>
               </div>
             </div>
           </article>

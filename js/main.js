@@ -29,13 +29,11 @@
     requestAnimationFrame(tick);
   }
 
-  // เรียก fn(el) ครั้งเดียวเมื่อ element เลื่อนเข้ามาในจอ
-  function onceVisible(els, fn, threshold = 0.6) {
+  // เรียก fn(el) ทุกครั้งที่ element เลื่อนเข้ามาในจอ (ออกไปแล้วกลับมาจะเล่นใหม่)
+  function onEachVisible(els, fn, threshold = 0.6) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        io.unobserve(entry.target);
-        fn(entry.target);
+        if (entry.isIntersecting) fn(entry.target);
       });
     }, { threshold });
     els.forEach((el) => io.observe(el));
@@ -176,13 +174,9 @@
     const items = GALLERY.map((data, index) => ({ ...data, index, el: null }));
     const grids = [];
 
-    // ภาพค่อยๆ โผล่ขึ้นทีละภาพเมื่อเลื่อนมาเห็น
+    // ภาพค่อยๆ โผล่ขึ้นทีละภาพเมื่อเลื่อนมาเห็น — เลื่อนผ่านไปแล้วกลับมาก็เล่นใหม่
     const revealIO = reduceMotion() || !('IntersectionObserver' in window) ? null : new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-in');
-        revealIO.unobserve(entry.target);
-      });
+      entries.forEach((entry) => entry.target.classList.toggle('is-in', entry.isIntersecting));
     }, { rootMargin: '0px 0px -6% 0px' });
 
     function createItem(it) {
@@ -426,7 +420,7 @@
       </li>`).join('');
 
     if (reduceMotion()) return; // แสดงตัวเลขจริงทันที
-    onceVisible($$('.stat__num', list), (el) => {
+    onEachVisible($$('.stat__num', list), (el) => {
       countUp(el, Number(el.dataset.target), (n) => format(n, el.dataset.suffix));
     });
   }
@@ -525,14 +519,60 @@
       els.forEach((el) => el.classList.add('is-visible'));
       return;
     }
+    // เลื่อนผ่านไปแล้วกลับมา ลูกเล่นจะเล่นใหม่ทุกครั้ง (ใส่ data-once ถ้าต้องการให้เล่นครั้งเดียว)
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        io.unobserve(entry.target);
+        const el = entry.target;
+        if (entry.isIntersecting) {
+          el.classList.add('is-visible');
+          if ('once' in el.dataset) io.unobserve(el);
+        } else {
+          el.classList.remove('is-visible');
+        }
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
     els.forEach((el) => io.observe(el));
+
+    // Hero / ภาพปก: เลื่อนกลับขึ้นมาบนสุด ตัวอักษรและข้อความจะเล่นแอนิเมชันใหม่
+    $$('.hero, .bhero').forEach((hero) => {
+      new IntersectionObserver(([entry]) => {
+        hero.classList.toggle('is-replay', !entry.isIntersecting);
+      }).observe(hero);
+    });
+  }
+
+  /* ---------- 9.1) เปิดเว็บแล้วเริ่มที่ด้านบนเสมอ ----------
+     - ไม่ให้เบราว์เซอร์จำตำแหน่งเลื่อนเดิม (มือถือชอบเด้งไปกลางหน้า)
+     - ลิงก์ในหน้า (#portfolio ฯลฯ) เลื่อนนุ่มๆ โดยไม่ทิ้ง # ไว้ใน URL → เปิดเว็บใหม่/รีเฟรชจะไม่เด้งไปส่วนเดิม
+     - มาจากหน้าอื่นแบบ index.html#portfolio ยังพาไปส่วนนั้นได้ แล้วค่อยลบ # ออก */
+  function initAnchors() {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    const fromLink = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (fromLink) {
+      history.replaceState(null, '', location.pathname + location.search);
+      fromLink.scrollIntoView();
+      // ฟอนต์/ภาพโหลดเสร็จแล้วตำแหน่งอาจขยับ → เลื่อนให้ตรงอีกครั้ง (ถ้าผู้ใช้ยังไม่ได้เลื่อนเอง)
+      const y = window.scrollY;
+      window.addEventListener('load', () => { if (Math.abs(window.scrollY - y) < 4) fromLink.scrollIntoView(); }, { once: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
+
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a || e.defaultPrevented) return;
+      const id = decodeURIComponent(a.getAttribute('href').slice(1));
+      const target = id ? document.getElementById(id) : null;
+      if (!target) return;
+      e.preventDefault();
+      const behavior = reduceMotion() ? 'auto' : 'smooth';
+      if (id === 'home') window.scrollTo({ top: 0, behavior });
+      else target.scrollIntoView({ behavior });
+      if (a.classList.contains('skip-link')) { // ผู้ใช้คีย์บอร์ด: ย้ายโฟกัสไปส่วนที่เลือก
+        target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+      }
+    });
   }
 
   /* ---------- 10) Parallax เบาๆ (Hero + CTA) ---------- */
@@ -713,7 +753,7 @@
   function initServices() {
     const prices = $$('.service__price [data-count]');
     if (!reduceMotion()) {
-      onceVisible(prices, (el) => countUp(el, Number(el.dataset.count), (n) => n.toLocaleString('en-US'), 1400), 0.8);
+      onEachVisible(prices, (el) => countUp(el, Number(el.dataset.count), (n) => n.toLocaleString('en-US'), 1400), 0.8);
     }
 
     if (!finePointer() || reduceMotion()) return;
@@ -758,7 +798,7 @@
 
     const ticket = {
       media: $('#ticketMedia'), type: $('#ticketType'), pkg: $('#ticketPkg'), date: $('#ticketDate'),
-      time: $('#ticketTime'), bar: $('#ticketBar'), hint: $('#ticketHint'),
+      time: $('#ticketTime'), price: $('#ticketPrice'), bar: $('#ticketBar'), hint: $('#ticketHint'),
     };
 
     /* --- เวลา / วันที่ --- */
@@ -801,7 +841,7 @@
     function dayState(date) {
       if (date < avail.minDate || date > avail.maxDate) return 'off';
       const pkg = currentPkg();
-      const fits = pkg && !pkg.hourly ? !clash(date, pkg.ranges) : hourlyStarts(date, 1).some((x) => x.ok);
+      const fits = pkg && !pkg.hourly ? !clash(date, pkg.ranges) : hourlyStarts(date, pkg?.minHours || 1).some((x) => x.ok);
       if (!fits) return 'full';
       return (avail.busy[date] || []).length ? 'partial' : 'free';
     }
@@ -846,9 +886,12 @@
       if (!pkg) { el.pick.textContent = 'เลือกรูปแบบการจองก่อน'; updateTicket(); return; }
       if (pkg.hourly) {
         el.hourly.hidden = false;
-        const keepHours = Number(el.hours.value) || 1;
-        el.hours.innerHTML = Array.from({ length: pkg.maxHours || 8 }, (_, i) => `<option value="${i + 1}">${i + 1} ชั่วโมง</option>`).join('');
-        el.hours.value = String(Math.min(keepHours, pkg.maxHours || 8));
+        const min = pkg.minHours || 1;
+        const max = pkg.maxHours || 8;
+        const keepHours = Math.min(Math.max(Number(el.hours.value) || min, min), max);
+        el.hours.innerHTML = Array.from({ length: max - min + 1 }, (_, i) => `<option value="${min + i}">${min + i} ชั่วโมง</option>`).join('');
+        el.hours.value = String(keepHours);
+        el.hours.disabled = min === max; // แพ็กเกจที่กำหนดจำนวนชั่วโมงไว้แล้ว (เช่น กลุ่ม 3 ชม.)
         fillStarts(el.start.value);
       }
       updatePick();
@@ -900,6 +943,7 @@
       imgs.forEach((img) => img.classList.toggle('is-active', img === active));
       ticket.type.textContent = type ? type.label : 'ยังไม่ได้เลือกงาน';
       ticket.pkg.textContent = pkg ? pkgLabel() : '—';
+      if (ticket.price) ticket.price.textContent = pkg?.price || type?.price || '—';
       ticket.date.textContent = state.date ? thaiDate(state.date) : '—';
       ticket.time.textContent = ranges ? fmtRanges(ranges) : '—';
       const F = form.elements;
@@ -924,10 +968,16 @@
       const type = currentType();
       el.pkgStep.disabled = !type;
       if (!type) return;
+      const timeInfo = (p) => {
+        if (!p.hourly) return fmtRanges(p.ranges);
+        if (p.minHours && p.minHours === p.maxHours) return `เลือกเวลาเริ่มเอง · ${p.minHours} ชม.`;
+        return `เลือกเวลาเริ่มเอง · ${p.minHours ? `${p.minHours}–` : 'สูงสุด '}${p.maxHours || 8} ชม.`;
+      };
       el.pkgs.innerHTML = type.packages.map((p) => `
         <label class="chip"><input type="radio" name="pkg" value="${esc(p.id)}">
-          <span>${esc(p.label)}<small>${p.hourly ? `เลือกเวลาเริ่มเอง · สูงสุด ${p.maxHours || 8} ชม.` : fmtRanges(p.ranges)}</small></span>
-        </label>`).join('');
+          <span>${esc(p.label)}${p.price ? `<em>${esc(p.price)}</em>` : ''}<small>${timeInfo(p)}</small></span>
+        </label>`).join('')
+        + (type.note ? `<p class="booking__note">${esc(type.note)}</p>` : '');
       if (type.packages.length === 1) {
         $('input', el.pkgs).checked = true;
         state.pkg = type.packages[0].id;
@@ -1254,6 +1304,7 @@
   }
 
   const lightbox = createLightbox();
+  initAnchors();
   initContacts();
   initNav();
   initHeroBrand();

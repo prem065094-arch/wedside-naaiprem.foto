@@ -95,7 +95,7 @@
       <div class="container">
         <div class="booking__layout">
 
-        <form class="booking__form reveal" id="bookingForm" novalidate>
+        <form class="booking__form reveal" id="bookingForm" novalidate data-once>
           <fieldset class="booking__step">
             <legend class="booking__legend"><span>01</span>ประเภทงาน</legend>
             <div class="tcards" id="bookingTypes"></div>
@@ -216,6 +216,7 @@
                 <div><dt>รูปแบบ</dt><dd id="ticketPkg">—</dd></div>
                 <div><dt>วันที่</dt><dd id="ticketDate">—</dd></div>
                 <div><dt>เวลา</dt><dd id="ticketTime">—</dd></div>
+                <div><dt>ราคา</dt><dd id="ticketPrice">—</dd></div>
               </dl>
               <div class="ticket__progress" aria-hidden="true"><span id="ticketBar"></span></div>
               <p class="ticket__hint" id="ticketHint">เลือกแล้ว 0 จาก 4 ขั้นตอน</p>
@@ -225,7 +226,7 @@
 
         <div class="booking__done" id="bookingDone" tabindex="-1" hidden></div>
 
-        <details class="booking__slip reveal" id="slipBox">
+        <details class="booking__slip reveal" id="slipBox" data-once>
           <summary>มีรหัสจองแล้ว? แนบสลิปมัดจำที่นี่</summary>
           <form class="booking__slip-form" id="slipForm" novalidate>
             <div class="deposit" data-deposit></div>
