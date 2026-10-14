@@ -386,7 +386,8 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 
 /* ปุ่มบอกให้เลื่อนลงไปดูแนะนำตัว (ลูกศรเด้งเบาๆ) */
 .hero__scroll {
-  position: absolute; left: 50%; bottom: calc(26px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  position: absolute; left: 0; right: 0; bottom: calc(26px + env(safe-area-inset-bottom));
+  width: max-content; margin-inline: auto; /* จัดกลางด้วย margin เพราะ animation heroIn ใช้ transform */
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   font-family: var(--font-heading); font-size: .9rem; letter-spacing: .02em; white-space: nowrap;
   color: rgba(242,242,242,.88); text-shadow: 0 2px 12px rgba(0,0,0,.7);
