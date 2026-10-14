@@ -414,8 +414,9 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 
 @media (max-width: 1199px) { :root { --gallery-cols: 3; } }
 @media (max-width: 899px)  { :root { --gallery-cols: 2; --gallery-gap: 8px; } }
+/* มือถือ: 2 คอลัมน์ เลื่อนแล้วเห็นหลายภาพพร้อมกัน (ภาพยังเต็มสัดส่วนจริง ไม่ถูกครอป) */
 @media (max-width: 479px)  {
-  :root { --gallery-cols: 1; --gallery-gap: 10px; }
+  :root { --gallery-gap: 6px; --gallery-pad: 10px; }
   .gallery__head { grid-template-columns: 1fr; }
   .gallery__count { grid-column: 1; grid-row: auto; margin-top: 8px; font-size: 1rem; }
 }
@@ -476,6 +477,12 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 .service__body { display: flex; flex-direction: column; flex: 1; padding: 26px 24px 28px; }
 .service__tags { font-size: .82rem; color: var(--text-dim); letter-spacing: .02em; }
 .service__title { font-family: var(--font-heading); font-weight: 400; font-size: 1.4rem; margin: 6px 0 10px; }
+.service__price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; color: var(--text-muted); font-size: .92rem; }
+.service__price strong {
+  font-family: var(--font-display); font-weight: 400; font-size: 2.3rem; line-height: 1; color: var(--text);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.service__price--ask { font-family: var(--font-heading); color: var(--text); font-size: 1.05rem; min-height: 2.3rem; align-items: center; }
 .service__text { color: var(--text-muted); font-size: .94rem; }
 .service__list { margin: 20px 0 26px; display: grid; gap: 8px; font-size: .92rem; }
 .service__list li { position: relative; padding-left: 24px; }
