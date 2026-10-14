@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>จองคิวถ่ายภาพ — naaiprem.foto</title>
+  <meta name="description" content="จองคิวถ่ายภาพออนไลน์กับ naaiprem.foto รับปริญญา งานแต่ง พรีเวดดิ้ง พอร์ตนักเรียน อีเวนต์ เลือกวันว่างจากปฏิทิน ส่งคำขอและแนบสลิปมัดจำได้ทันที">
+  <meta name="theme-color" content="#0a0a0a">
+
+  <!-- หน้าจองคิว (ฟอร์มสร้างจาก BOOKING ใน js/data.js) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="จองคิวถ่ายภาพ — naaiprem.foto">
+  <meta property="og:description" content="เลือกวันว่างจากปฏิทิน ส่งคำขอจองและแนบสลิปมัดจำได้ทันที">
+  <meta property="og:image" content="images/hero/hero-01-graduation.jpg">
+  <meta property="og:locale" content="th_TH">
+
+  <link rel="icon" href="images/logo/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/logo/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Sans+Thai:wght@300;400;500&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="images/hero/hero-01-graduation-portrait.jpg" media="(orientation: portrait)">
+  <link rel="preload" as="image" href="images/hero/hero-01-graduation.jpg" media="(orientation: landscape)">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- บอก CSS ว่า JS ทำงาน (ถ้าไม่มี JS เนื้อหาจะแสดงทันทีโดยไม่มี animation) -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- data.js ต้องมาก่อน main.js -->
+  <script src="js/data.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body class="page-booking">
+  <a class="skip-link" href="#booking">ข้ามไปยังฟอร์มจอง</a>
+
+  <!-- Cursor แบบกำหนดเอง (แสดงเฉพาะ Desktop ที่ใช้เมาส์) -->
+  <div class="cursor" aria-hidden="true">
+    <div class="cursor__dot"></div>
+    <div class="cursor__ring"><span class="cursor__label">ดู</span></div>
+  </div>
+
+  <!-- ============================== NAVBAR ============================== -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="logo" aria-label="naaiprem.foto กลับหน้าหลัก"><svg class="logo__mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M17.50 20.25L37.13 8.92M24.00 16.50L43.63 27.83M30.50 20.25L30.50 42.92M30.50 27.75L10.87 39.08M24.00 31.50L4.37 20.17M17.50 27.75L17.50 5.08"/></svg><span class="logo__text">naaiprem<span>.foto</span></span></a>
+
+      <nav class="nav__menu" id="navMenu" aria-label="เมนูหลัก">
+        <ul class="nav__links">
+          <li><a href="index.html#portfolio" class="nav__link">ผลงาน</a></li>
+          <li><a href="index.html#services" class="nav__link">บริการ</a></li>
+          <li><a href="index.html#process" class="nav__link">ขั้นตอน</a></li>
+          <li><a href="index.html#reviews" class="nav__link">รีวิว</a></li>
+          <li><a href="index.html#faq" class="nav__link">คำถามที่พบบ่อย</a></li>
+        </ul>
+        <div class="nav__mobile-contact">
+          <a href="tel:0622349685" data-contact="phone" class="nav__mobile-phone"><span data-contact-text="phoneLabel">062-234-9685</span></a>
+          <p>รับงานทั่วประเทศไทย</p>
+        </div>
+      </nav>
+
+      <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="messenger" class="btn btn--primary btn--sm nav__cta">สอบถาม</a>
+
+      <button class="nav__toggle" id="navToggle" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+    <div class="nav__progress" id="navProgress" aria-hidden="true"></div>
+  </header>
+
+  <main>
+    <!-- ============================== ภาพปก ==============================
+         ภาพสลับ 3 ภาพ (ใช้ไฟล์เดียวกับ Hero หน้าแรก — แนวตั้งสำหรับมือถือ) -->
+    <section class="bhero">
+      <div class="bhero__media" aria-hidden="true">
+        <picture class="bhero__slide"><source media="(orientation: portrait)" srcset="images/hero/hero-01-graduation-portrait.jpg"><img src="images/hero/hero-01-graduation.jpg" alt="" width="2000" height="1331" fetchpriority="high" decoding="async"></picture>
+        <picture class="bhero__slide"><source media="(orientation: portrait)" srcset="images/hero/hero-02-wedding-portrait.jpg"><img src="images/hero/hero-02-wedding.jpg" alt="" width="2000" height="1331" loading="lazy" decoding="async"></picture>
+        <picture class="bhero__slide"><source media="(orientation: portrait)" srcset="images/hero/hero-03-portfolio-portrait.jpg"><img src="images/hero/hero-03-portfolio.jpg" alt="" width="2000" height="1331" loading="lazy" decoding="async"></picture>
+      </div>
+      <div class="bhero__shade" aria-hidden="true"></div>
+      <div class="bhero__content container">
+        <p class="hero__eyebrow hero-in" style="--i:0">Booking · naaiprem.foto</p>
+        <h1 class="bhero__title hero-in" style="--i:1" id="bheroTitle">จองคิวถ่ายภาพ</h1>
+        <p class="bhero__lead hero-in" style="--i:2">เลือกงาน วันที่ และเวลาที่สะดวก ส่งคำขอได้ทันที เราจะติดต่อกลับเพื่อยืนยันภายใน 24 ชั่วโมง</p>
+        <ol class="bhero__steps hero-in" style="--i:3">
+          <li><span>1</span>เลือกงานและวันว่าง</li>
+          <li><span>2</span>ส่งคำขอ / แนบสลิปมัดจำ</li>
+          <li><span>3</span>รอยืนยันคิว</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================== ฟอร์มจอง ==============================
+         แพ็กเกจ/เวลา/ภาพการ์ด/บัญชีรับมัดจำ แก้ที่ BOOKING ใน js/data.js
+         ข้อมูลส่งไป Google Sheets ผ่าน apps-script/Code.gs -->
+    <section class="booking" id="booking" aria-labelledby="bheroTitle">
+      <div class="container">
+        <div class="booking__layout">
+
+        <form class="booking__form reveal" id="bookingForm" novalidate>
+          <fieldset class="booking__step">
+            <legend class="booking__legend"><span>01</span>ประเภทงาน</legend>
+            <div class="tcards" id="bookingTypes"></div>
+          </fieldset>
+
+          <fieldset class="booking__step" id="bookingPkgStep" disabled>
+            <legend class="booking__legend"><span>02</span>รูปแบบการจอง</legend>
+            <div class="chips" id="bookingPkgs"><p class="booking__hint">เลือกประเภทงานก่อน</p></div>
+          </fieldset>
+
+          <fieldset class="booking__step">
+            <legend class="booking__legend"><span>03</span>วันที่และเวลา</legend>
+            <div class="booking__when">
+              <div class="cal" id="bookingCal">
+                <div class="cal__head">
+                  <button type="button" class="cal__nav" data-cal="-1" aria-label="เดือนก่อนหน้า"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+                  <p class="cal__title" id="calTitle" aria-live="polite"></p>
+                  <button type="button" class="cal__nav" data-cal="1" aria-label="เดือนถัดไป"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+                </div>
+                <div class="cal__week" aria-hidden="true"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
+                <div class="cal__grid" id="calGrid"></div>
+                <ul class="cal__legend">
+                  <li><i class="is-free"></i>ว่าง</li>
+                  <li><i class="is-partial"></i>ว่างบางช่วง</li>
+                  <li><i class="is-full"></i>เต็ม / ปิดรับ</li>
+                </ul>
+                <p class="cal__status" id="calStatus" role="status"></p>
+              </div>
+
+              <div class="booking__time" id="bookingTime">
+                <p class="booking__date" id="bookingDate">ยังไม่ได้เลือกวันที่</p>
+                <ul class="booking__busy" id="bookingBusy"></ul>
+                <div class="booking__hourly" id="bookingHourly" hidden>
+                  <label class="field">
+                    <span class="field__label">เวลาเริ่ม</span>
+                    <select class="field__input" id="bookingStart"></select>
+                  </label>
+                  <label class="field">
+                    <span class="field__label">จำนวนชั่วโมง</span>
+                    <select class="field__input" id="bookingHours"></select>
+                  </label>
+                </div>
+                <p class="booking__pick" id="bookingPick"></p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="booking__step">
+            <legend class="booking__legend"><span>04</span>ข้อมูลติดต่อ</legend>
+            <div class="booking__fields">
+              <label class="field">
+                <span class="field__label">ชื่อ-นามสกุล <b>*</b></span>
+                <input class="field__input" name="name" autocomplete="name" required maxlength="100">
+              </label>
+              <label class="field">
+                <span class="field__label">เบอร์โทร <b>*</b></span>
+                <input class="field__input" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="15" placeholder="08x-xxx-xxxx">
+              </label>
+              <label class="field">
+                <span class="field__label">LINE ID / ชื่อ Facebook</span>
+                <input class="field__input" name="contact" maxlength="100">
+              </label>
+              <label class="field">
+                <span class="field__label">จำนวนคนที่ถ่าย</span>
+                <input class="field__input" name="people" maxlength="30" placeholder="เช่น 1 คน / แขกประมาณ 200 คน">
+              </label>
+              <label class="field">
+                <span class="field__label">สถานที่ถ่าย <b>*</b></span>
+                <input class="field__input" name="place" required maxlength="200" placeholder="เช่น มหาวิทยาลัย / โรงแรม / ยังไม่แน่ใจ">
+              </label>
+              <label class="field">
+                <span class="field__label">จังหวัด <b>*</b></span>
+                <input class="field__input" name="province" required maxlength="100" autocomplete="address-level1">
+              </label>
+              <label class="field">
+                <span class="field__label">รู้จักเราจากช่องทางไหน <b>*</b></span>
+                <select class="field__input" name="source" id="bookingSource" required></select>
+              </label>
+              <label class="field field--wide">
+                <span class="field__label">รายละเอียดเพิ่มเติม</span>
+                <textarea class="field__input" name="note" rows="3" maxlength="1500" placeholder="เช่น คณะ / ธีมงาน / สไตล์ภาพที่ชอบ"></textarea>
+              </label>
+              <!-- ช่องกันบอท (ซ่อนจากคนจริง) -->
+              <label class="booking__trap" aria-hidden="true">เว็บไซต์ <input name="website" tabindex="-1" autocomplete="off"></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="booking__step">
+            <legend class="booking__legend"><span>05</span>สลิปมัดจำ <small>(ถ้าโอนแล้ว)</small></legend>
+            <div class="deposit" data-deposit></div>
+            <label class="upload">
+              <input type="file" accept="image/*" class="upload__input" data-slip-input>
+              <span class="upload__box">
+                <img class="upload__preview" alt="ตัวอย่างสลิปที่เลือก" hidden>
+                <span class="upload__text">แตะเพื่อเลือกรูปสลิป<small>ยังไม่ได้โอน? ส่งคำขอไปก่อนได้ แล้วค่อยแนบสลิปทีหลังด้วยรหัสจอง</small></span>
+              </span>
+            </label>
+          </fieldset>
+
+          <div class="booking__submit">
+            <label class="check">
+              <input type="checkbox" name="consent" required>
+              <span>ยินยอมให้เก็บข้อมูลนี้เพื่อใช้ติดต่อและนัดหมายการถ่ายภาพเท่านั้น</span>
+            </label>
+            <p class="booking__error" id="bookingError" role="alert"></p>
+            <button type="submit" class="btn btn--primary btn--lg" id="bookingSubmit">ส่งคำขอจองคิว</button>
+          </div>
+        </form>
+
+
+          <!-- สรุปการจอง (Desktop: ติดข้างฟอร์ม) -->
+          <aside class="ticket" aria-label="สรุปการจอง">
+            <div class="ticket__media" id="ticketMedia" aria-hidden="true"></div>
+            <div class="ticket__body">
+              <p class="ticket__eyebrow">สรุปการจอง</p>
+              <p class="ticket__type" id="ticketType">ยังไม่ได้เลือกงาน</p>
+              <dl class="ticket__rows">
+                <div><dt>รูปแบบ</dt><dd id="ticketPkg">—</dd></div>
+                <div><dt>วันที่</dt><dd id="ticketDate">—</dd></div>
+                <div><dt>เวลา</dt><dd id="ticketTime">—</dd></div>
+              </dl>
+              <div class="ticket__progress" aria-hidden="true"><span id="ticketBar"></span></div>
+              <p class="ticket__hint" id="ticketHint">เลือกแล้ว 0 จาก 4 ขั้นตอน</p>
+            </div>
+          </aside>
+        </div>
+
+        <div class="booking__done" id="bookingDone" tabindex="-1" hidden></div>
+
+        <details class="booking__slip reveal" id="slipBox">
+          <summary>มีรหัสจองแล้ว? แนบสลิปมัดจำที่นี่</summary>
+          <form class="booking__slip-form" id="slipForm" novalidate>
+            <div class="deposit" data-deposit></div>
+            <div class="booking__fields">
+              <label class="field">
+                <span class="field__label">รหัสจอง <b>*</b></span>
+                <input class="field__input" name="code" required maxlength="12" placeholder="NPXXXXXX" autocapitalize="characters">
+              </label>
+              <label class="field">
+                <span class="field__label">เบอร์โทรที่ใช้จอง <b>*</b></span>
+                <input class="field__input" name="phone" type="tel" inputmode="tel" required maxlength="15">
+              </label>
+            </div>
+            <label class="upload">
+              <input type="file" accept="image/*" class="upload__input" data-slip-input required>
+              <span class="upload__box">
+                <img class="upload__preview" alt="ตัวอย่างสลิปที่เลือก" hidden>
+                <span class="upload__text">แตะเพื่อเลือกรูปสลิป</span>
+              </span>
+            </label>
+            <p class="booking__error" role="alert"></p>
+            <button type="submit" class="btn btn--primary">ส่งสลิป</button>
+          </form>
+        </details>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a href="index.html" class="logo logo--lg" aria-label="naaiprem.foto กลับหน้าหลัก"><svg class="logo__mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20"/><path d="M17.50 20.25L37.13 8.92M24.00 16.50L43.63 27.83M30.50 20.25L30.50 42.92M30.50 27.75L10.87 39.08M24.00 31.50L4.37 20.17M17.50 27.75L17.50 5.08"/></svg><span class="logo__text">naaiprem<span>.foto</span><small>Photography</small></span></a>
+        <p>ช่างภาพงานแต่ง รับปริญญา พอร์ตนักเรียน และอีเวนต์<br>รับงานทั่วประเทศไทย</p>
+      </div>
+
+      <div class="footer__col">
+        <h3 class="footer__heading">ติดต่อ</h3>
+        <a href="tel:0622349685" data-contact="phone" class="footer__phone"><span data-contact-text="phoneLabel">062-234-9685</span></a>
+        <p class="footer__muted">หรือทักแชทเพจ NAAI PREM ได้ทุกวัน</p>
+      </div>
+
+      <div class="footer__col">
+        <h3 class="footer__heading">ติดตาม</h3>
+        <ul class="footer__social">
+          <li>
+            <a href="https://www.facebook.com/" data-contact="facebookPage">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v6h4v-6h3l1-4h-4V8z"/></svg>
+              Facebook Page · NAAI PREM
+            </a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/" data-contact="facebookPersonal">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+              Facebook · เปรม ม.
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/naaiprem_photo/" data-contact="instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17 7h.01"/></svg>
+              Instagram · naaiprem_photo
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container footer__bottom">
+      <p>© <span id="year">2026</span> naaiprem.foto · สงวนลิขสิทธิ์ภาพทั้งหมด ห้ามนำไปใช้โดยไม่ได้รับอนุญาต</p>
+    </div>
+  </footer>
+
+</body>
+</html>

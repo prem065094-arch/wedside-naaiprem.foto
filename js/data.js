@@ -15,10 +15,9 @@
 const CONTACT = {
   phoneLabel: '062-234-9685',
   phone: 'tel:0622349685',
-  // TODO: ใส่ URL เพจ Facebook "NAAI PREM" จริง
-  facebookPage: 'https://www.facebook.com/',
-  // TODO: ลิงก์ทักแชทเพจ รูปแบบ https://m.me/<ชื่อผู้ใช้ของเพจ>
-  messenger: 'https://m.me/',
+  facebookPage: 'https://www.facebook.com/people/NAAI-PREM/61560883106906/',
+  // ปุ่ม "สอบถาม / ทักแชท" ทั้งเว็บ — ตอนนี้พาไปหน้าเพจ (ลูกค้ากดปุ่มข้อความบนเพจได้)
+  messenger: 'https://www.facebook.com/people/NAAI-PREM/61560883106906/',
   // TODO: ใส่ URL Facebook ส่วนตัว "เปรม ม." จริง
   facebookPersonal: 'https://www.facebook.com/',
   instagram: 'https://www.instagram.com/naaiprem_photo/',
@@ -258,21 +257,22 @@ const STRIP = [
 ];
 
 /* ---------- ระบบจองคิวออนไลน์ ----------
-   ข้อมูลการจองถูกส่งไปเก็บใน Google Sheets ผ่าน Google Apps Script (ดูวิธีติดตั้งที่ apps-script/SETUP.md)
-   • endpoint ว่าง = ซ่อนส่วนจองคิว ปุ่ม "จองคิว" จะพาไปทักแชทแทน
+   หน้าจองอยู่ที่ booking.html — ข้อมูลส่งไปเก็บใน Google Sheets ผ่าน Google Apps Script (วิธีติดตั้ง: apps-script/SETUP.md)
+   • ลิงก์ booking.html?type=wedding จะเลือกประเภทงานไว้ให้ (ใช้กับปุ่มจองในการ์ดบริการ)
+   • types[].image = ภาพบนการ์ดเลือกประเภทงาน / price = ข้อความราคาใต้ชื่อ
+   • endpoint ว่าง = หน้าจองจะแสดงข้อความให้ทักแชทแทนฟอร์ม
    • เวลาแพ็กเกจแก้ได้ที่ types ด้านล่าง (ranges = ช่วงเวลาตายตัว, hourly = จองรายชั่วโมง)
    • เวลากันไว้เดินทางก่อน-หลังงาน และวันจองล่วงหน้า ตั้งใน apps-script/Code.gs (CONFIG) */
 const BOOKING = {
   endpoint: 'https://script.google.com/macros/s/AKfycbz1WzIcNMSfSm8xeSIXUJv9JoGqGa7q3YPse4vkdUHn8heyTdpvgxNuyLtI9cZM9DBo/exec',
 
-  // แสดงในขั้นตอนแนบสลิป (ช่องที่ว่างจะไม่แสดง)
+  // แสดงในขั้นตอนแนบสลิป: QR ด้านบน แล้วตามด้วยธนาคาร / ชื่อบัญชี / เลขบัญชี (ช่องที่ว่างจะไม่แสดง)
   deposit: {
-    note: 'โอนมัดจำเพื่อล็อกคิว ยอดมัดจำจะแจ้งให้ตอนยืนยันรายละเอียด',
-    promptpay: '062-234-9685',
+    note: 'โอนมัดจำเพื่อล็อกคิว ยอดมัดจำจะแจ้งให้ตอนยืนยันรายละเอียด', // TODO: ใส่ยอดมัดจำเมื่อกำหนดแล้ว
+    qr: 'images/payment/promptpay-qr.png', // QR พร้อมเพย์ (062-234-9685)
+    bank: 'ธนาคารไทยพาณิชย์ (SCB)',
     accountName: 'นายวชิรพล มะลิวัลย์',
-    bank: '',          // ถ้าจะแสดงเลขบัญชีธนาคารด้วย ใส่ชื่อธนาคาร
-    accountNo: '',     // และเลขบัญชีตรงนี้
-    qr: 'images/payment/promptpay-qr.jpg', // QR พร้อมเพย์ (ลูกค้ากดบันทึกรูปไปสแกนในแอปธนาคารได้)
+    accountNo: '421-1-25593-9',
   },
 
   // เวลาเริ่มที่เลือกได้สำหรับงานรายชั่วโมง (ทุก 30 นาที)
@@ -280,24 +280,24 @@ const BOOKING = {
   hourlyUntil: '22:00', // ต้องถ่ายเสร็จไม่เกินเวลานี้
 
   types: [
-    { id: 'graduation', label: 'รับปริญญา', packages: [
+    { id: 'graduation', label: 'รับปริญญา', price: 'เริ่มต้น 3,500 บาท', image: 'images/strip/graduation-07-portrait.jpg', packages: [
       { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 8 },
       { id: 'morning', label: 'ครึ่งวันเช้า', ranges: [['07:00', '12:00']] },
       { id: 'afternoon', label: 'ครึ่งวันบ่าย', ranges: [['13:00', '17:00']] },
       { id: 'fullday', label: 'เต็มวัน', ranges: [['07:00', '17:00']] },
     ] },
-    { id: 'wedding', label: 'งานแต่ง', packages: [
+    { id: 'wedding', label: 'งานแต่ง', price: 'เริ่มต้น 5,500 บาท', image: 'images/strip/wedding-12-portrait.jpg', packages: [
       { id: 'ceremony', label: 'พิธีเช้า (เช้า–เที่ยง)', ranges: [['06:00', '12:00']] },
       { id: 'reception', label: 'งานเลี้ยงช่วงเย็น', ranges: [['17:00', '22:00']] },
       { id: 'both', label: 'พิธีเช้า + งานเลี้ยงเย็น', ranges: [['06:00', '12:00'], ['17:00', '22:00']] },
     ] },
-    { id: 'prewedding', label: 'พรีเวดดิ้ง', packages: [
+    { id: 'prewedding', label: 'พรีเวดดิ้ง', price: 'สอบถามราคา', image: 'images/strip/wedding-16-portrait.jpg', packages: [
       { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 8 },
     ] },
-    { id: 'portfolio', label: 'พอร์ตนักเรียน', packages: [
+    { id: 'portfolio', label: 'พอร์ตนักเรียน', price: 'เริ่มต้น 500 บาท', image: 'images/strip/portfolio-07-portrait.jpg', packages: [
       { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 6 },
     ] },
-    { id: 'event', label: 'อีเวนต์', packages: [
+    { id: 'event', label: 'อีเวนต์', price: 'สอบถามราคา', image: 'images/services/service-event.jpg', packages: [
       { id: 'hourly', label: 'รายชั่วโมง', hourly: true, maxHours: 10 },
       { id: 'morning', label: 'ครึ่งวันเช้า', ranges: [['07:00', '12:00']] },
       { id: 'afternoon', label: 'ครึ่งวันบ่าย', ranges: [['13:00', '17:00']] },

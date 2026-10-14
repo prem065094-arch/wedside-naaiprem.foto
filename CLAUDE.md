@@ -8,7 +8,8 @@
 - รับงานทั่วประเทศไทย
 - จุดขาย: **บรีฟท่าโพสให้ตลอด** (ไม่เคยถ่ายก็ไม่ต้องกังวล) และ **ไม่จำกัดจำนวนรูป**
 - สไตล์ภาพ: โทนใส สดใส เน้นภาพแคนดิด เป็นธรรมชาติ
-- ช่องทางหลัก: แชทเพจ Facebook "NAAI PREM" และโทร 062-234-9685 (`tel:0622349685`)
+- ช่องทางหลัก: เพจ Facebook "NAAI PREM" (https://www.facebook.com/people/NAAI-PREM/61560883106906/) และโทร 062-234-9685 (`tel:0622349685`)
+- ปุ่ม "จองคิว" ทุกปุ่ม → `booking.html` (การ์ดบริการใช้ `booking.html?type=<id>`) / ปุ่ม "สอบถาม / ราคา / ทักแชท" → เพจ NAAI PREM
 - ช่องทางรอง: Instagram `naaiprem_photo`, Facebook ส่วนตัว "เปรม ม."
 - กลุ่มเป้าหมาย: คู่บ่าวสาว, บัณฑิตและครอบครัว, นักเรียน ม.ปลายและผู้ปกครอง, องค์กร/ผู้จัดงาน
 
@@ -22,7 +23,8 @@
 
 ## โครงสร้างไฟล์
 ```
-index.html        โครงทุก section (ข้อความไทย, meta/OG, Google Fonts)
+index.html        หน้าหลัก: โครงทุก section (ข้อความไทย, meta/OG, Google Fonts)
+booking.html      หน้าจองคิว (ภาพปกสลับ + การ์ดเลือกงานแบบภาพ + ปฏิทิน + การ์ดสรุปการจอง) ใช้ css/js ชุดเดียวกัน
 css/style.css     design tokens (:root) → base → components → sections → responsive → reduced-motion
 js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, STRIP, BOOKING, REVIEWS
 js/main.js        logic ทั้งหมด (nav, hero, gallery แยกหมวด+masonry, lightbox, แถบภาพวิ่ง, slider, faq, cursor, counter, parallax, fab, scroll progress)
@@ -93,7 +95,8 @@ cd ~/Desktop/Webside_naaiprem && python3 -m http.server 8000
 ```
 
 ## TODO — ยังรอข้อมูลจริง
-- [ ] URL Facebook Page / Messenger / Facebook ส่วนตัว ใน `CONTACT`
+- [x] URL เพจ NAAI PREM ใน `CONTACT`
+- [ ] URL Facebook ส่วนตัว "เปรม ม." ใน `CONTACT`
 - [ ] รีวิวจริงใน `REVIEWS`
 - [ ] ตัวเลขจริงใน `STATS`
 - [x] ระยะเวลาส่งงาน งานแต่ง/รับปริญญา ไม่เกิน 14 วัน
@@ -101,5 +104,5 @@ cd ~/Desktop/Webside_naaiprem && python3 -m http.server 8000
 - [x] ภาพจริงของหมวดงานแต่ง / รับปริญญา / พอร์ตนักเรียน
 - [ ] ภาพจริงของหมวดอีเวนต์ (แกลเลอรียังไม่มีหมวดอีเวนต์ / Hero สไลด์ 4 และการ์ดบริการอีเวนต์ยังใช้ภาพตัวอย่าง)
 - [ ] ภาพ OG (`og:image`) และ URL โดเมนจริง
-- [x] ติดตั้งระบบจอง + ใส่ `BOOKING.endpoint` และพร้อมเพย์ 062-234-9685 (QR: images/payment/promptpay-qr.jpg)
+- [x] ติดตั้งระบบจอง + ใส่ `BOOKING.endpoint` / มัดจำ: QR พร้อมเพย์ (images/payment/promptpay-qr.png) + SCB 421-1-25593-9
 - [ ] ยอดมัดจำของแต่ละงาน (ตอนนี้แจ้งว่า "จะแจ้งให้ตอนยืนยันรายละเอียด")

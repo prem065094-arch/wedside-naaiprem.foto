@@ -57,7 +57,7 @@
         </div>
       </nav>
 
-      <a href="https://m.me/" data-contact="messenger" data-booking-link class="btn btn--primary btn--sm nav__cta">จองคิว</a>
+      <a href="booking.html" class="btn btn--primary btn--sm nav__cta">จองคิว</a>
 
       <button class="nav__toggle" id="navToggle" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="navMenu">
         <span></span><span></span>
@@ -116,7 +116,7 @@
         </p>
         <div class="hero__actions hero-in" style="--i:5">
           <a href="#portfolio" class="btn btn--ghost">ดูผลงาน</a>
-          <a href="https://m.me/" data-contact="messenger" data-booking-link class="btn btn--primary">จองคิว</a>
+          <a href="booking.html" class="btn btn--primary">จองคิว</a>
         </div>
       </div>
 
@@ -300,7 +300,10 @@
                 <li>คัดและแต่งทุกภาพ</li>
                 <li class="service__delivery">ส่งงานไม่เกิน 14 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
               </ul>
-              <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
+              <div class="service__actions">
+                <a href="booking.html?type=wedding" class="btn btn--primary btn--block">จองคิว</a>
+                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามราคา</a>
+              </div>
             </div>
           </article>
 
@@ -319,7 +322,10 @@
                 <li>คัดและแต่งทุกภาพ</li>
                 <li class="service__delivery">ส่งงานไม่เกิน 14 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
               </ul>
-              <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
+              <div class="service__actions">
+                <a href="booking.html?type=graduation" class="btn btn--primary btn--block">จองคิว</a>
+                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามราคา</a>
+              </div>
             </div>
           </article>
 
@@ -338,7 +344,10 @@
                 <li>คัดและแต่งทุกภาพ</li>
                 <li class="service__delivery">ส่งงานภายใน 7 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
               </ul>
-              <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
+              <div class="service__actions">
+                <a href="booking.html?type=portfolio" class="btn btn--primary btn--block">จองคิว</a>
+                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามราคา</a>
+              </div>
             </div>
           </article>
 
@@ -357,7 +366,10 @@
                 <li>คัดและแต่งทุกภาพ</li>
                 <li class="service__delivery">ส่งงานภายใน 7 วัน ผ่านลิงก์ออนไลน์<!-- แก้: ระยะเวลาส่งงาน --></li>
               </ul>
-              <a href="https://m.me/" data-contact="messenger" class="btn btn--outline btn--block">สอบถามคิวและราคา</a>
+              <div class="service__actions">
+                <a href="booking.html?type=event" class="btn btn--primary btn--block">จองคิว</a>
+                <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage" class="btn btn--outline btn--block">สอบถามราคา</a>
+              </div>
             </div>
           </article>
         </div>
@@ -377,7 +389,7 @@
           <li class="step reveal" data-delay="0">
             <span class="step__num">01</span>
             <h3 class="step__title">จองออนไลน์ หรือทักแชท</h3>
-            <p class="step__text">เลือกวันว่างและส่งคำขอจองได้ที่ฟอร์มด้านล่าง หรือทักเพจ NAAI PREM / โทร <span data-contact-text="phoneLabel">062-234-9685</span></p>
+            <p class="step__text">เลือกวันว่างและส่งคำขอจองได้ที่<a href="booking.html">หน้าจองคิว</a> หรือทักเพจ NAAI PREM / โทร <span data-contact-text="phoneLabel">062-234-9685</span></p>
           </li>
           <li class="step reveal" data-delay="1">
             <span class="step__num">02</span>
@@ -405,157 +417,6 @@
             <p class="step__text">รับภาพทั้งหมดผ่านลิงก์ออนไลน์ ดาวน์โหลดเก็บไว้ได้ทันที</p>
           </li>
         </ol>
-      </div>
-    </section>
-
-    <!-- ============================== จองคิวออนไลน์ ==============================
-         แพ็กเกจ/เวลา/บัญชีรับมัดจำ แก้ที่ BOOKING ใน js/data.js
-         ข้อมูลส่งไป Google Sheets ผ่าน apps-script/Code.gs (ถ้ายังไม่ตั้ง BOOKING.endpoint ส่วนนี้จะถูกซ่อน) -->
-    <section class="section booking" id="booking" aria-labelledby="bookingTitle">
-      <div class="container">
-        <header class="section-head reveal">
-          <p class="eyebrow">Booking</p>
-          <h2 class="section-title" id="bookingTitle">จองคิวออนไลน์</h2>
-          <p class="section-lead">เลือกประเภทงาน วันที่ และเวลาที่สะดวก ส่งคำขอได้ทันที แล้วเราจะติดต่อกลับเพื่อยืนยันภายใน 24 ชั่วโมง</p>
-        </header>
-
-        <form class="booking__form reveal" id="bookingForm" novalidate>
-          <fieldset class="booking__step">
-            <legend class="booking__legend"><span>01</span>ประเภทงาน</legend>
-            <div class="chips" id="bookingTypes"></div>
-          </fieldset>
-
-          <fieldset class="booking__step" id="bookingPkgStep" disabled>
-            <legend class="booking__legend"><span>02</span>รูปแบบการจอง</legend>
-            <div class="chips" id="bookingPkgs"><p class="booking__hint">เลือกประเภทงานก่อน</p></div>
-          </fieldset>
-
-          <fieldset class="booking__step">
-            <legend class="booking__legend"><span>03</span>วันที่และเวลา</legend>
-            <div class="booking__when">
-              <div class="cal" id="bookingCal">
-                <div class="cal__head">
-                  <button type="button" class="cal__nav" data-cal="-1" aria-label="เดือนก่อนหน้า"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-                  <p class="cal__title" id="calTitle" aria-live="polite"></p>
-                  <button type="button" class="cal__nav" data-cal="1" aria-label="เดือนถัดไป"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
-                </div>
-                <div class="cal__week" aria-hidden="true"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
-                <div class="cal__grid" id="calGrid"></div>
-                <ul class="cal__legend">
-                  <li><i class="is-free"></i>ว่าง</li>
-                  <li><i class="is-partial"></i>ว่างบางช่วง</li>
-                  <li><i class="is-full"></i>เต็ม / ปิดรับ</li>
-                </ul>
-                <p class="cal__status" id="calStatus" role="status"></p>
-              </div>
-
-              <div class="booking__time" id="bookingTime">
-                <p class="booking__date" id="bookingDate">ยังไม่ได้เลือกวันที่</p>
-                <ul class="booking__busy" id="bookingBusy"></ul>
-                <div class="booking__hourly" id="bookingHourly" hidden>
-                  <label class="field">
-                    <span class="field__label">เวลาเริ่ม</span>
-                    <select class="field__input" id="bookingStart"></select>
-                  </label>
-                  <label class="field">
-                    <span class="field__label">จำนวนชั่วโมง</span>
-                    <select class="field__input" id="bookingHours"></select>
-                  </label>
-                </div>
-                <p class="booking__pick" id="bookingPick"></p>
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset class="booking__step">
-            <legend class="booking__legend"><span>04</span>ข้อมูลติดต่อ</legend>
-            <div class="booking__fields">
-              <label class="field">
-                <span class="field__label">ชื่อ-นามสกุล <b>*</b></span>
-                <input class="field__input" name="name" autocomplete="name" required maxlength="100">
-              </label>
-              <label class="field">
-                <span class="field__label">เบอร์โทร <b>*</b></span>
-                <input class="field__input" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="15" placeholder="08x-xxx-xxxx">
-              </label>
-              <label class="field">
-                <span class="field__label">LINE ID / ชื่อ Facebook</span>
-                <input class="field__input" name="contact" maxlength="100">
-              </label>
-              <label class="field">
-                <span class="field__label">จำนวนคนที่ถ่าย</span>
-                <input class="field__input" name="people" maxlength="30" placeholder="เช่น 1 คน / แขกประมาณ 200 คน">
-              </label>
-              <label class="field">
-                <span class="field__label">สถานที่ถ่าย <b>*</b></span>
-                <input class="field__input" name="place" required maxlength="200" placeholder="เช่น มหาวิทยาลัย / โรงแรม / ยังไม่แน่ใจ">
-              </label>
-              <label class="field">
-                <span class="field__label">จังหวัด <b>*</b></span>
-                <input class="field__input" name="province" required maxlength="100" autocomplete="address-level1">
-              </label>
-              <label class="field">
-                <span class="field__label">รู้จักเราจากช่องทางไหน <b>*</b></span>
-                <select class="field__input" name="source" id="bookingSource" required></select>
-              </label>
-              <label class="field field--wide">
-                <span class="field__label">รายละเอียดเพิ่มเติม</span>
-                <textarea class="field__input" name="note" rows="3" maxlength="1500" placeholder="เช่น คณะ / ธีมงาน / สไตล์ภาพที่ชอบ"></textarea>
-              </label>
-              <!-- ช่องกันบอท (ซ่อนจากคนจริง) -->
-              <label class="booking__trap" aria-hidden="true">เว็บไซต์ <input name="website" tabindex="-1" autocomplete="off"></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="booking__step">
-            <legend class="booking__legend"><span>05</span>สลิปมัดจำ <small>(ถ้าโอนแล้ว)</small></legend>
-            <div class="deposit" data-deposit></div>
-            <label class="upload">
-              <input type="file" accept="image/*" class="upload__input" data-slip-input>
-              <span class="upload__box">
-                <img class="upload__preview" alt="ตัวอย่างสลิปที่เลือก" hidden>
-                <span class="upload__text">แตะเพื่อเลือกรูปสลิป<small>ยังไม่ได้โอน? ส่งคำขอไปก่อนได้ แล้วค่อยแนบสลิปทีหลังด้วยรหัสจอง</small></span>
-              </span>
-            </label>
-          </fieldset>
-
-          <div class="booking__submit">
-            <label class="check">
-              <input type="checkbox" name="consent" required>
-              <span>ยินยอมให้เก็บข้อมูลนี้เพื่อใช้ติดต่อและนัดหมายการถ่ายภาพเท่านั้น</span>
-            </label>
-            <p class="booking__error" id="bookingError" role="alert"></p>
-            <button type="submit" class="btn btn--primary btn--lg" id="bookingSubmit">ส่งคำขอจองคิว</button>
-          </div>
-        </form>
-
-        <div class="booking__done" id="bookingDone" tabindex="-1" hidden></div>
-
-        <details class="booking__slip reveal" id="slipBox">
-          <summary>มีรหัสจองแล้ว? แนบสลิปมัดจำที่นี่</summary>
-          <form class="booking__slip-form" id="slipForm" novalidate>
-            <div class="deposit" data-deposit></div>
-            <div class="booking__fields">
-              <label class="field">
-                <span class="field__label">รหัสจอง <b>*</b></span>
-                <input class="field__input" name="code" required maxlength="12" placeholder="NPXXXXXX" autocapitalize="characters">
-              </label>
-              <label class="field">
-                <span class="field__label">เบอร์โทรที่ใช้จอง <b>*</b></span>
-                <input class="field__input" name="phone" type="tel" inputmode="tel" required maxlength="15">
-              </label>
-            </div>
-            <label class="upload">
-              <input type="file" accept="image/*" class="upload__input" data-slip-input required>
-              <span class="upload__box">
-                <img class="upload__preview" alt="ตัวอย่างสลิปที่เลือก" hidden>
-                <span class="upload__text">แตะเพื่อเลือกรูปสลิป</span>
-              </span>
-            </label>
-            <p class="booking__error" role="alert"></p>
-            <button type="submit" class="btn btn--primary">ส่งสลิป</button>
-          </form>
-        </details>
       </div>
     </section>
 
@@ -638,11 +499,15 @@
       <div class="cta__content container">
         <p class="eyebrow reveal">Let's talk</p>
         <h2 class="cta__title reveal" id="ctaTitle">พร้อมเก็บวันสำคัญ<br>ของคุณแล้วหรือยัง?</h2>
-        <p class="cta__text reveal">ทักมาเช็กคิวว่างและสอบถามราคาได้เลย คุยกันแบบสบายๆ ไม่มีค่าใช้จ่ายในการสอบถาม</p>
+        <p class="cta__text reveal">เลือกวันว่างและจองคิวออนไลน์ได้ทันที หรือทักมาสอบถามรายละเอียดและราคาที่เพจได้เลย คุยกันแบบสบายๆ</p>
         <div class="cta__actions reveal">
-          <a href="https://m.me/" data-contact="messenger" class="btn btn--primary btn--lg">
+          <a href="booking.html" class="btn btn--primary btn--lg">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+            จองคิวออนไลน์
+          </a>
+          <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="messenger" class="btn btn--ghost btn--lg">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/></svg>
-            ทักแชทเพจ NAAI PREM
+            สอบถามที่เพจ NAAI PREM
           </a>
           <a href="tel:0622349685" data-contact="phone" class="btn btn--ghost btn--lg">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
@@ -672,7 +537,7 @@
         <h3 class="footer__heading">ติดตาม</h3>
         <ul class="footer__social">
           <li>
-            <a href="https://www.facebook.com/" data-contact="facebookPage">
+            <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="facebookPage">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v6h4v-6h3l1-4h-4V8z"/></svg>
               Facebook Page · NAAI PREM
             </a>
@@ -701,13 +566,17 @@
   <!-- ============================== ปุ่มลอย (มือถือ) ============================== -->
   <div class="fab" id="fab">
     <div class="fab__menu" id="fabMenu">
+      <a href="booking.html" class="fab__action">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+        จองคิว
+      </a>
       <a href="tel:0622349685" data-contact="phone" class="fab__action">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
         โทรเลย
       </a>
-      <a href="https://m.me/" data-contact="messenger" class="fab__action">
+      <a href="https://www.facebook.com/people/NAAI-PREM/61560883106906/" data-contact="messenger" class="fab__action">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/></svg>
-        ทักแชทเพจ
+        สอบถามที่เพจ
       </a>
     </div>
     <button class="fab__toggle" id="fabToggle" aria-label="เปิดช่องทางติดต่อ" aria-expanded="false" aria-controls="fabMenu">

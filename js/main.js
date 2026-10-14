@@ -290,6 +290,7 @@
   /* ---------- 5) Lightbox ---------- */
   function createLightbox() {
     const box = $('#lightbox');
+    if (!box) return { open() {} }; // หน้าที่ไม่มี Lightbox (เช่น booking.html)
     const stage = $('#lightboxStage');
     const img = $('#lightboxImg');
     const caption = $('#lightboxCaption');
@@ -570,6 +571,7 @@
     if (!finePointer() || reduceMotion()) return;
 
     const cursor = $('.cursor');
+    if (!cursor) return;
     const dot = $('.cursor__dot');
     const ring = $('.cursor__ring');
     document.body.classList.add('has-cursor');
@@ -731,13 +733,16 @@
   function initBooking() {
     const section = $('#booking');
     if (!section || typeof BOOKING === 'undefined') return;
-    if (!BOOKING.endpoint) { section.hidden = true; return; } // ยังไม่เปิดระบบ → ปุ่มจองคิวพาไปทักแชทเหมือนเดิม
-
-    $$('[data-booking-link]').forEach((a) => {
-      a.href = '#booking';
-      a.removeAttribute('target');
-      a.removeAttribute('rel');
-    });
+    const layout = $('.booking__layout', section);
+    if (!BOOKING.endpoint) { // ยังไม่ได้เชื่อม Google Sheets → ให้ทักแชทแทน
+      layout.innerHTML = `<div class="booking__closed">
+        <h2>ระบบจองออนไลน์ปิดชั่วคราว</h2>
+        <p>ทักมาจองคิวหรือสอบถามที่เพจ NAAI PREM ได้เลย</p>
+        <a class="btn btn--primary" href="${esc(CONTACT.messenger)}" target="_blank" rel="noopener">ทักแชทเพจ NAAI PREM</a>
+      </div>`;
+      $('#slipBox')?.remove();
+      return;
+    }
 
     const form = $('#bookingForm');
     const done = $('#bookingDone');
@@ -749,6 +754,11 @@
       date: $('#bookingDate'), busy: $('#bookingBusy'), hourly: $('#bookingHourly'),
       start: $('#bookingStart'), hours: $('#bookingHours'), pick: $('#bookingPick'),
       error: $('#bookingError'), submit: $('#bookingSubmit'),
+    };
+
+    const ticket = {
+      media: $('#ticketMedia'), type: $('#ticketType'), pkg: $('#ticketPkg'), date: $('#ticketDate'),
+      time: $('#ticketTime'), bar: $('#ticketBar'), hint: $('#ticketHint'),
     };
 
     /* --- เวลา / วันที่ --- */
@@ -827,12 +837,13 @@
         el.date.textContent = 'ยังไม่ได้เลือกวันที่';
         el.busy.innerHTML = '';
         el.pick.textContent = pkg ? 'เลือกวันที่จากปฏิทิน' : 'เลือกประเภทงานและรูปแบบการจองก่อน แล้วปฏิทินจะแสดงวันที่ว่างให้';
+        updateTicket();
         return;
       }
       el.date.textContent = thaiDate(state.date);
       el.busy.innerHTML = (avail.busy[state.date] || []).map(([a, b]) => (a === '00:00' && b === '24:00'
         ? '<li>ปิดรับทั้งวัน</li>' : `<li>มีคิวแล้ว ${a}–${b} น.</li>`)).join('');
-      if (!pkg) { el.pick.textContent = 'เลือกรูปแบบการจองก่อน'; return; }
+      if (!pkg) { el.pick.textContent = 'เลือกรูปแบบการจองก่อน'; updateTicket(); return; }
       if (pkg.hourly) {
         el.hourly.hidden = false;
         const keepHours = Number(el.hours.value) || 1;
@@ -871,11 +882,43 @@
       el.pick.innerHTML = ranges
         ? `<strong>${esc(currentType().label)} · ${esc(pkgLabel())}</strong><br>${esc(thaiDate(state.date))}<br>เวลา ${fmtRanges(ranges)}`
         : 'เลือกเวลาเริ่มและจำนวนชั่วโมง';
+      updateTicket();
     }
 
-    /* --- ตัวเลือกประเภทงาน / รูปแบบ --- */
-    el.types.innerHTML = BOOKING.types.map((t) =>
-      `<label class="chip"><input type="radio" name="type" value="${esc(t.id)}"><span>${esc(t.label)}</span></label>`).join('');
+    /* --- การ์ดสรุปการจอง: ภาพเปลี่ยนตามประเภทงาน + แถบความคืบหน้า --- */
+    if (ticket.media) {
+      ticket.media.innerHTML = BOOKING.types.filter((t) => t.image).map((t, k) =>
+        `<img src="${esc(t.image)}" alt="" data-type="${esc(t.id)}" loading="lazy" decoding="async"${k === 0 ? ' class="is-active"' : ''}>`).join('');
+    }
+    function updateTicket() {
+      if (!ticket.type) return;
+      const type = currentType();
+      const pkg = currentPkg();
+      const ranges = selectedRanges();
+      const imgs = $$('img', ticket.media);
+      const active = (type && imgs.find((img) => img.dataset.type === type.id)) || imgs[0];
+      imgs.forEach((img) => img.classList.toggle('is-active', img === active));
+      ticket.type.textContent = type ? type.label : 'ยังไม่ได้เลือกงาน';
+      ticket.pkg.textContent = pkg ? pkgLabel() : '—';
+      ticket.date.textContent = state.date ? thaiDate(state.date) : '—';
+      ticket.time.textContent = ranges ? fmtRanges(ranges) : '—';
+      const F = form.elements;
+      const contactOk = F.name.value.trim().length >= 2 && /^0\d{8,9}$/.test(digits(F.phone.value))
+        && F.place.value.trim() && F.province.value.trim() && F.source.value;
+      const steps = [type, pkg, ranges, contactOk].filter(Boolean).length;
+      ticket.bar.style.transform = `scaleX(${steps / 4})`;
+      ticket.hint.textContent = steps === 4 ? 'ครบแล้ว! กด "ส่งคำขอจองคิว" ได้เลย' : `เลือกแล้ว ${steps} จาก 4 ขั้นตอน`;
+    }
+    form.addEventListener('input', updateTicket);
+
+    /* --- ตัวเลือกประเภทงาน (การ์ดภาพ) / รูปแบบ --- */
+    el.types.innerHTML = BOOKING.types.map((t) => `
+      <label class="tcard">
+        <input type="radio" name="type" value="${esc(t.id)}">
+        <span class="tcard__media">${t.image ? `<img src="${esc(t.image)}" alt="" loading="lazy" decoding="async">` : ''}</span>
+        <span class="tcard__body"><b>${esc(t.label)}</b>${t.price ? `<small>${esc(t.price)}</small>` : ''}</span>
+        <i class="tcard__check" aria-hidden="true"></i>
+      </label>`).join('');
 
     function renderPkgs() {
       const type = currentType();
@@ -934,21 +977,35 @@
     $('#bookingSource').innerHTML = '<option value="">เลือกช่องทาง</option>'
       + (BOOKING.sources || []).map((x) => `<option>${esc(x)}</option>`).join('');
 
-    /* --- ข้อมูลมัดจำ --- */
+    /* --- ข้อมูลมัดจำ: QR ด้านบน แล้วตามด้วยธนาคาร / ชื่อบัญชี / เลขบัญชี --- */
     const dep = BOOKING.deposit || {};
-    const depositLines = [
-      dep.note && `<span>${esc(dep.note)}</span>`,
-      dep.promptpay && `<span>พร้อมเพย์ <strong>${esc(dep.promptpay)}</strong></span>`,
-      dep.accountNo && `<span>${esc(dep.bank || 'บัญชี')} <strong>${esc(dep.accountNo)}</strong></span>`,
-      dep.accountName && `<span>ชื่อบัญชี <strong>${esc(dep.accountName)}</strong></span>`,
+    const depRows = [
+      dep.bank && `<div><dt>ธนาคาร</dt><dd>${esc(dep.bank)}</dd></div>`,
+      dep.accountName && `<div><dt>ชื่อบัญชี</dt><dd>${esc(dep.accountName)}</dd></div>`,
+      dep.accountNo && `<div><dt>เลขบัญชี</dt><dd><strong>${esc(dep.accountNo)}</strong>
+        <button type="button" class="copy-btn" data-copy="${esc(digits(dep.accountNo))}">คัดลอก</button></dd></div>`,
+      dep.promptpay && `<div><dt>พร้อมเพย์</dt><dd><strong>${esc(dep.promptpay)}</strong></dd></div>`,
     ].filter(Boolean).join('');
-    const depositHtml = dep.qr ? `
-      <div class="deposit__qr">
-        <img src="${esc(dep.qr)}" alt="QR พร้อมเพย์สำหรับโอนมัดจำ" width="548" height="900" loading="lazy" decoding="async">
-        <a href="${esc(dep.qr)}" download="naaiprem-promptpay-qr.jpg">บันทึกรูป QR</a>
-      </div>
-      <div class="deposit__info">${depositLines}</div>` : depositLines;
+    const depositHtml = [
+      dep.note && `<p class="deposit__note">${esc(dep.note)}</p>`,
+      dep.qr && `<figure class="deposit__qr">
+        <img src="${esc(dep.qr)}" alt="QR พร้อมเพย์สำหรับโอนมัดจำ" width="600" height="600" loading="lazy" decoding="async">
+        <figcaption>สแกนด้วยแอปธนาคาร · <a href="${esc(dep.qr)}" download="naaiprem-promptpay-qr.png">บันทึกรูป QR</a></figcaption>
+      </figure>`,
+      depRows && `<dl class="deposit__rows">${depRows}</dl>`,
+    ].filter(Boolean).join('');
     $$('[data-deposit]').forEach((box) => { box.innerHTML = depositHtml; });
+    section.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-copy]');
+      if (!btn) return;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        btn.textContent = 'คัดลอกแล้ว ✓';
+      } catch (err) {
+        btn.textContent = btn.dataset.copy; // คัดลอกไม่ได้ → แสดงตัวเลขให้กดค้างคัดลอกเอง
+      }
+      setTimeout(() => { btn.textContent = 'คัดลอก'; }, 2200);
+    });
 
     /* --- โหลดตารางว่าง (โหลดเมื่อเลื่อนใกล้ถึงส่วนจอง เพื่อไม่ให้หน้าแรกช้า) --- */
     async function loadAvailability() {
@@ -967,6 +1024,13 @@
       if (state.date && dayState(state.date) !== 'free' && dayState(state.date) !== 'partial') state.date = null;
       renderCalendar();
       renderTime();
+    }
+    const preset = new URLSearchParams(location.search).get('type');
+    const presetInput = preset && el.types.querySelector(`input[value="${CSS.escape(preset)}"]`);
+    if (presetInput) {
+      presetInput.checked = true;
+      state.type = preset;
+      renderPkgs();
     }
     renderCalendar();
     renderTime();
@@ -1123,13 +1187,13 @@
         <p>${hasSlip
     ? 'ได้รับสลิปมัดจำแล้ว เราจะตรวจยอดและยืนยันคิวให้ภายใน 24 ชั่วโมง'
     : 'เราจะติดต่อกลับเพื่อยืนยันรายละเอียดภายใน 24 ชั่วโมง โอนมัดจำแล้วแนบสลิปได้ทันทีด้วยรหัสนี้'}</p>
-        ${hasSlip ? '' : `<div class="deposit" style="margin-top:20px">${depositHtml}</div>`}
+        ${hasSlip ? '' : `<div class="deposit">${depositHtml}</div>`}
         <div class="booking__actions">
           ${hasSlip ? '' : '<button type="button" class="btn btn--primary" data-done="slip">แนบสลิปมัดจำ</button>'}
           <a class="btn btn--outline" href="${esc(CONTACT.messenger)}" target="_blank" rel="noopener">ทักแชทเพจ</a>
           <button type="button" class="btn btn--outline" data-done="again">จองคิวเพิ่ม</button>
         </div>`;
-      form.hidden = true;
+      layout.hidden = true;
       done.hidden = false;
       done.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'start' });
       done.focus({ preventScroll: true });
@@ -1148,7 +1212,7 @@
         el.pkgStep.disabled = true;
         $('.upload__preview', form).hidden = true;
         done.hidden = true;
-        form.hidden = false;
+        layout.hidden = false;
         loadAvailability();
         section.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' });
       });
