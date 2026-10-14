@@ -35,7 +35,8 @@ css/style.css     design tokens (:root) → base → components → sections →
 js/data.js        ★ ข้อมูลที่แก้บ่อย: CONTACT, SETTINGS, STATS, GALLERY, COVER, STRIP, BOOKING, REVIEWS
 js/main.js        logic ทั้งหมด (nav, หน้าปกคอลัมน์ภาพเฉียง, gallery แยกหมวด+masonry, lightbox, แถบภาพวิ่ง, slider, faq, cursor, counter, parallax, fab, scroll progress)
 images/cover/       ภาพย่อ 560px สำหรับหน้าปก (คอลัมน์ภาพเฉียง) — รายการอยู่ใน COVER
-images/hero/        (เลิกใช้บนหน้าเว็บแล้ว เหลือ hero-01-graduation.jpg ไว้เป็น og:image)
+images/hero/        (เลิกใช้บนหน้าเว็บแล้ว)
+images/og/          og-share.jpg 1200×630 ภาพตัวอย่างตอนแชร์ลิงก์ (FB/LINE) — ถ้าเปลี่ยนไฟล์ ต้องไป Sharing Debugger กด Scrape Again
 images/wedding/ graduation/ portfolio/ ordination/   ภาพแกลเลอรีแยกตามหมวด
 images/services/    ภาพการ์ดบริการ
 images/cta/         ภาพพื้นหลัง Call to Action
