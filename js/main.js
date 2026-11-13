@@ -744,9 +744,10 @@
     const layout = $('.booking__layout', section);
     if (!BOOKING.endpoint) { // ยังไม่ได้เชื่อม Google Sheets → ให้ทักแชทแทน
       layout.innerHTML = `<div class="booking__closed">
-        <h2>ระบบจองออนไลน์ปิดชั่วคราว</h2>
-        <p>ทักมาจองคิวหรือสอบถามที่เพจ NAAI PREM ได้เลย</p>
-        <a class="btn btn--primary" href="${esc(CONTACT.messenger)}" target="_blank" rel="noopener">ทักแชทเพจ NAAI PREM</a>
+        <h2>จองคิวผ่านแชทได้เลย</h2>
+        <p>ทักแชทเพจ NAAI PREM แจ้งวันที่ ประเภทงาน และสถานที่ เราเช็กคิวว่าง คุยรายละเอียด และแจ้งยอดมัดจำให้ในแชท</p>
+        <a class="btn btn--primary" href="${esc(CONTACT.messenger)}" target="_blank" rel="noopener">ทักแชทจองคิว</a>
+        <a class="btn btn--ghost" href="${esc(CONTACT.phone)}">โทร ${esc(CONTACT.phoneLabel)}</a>
       </div>`;
       $('#slipBox')?.remove();
       return;

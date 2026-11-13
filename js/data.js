@@ -17,8 +17,8 @@ const CONTACT = {
   phoneLabel: '062-234-9685',
   phone: 'tel:0622349685',
   facebookPage: 'https://www.facebook.com/people/NAAI-PREM/61560883106906/',
-  // ปุ่ม "สอบถาม / ทักแชท" ทั้งเว็บ — ตอนนี้พาไปหน้าเพจ (ลูกค้ากดปุ่มข้อความบนเพจได้)
-  messenger: 'https://www.facebook.com/people/NAAI-PREM/61560883106906/',
+  // ปุ่ม "จองคิว / ทักแชท" ทั้งเว็บ — เปิดแชท Messenger ของเพจโดยตรง
+  messenger: 'https://m.me/61560883106906',
   // TODO: ใส่ URL Facebook ส่วนตัว "เปรม ม." จริง
   facebookPersonal: 'https://www.facebook.com/',
   instagram: 'https://www.instagram.com/naaiprem_photo/',
@@ -364,7 +364,9 @@ const STRIP = [
    • เวลาแพ็กเกจแก้ได้ที่ types ด้านล่าง (ranges = ช่วงเวลาตายตัว, hourly = จองรายชั่วโมง)
    • เวลากันไว้เดินทางก่อน-หลังงาน และวันจองล่วงหน้า ตั้งใน apps-script/Code.gs (CONFIG) */
 const BOOKING = {
-  endpoint: 'https://script.google.com/macros/s/AKfycbz1WzIcNMSfSm8xeSIXUJv9JoGqGa7q3YPse4vkdUHn8heyTdpvgxNuyLtI9cZM9DBo/exec',
+  // ปิดระบบจองออนไลน์แล้ว (รับจองผ่านแชทเท่านั้น) — จะเปิดใหม่ให้เอา // ข้างหน้าบรรทัดล่างออก แล้วลบบรรทัด endpoint: ''
+  endpoint: '',
+  // endpoint: 'https://script.google.com/macros/s/AKfycbz1WzIcNMSfSm8xeSIXUJv9JoGqGa7q3YPse4vkdUHn8heyTdpvgxNuyLtI9cZM9DBo/exec',
 
   // แสดงในขั้นตอนแนบสลิป: QR ด้านบน แล้วตามด้วยธนาคาร / ชื่อบัญชี / เลขบัญชี (ช่องที่ว่างจะไม่แสดง)
   deposit: {
