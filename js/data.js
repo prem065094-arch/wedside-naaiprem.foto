@@ -364,9 +364,8 @@ const STRIP = [
    • เวลาแพ็กเกจแก้ได้ที่ types ด้านล่าง (ranges = ช่วงเวลาตายตัว, hourly = จองรายชั่วโมง)
    • เวลากันไว้เดินทางก่อน-หลังงาน และวันจองล่วงหน้า ตั้งใน apps-script/Code.gs (CONFIG) */
 const BOOKING = {
-  // ปิดระบบจองออนไลน์แล้ว (รับจองผ่านแชทเท่านั้น) — จะเปิดใหม่ให้เอา // ข้างหน้าบรรทัดล่างออก แล้วลบบรรทัด endpoint: ''
-  endpoint: '',
-  // endpoint: 'https://script.google.com/macros/s/AKfycbz1WzIcNMSfSm8xeSIXUJv9JoGqGa7q3YPse4vkdUHn8heyTdpvgxNuyLtI9cZM9DBo/exec',
+  // หน้าจองเปิดใช้อยู่ แต่ไม่มีปุ่มจากหน้าแรก — เปรมส่งลิงก์ booking.html ให้ลูกค้าเองหลังคุยในแชท (ใส่ '' = ปิดฟอร์ม)
+  endpoint: 'https://script.google.com/macros/s/AKfycbz1WzIcNMSfSm8xeSIXUJv9JoGqGa7q3YPse4vkdUHn8heyTdpvgxNuyLtI9cZM9DBo/exec',
 
   // แสดงในขั้นตอนแนบสลิป: QR ด้านบน แล้วตามด้วยธนาคาร / ชื่อบัญชี / เลขบัญชี (ช่องที่ว่างจะไม่แสดง)
   deposit: {
