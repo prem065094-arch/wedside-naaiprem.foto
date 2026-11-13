@@ -623,6 +623,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round
 .services { background: var(--bg); }
 .services__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; perspective: 1400px; }
 .service {
+  scroll-margin-top: calc(var(--nav-h) + 16px); /* ทางลัดในเมนูมือถือเลื่อนมาที่การ์ด ไม่ให้หัวการ์ดจมใต้เมนู */
   display: flex; flex-direction: column;
   background: var(--bg-alt); border: 1px solid var(--line);
   transition: border-color .5s var(--ease);
@@ -1124,7 +1125,10 @@ select.field__input option:disabled { color: var(--text-dim); }
 .cta__title { font-family: var(--font-heading); font-weight: 500; font-size: clamp(2.3rem, 5.8vw, 4.2rem); line-height: 1.3; }
 .cta__text { margin-top: 18px; max-width: 620px; color: rgba(242,242,242,.82); font-size: 1.12rem; }
 .cta__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 40px; }
-.cta__note { margin-top: 28px; font-size: .92rem; color: rgba(242,242,242,.65); }
+.cta__how { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px; margin-top: 26px; font-family: var(--font-heading); font-size: .92rem; color: rgba(242,242,242,.82); }
+.cta__how li { display: inline-flex; align-items: center; gap: 9px; }
+.cta__how span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255,255,255,.5); font-size: .78rem; font-variant-numeric: tabular-nums; }
+.cta__note { margin-top: 22px; font-size: .92rem; color: rgba(242,242,242,.65); }
 .cta__note a { color: var(--text); border-bottom: 1px solid rgba(255,255,255,.35); }
 @media (max-width: 599px) {
   .cta__actions { flex-direction: column; width: 100%; }
@@ -1190,7 +1194,10 @@ select.field__input option:disabled { color: var(--text-dim); }
     display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
     transition: opacity .4s var(--ease), transform .4s var(--ease);
   }
-  .fab.is-hidden { opacity: 0; transform: translateY(24px); pointer-events: none; }
+  .fab, .fab__menu { pointer-events: none; } /* กล่องเมนูตอนปิดมองไม่เห็นแต่มีขนาด — ห้ามบังการแตะปุ่มอื่นด้านหลัง */
+  .fab__toggle { pointer-events: auto; }
+  .fab.is-hidden { opacity: 0; transform: translateY(24px); }
+  .fab.is-hidden .fab__toggle { pointer-events: none; }
   .fab__toggle {
     display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%;
     background: var(--accent); color: var(--accent-ink);
@@ -1215,7 +1222,6 @@ select.field__input option:disabled { color: var(--text-dim); }
     opacity: 1; transform: none; pointer-events: auto; visibility: visible;
     transition: opacity .35s var(--ease), transform .35s var(--ease), visibility 0s;
   }
-  .fab.is-open .fab__action:first-child { transition-delay: .06s; }
 }
 
 /* ===== Lightbox ===== */

@@ -43,7 +43,7 @@
   function initContacts() {
     $$('[data-contact]').forEach((el) => {
       const url = CONTACT[el.dataset.contact];
-      if (!url) return;
+      if (!url) { (el.closest('li') || el).hidden = true; return; } // ยังไม่มี URL → ซ่อน ไม่ให้เป็นปุ่มที่กดแล้วไปไม่ถูก
       el.href = url;
       if (/^https?:/.test(url)) {
         el.target = '_blank';
@@ -744,9 +744,9 @@
     const layout = $('.booking__layout', section);
     if (!BOOKING.endpoint) { // ยังไม่ได้เชื่อม Google Sheets → ให้ทักแชทแทน
       layout.innerHTML = `<div class="booking__closed">
-        <h2>จองคิวผ่านแชทได้เลย</h2>
-        <p>ทักแชทเพจ NAAI PREM แจ้งวันที่ ประเภทงาน และสถานที่ เราเช็กคิวว่าง คุยรายละเอียด และแจ้งยอดมัดจำให้ในแชท</p>
-        <a class="btn btn--primary" href="${esc(CONTACT.messenger)}" target="_blank" rel="noopener">ทักแชทจองคิว</a>
+        <h2>ติดต่อจองคิวทางเพจได้เลย</h2>
+        <p>ทักเพจ NAAI PREM แจ้งวันที่ ประเภทงาน และสถานที่ เราเช็กคิวว่าง คุยรายละเอียด และแจ้งยอดมัดจำให้</p>
+        <a class="btn btn--primary" href="${esc(CONTACT.facebookPage)}" target="_blank" rel="noopener">ติดต่อจองคิวทางเพจ</a>
         <a class="btn btn--ghost" href="${esc(CONTACT.phone)}">โทร ${esc(CONTACT.phoneLabel)}</a>
       </div>`;
       $('#slipBox')?.remove();
@@ -1186,7 +1186,7 @@
         // ไม่ใส่ Content-Type เพื่อให้เป็น simple request (Apps Script ไม่รองรับ CORS preflight)
         res = await fetch(BOOKING.endpoint, { method: 'POST', body: JSON.stringify(payload) });
       } catch (err) {
-        return { ok: false, error: 'ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่ หรือทักแชทเพจ NAAI PREM' };
+        return { ok: false, error: 'ส่งไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่ หรือทักเพจ NAAI PREM' };
       }
       try { return await res.json(); } catch (err) {
         // Google ตอบช้าตอนระบบเพิ่งตื่น — กดส่งซ้ำได้อย่างปลอดภัย (มีรหัสคำขอกันจองซ้ำ)
@@ -1295,7 +1295,7 @@
         ${hasSlip ? '' : `<div class="deposit">${depositHtml}</div>`}
         <div class="booking__actions">
           ${hasSlip ? '' : '<button type="button" class="btn btn--primary" data-done="slip">แนบสลิปมัดจำ</button>'}
-          <a class="btn btn--outline" href="${esc(CONTACT.messenger)}" target="_blank" rel="noopener">ทักแชทเพจ</a>
+          <a class="btn btn--outline" href="${esc(CONTACT.facebookPage)}" target="_blank" rel="noopener">ทักเพจ NAAI PREM</a>
           <button type="button" class="btn btn--outline" data-done="again">จองคิวเพิ่ม</button>
         </div>`;
       layout.hidden = true;

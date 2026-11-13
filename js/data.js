@@ -17,10 +17,10 @@ const CONTACT = {
   phoneLabel: '062-234-9685',
   phone: 'tel:0622349685',
   facebookPage: 'https://www.facebook.com/people/NAAI-PREM/61560883106906/',
-  // ปุ่ม "จองคิว / ทักแชท" ทั้งเว็บ — เปิดแชท Messenger ของเพจโดยตรง
-  messenger: 'https://m.me/61560883106906',
-  // TODO: ใส่ URL Facebook ส่วนตัว "เปรม ม." จริง
-  facebookPersonal: 'https://www.facebook.com/',
+  // ปุ่ม "ติดต่อจองคิว / สอบถาม" ทั้งเว็บใช้ facebookPage (เปิดหน้าเพจ) — messenger เหลือไว้ให้โค้ดหน้าจองที่ยังเรียกใช้
+  messenger: 'https://www.facebook.com/people/NAAI-PREM/61560883106906/',
+  // TODO: ใส่ URL Facebook ส่วนตัว "เปรม ม." จริง (ว่างไว้ = ซ่อนลิงก์นี้)
+  facebookPersonal: '',
   instagram: 'https://www.instagram.com/naaiprem_photo/',
 };
 
